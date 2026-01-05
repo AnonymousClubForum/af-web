@@ -1,11 +1,27 @@
 import {defineConfig} from 'vite'
 import vue from '@vitejs/plugin-vue'
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 
 // https://vite.dev/config/
 export default defineConfig({
-    plugins: [vue()],
+    plugins: [
+        vue(),
+        AutoImport({
+            resolvers: [ElementPlusResolver()],
+        }),
+        Components({
+            resolvers: [ElementPlusResolver()],
+        }),
+    ],
     server: {
-        host: '0.0.0.0',  // 允许外部访问
-        port: 5173        // 指定访问端口号
+        port: 5173,
+        host: '0.0.0.0',
+        hmr: {
+            port: 5173,
+            protocol: 'ws',
+            host: 'localhost'
+        }
     }
 })

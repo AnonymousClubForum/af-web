@@ -1,91 +1,87 @@
-import {createRouter, createWebHashHistory} from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
+import {useUserStore} from '../stores'
+
+const routes = [
+    {
+        path: '/',
+        name: 'HomeView',
+        component: () => import('../views/HomeView.vue'),
+        meta: {title: '首页'}
+    },
+    {
+        path: '/login',
+        name: 'LoginView',
+        component: () => import('../views/LoginView.vue'),
+        meta: {title: '登录', guest: true}
+    },
+    {
+        path: '/register',
+        name: 'RegisterView',
+        component: () => import('../views/RegisterView.vue'),
+        meta: {title: '注册', guest: true}
+    },
+    {
+        path: '/posts',
+        name: 'PostList',
+        component: () => import('../views/PostList.vue'),
+        meta: {title: '帖子列表'}
+    },
+    {
+        path: '/post/create',
+        name: 'CreatePost',
+        component: () => import('../views/PostForm.vue'),
+        meta: {title: '发布帖子', requiresAuth: true}
+    },
+    {
+        path: '/post/edit/:id',
+        name: 'EditPost',
+        component: () => import('../views/PostForm.vue'),
+        meta: {title: '编辑帖子', requiresAuth: true}
+    },
+    {
+        path: '/post/:id',
+        name: 'PostDetail',
+        component: () => import('../views/PostDetail.vue'),
+        meta: {title: '帖子详情'}
+    },
+    {
+        path: '/profile',
+        name: 'ProfileView',
+        component: () => import('../views/ProfileView.vue'),
+        meta: {title: '个人中心', requiresAuth: true}
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        redirect: '/'
+    }
+]
 
 const router = createRouter({
-    history: createWebHashHistory(),
-    routes: [
-        {
-            name: 'home',
-            meta: {
-                title: 'Anonymous Forum',
-            },
-            path: '/',
-            component: () => import('../views/AppContainer.vue'),
-            redirect: {name: 'posts'},
-            children: [
-                {
-                    name: 'posts',
-                    meta: {
-                        title: 'Anonymous Forum',
-                    },
-                    path: 'posts',
-                    component: () => import('../views/post/PostsView.vue'),
-                },
-                {
-                    name: 'post',
-                    meta: {
-                        title: '帖子详情',
-                    },
-                    path: 'post/:id',
-                    component: () => import('../views/post/PostDetail.vue'),
-                },
-                {
-                    name: 'profile',
-                    meta: {
-                        title: '个人资料',
-                    },
-                    path: 'profile/:id',
-                    component: () => import('../views/user/ProfileView.vue'),
-                    props: true,   // 允许通过 props 传递路由参数
-                },
-                {
-                    name: 'newPost',
-                    meta: {
-                        title: '发布帖子',
-                    },
-                    path: 'newPost',
-                    component: () => import('../views/post/NewPost.vue'),
-                },
-                {
-                    name: 'auth',
-                    meta: {
-                        title: '用户认证',
-                    },
-                    path: 'auth',
-                    component: () => import('../views/user/AuthView.vue'),
-                },
-                {
-                    name: 'password',
-                    meta: {
-                        title: '修改密码',
-                    },
-                    path: 'password',
-                    component: () => import('../views/user/ResetPassword.vue'),
-                },
-                {
-                    name: 'gender',
-                    meta: {
-                        title: '修改性别',
-                    },
-                    path: 'gender',
-                    component: () => import('../views/user/ResetGender.vue'),
-                },
-                {
-                    name: 'search',
-                    meta: {
-                        title: '搜索结果',
-                    },
-                    path: 'search/:query',
-                    component: () => import('../views/post/SearchResult.vue'),
-                },
-            ],
-        },
-    ],
+    history: createWebHistory(),
+    routes
 })
 
+// 路由守卫
 router.beforeEach((to, _, next) => {
-    const title = to.meta.title as string;
-    document.title = title ? title : 'Anonymous Forum';
-    next();
-});
+    const userStore = useUserStore()
+
+    // 设置页面标题
+    document.title = to.meta.title ? `${to.meta.title} - 论坛` : '论坛'
+
+    // 需要登录的页面
+    if (to.meta.requiresAuth && !userStore.isLoggedIn) {
+        next('/login')
+        return
+    }
+
+    // 已登录用户不能访问登录/注册页面
+    if (to.meta.guest && userStore.isLoggedIn) {
+        next('/')
+        return
+    }
+
+    next()
+})
 
 export default router
