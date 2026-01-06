@@ -45,7 +45,7 @@
 import {onMounted, reactive, ref} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
-import {createPost, getPostDetail, updatePost} from '../api'
+import {createPost, getPost, updatePost} from '../api'
 import type {SavePostRequest} from '../types'
 
 const router = useRouter()
@@ -78,7 +78,7 @@ const loadPostDetail = async () => {
 
   loading.value = true
   try {
-    const res = await getPostDetail(postId)
+    const res = await getPost(postId)
     if (res.data) {
       postForm.title = res.data.title
       postForm.content = res.data.content

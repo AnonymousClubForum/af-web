@@ -4,7 +4,7 @@ import {ElMessage} from 'element-plus'
 // 创建 axios 实例
 const service: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
-    timeout: 10000
+    timeout: 3000
 })
 
 // 请求拦截器
@@ -13,7 +13,7 @@ service.interceptors.request.use(
         // 从 localStorage 获取 token
         const token = localStorage.getItem('token')
         if (token && config.headers) {
-            config.headers.Authorization = `Bearer ${token}`
+            config.headers.Authorization = token
         }
         return config
     },

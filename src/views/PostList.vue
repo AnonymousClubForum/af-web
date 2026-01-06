@@ -85,15 +85,15 @@ import {onMounted, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {Search} from '@element-plus/icons-vue'
-import {deletePost as deletePostApi, getPostList} from '../api'
-import type {Post} from '../types'
+import {deletePost as deletePostApi, getPostPage} from '../api'
+import type {Post, SimplePost} from '../types'
 import {useUserStore} from '../stores'
 
 const router = useRouter()
 const userStore = useUserStore()
 
 const loading = ref(false)
-const postList = ref<Post[]>([])
+const postList = ref<SimplePost[]>([])
 const searchKeyword = ref('')
 const currentPage = ref(1)
 const pageSize = ref(10)
@@ -103,10 +103,10 @@ const total = ref(0)
 const fetchPostList = async () => {
   loading.value = true
   try {
-    const res = await getPostList({
+    const res = await getPostPage({
       pageNum: currentPage.value,
       pageSize: pageSize.value,
-      keyword: searchKeyword.value || undefined
+      title: searchKeyword.value || undefined
     })
     if (res.data) {
       postList.value = res.data.records

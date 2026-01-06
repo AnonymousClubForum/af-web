@@ -6,7 +6,10 @@ export interface ApiResponse<T = any> {
     data: T
 }
 
-export interface PageParams {
-    pageNum: number
-    pageSize: number
+
+export interface PageResult<T> {
+    records: T[]
+    total: number
+    size: number
+    current: number
 }

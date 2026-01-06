@@ -28,7 +28,7 @@
         </template>
         <template v-else>
           <el-menu-item index="/profile">
-            <el-avatar v-if="userStore.user?.avatar" :src="userStore.user.avatar" :size="24"/>
+            <el-avatar v-if="userStore.user?.avatarId" :src="userStore.user.avatarId" :size="24"/>
             <span>{{ userStore.user?.username }}</span>
           </el-menu-item>
         </template>

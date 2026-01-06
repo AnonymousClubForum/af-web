@@ -1,22 +1,19 @@
 // 用户相关类型定义
-
 export interface User {
     id: number
     username: string
-    password?: string
-    avatar?: string
-    email?: string
-    bio?: string
-    createTime?: string
-    updateTime?: string
+    gender?: string
+    avatarId?: number
+    avatarThumbnailId?: number
 }
 
 export interface SaveUserRequest {
-    username: string
-    password: string
-    avatar?: string
-    email?: string
-    bio?: string
+    username?: string
+    password?: string
+    gender?: string
+    avatar?: File
+    avatarHeight?: number
+    avatarWidth?: number
 }
 
 export interface LoginRequest {
@@ -27,10 +24,4 @@ export interface LoginRequest {
 export interface LoginResponse {
     token: string
     user: User
-}
-
-export interface UpdateUserRequest {
-    avatar?: string
-    email?: string
-    bio?: string
 }

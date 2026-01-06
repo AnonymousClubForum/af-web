@@ -1,27 +1,10 @@
 import request from '../utils/request'
-import type {ApiResponse, PageResult, Post, QueryPostPageRequest, SavePostRequest} from '../types'
-
-// 分页查询帖子列表
-export function getPostList(params: QueryPostPageRequest): Promise<ApiResponse<PageResult<Post>>> {
-    return request({
-        url: '/post/page',
-        method: 'get',
-        params
-    })
-}
-
-// 获取帖子详情
-export function getPostDetail(id: number): Promise<ApiResponse<Post>> {
-    return request({
-        url: `/post/${id}`,
-        method: 'get'
-    })
-}
+import type {ApiResponse, PageResult, Post, QueryPostPageRequest, SavePostRequest, SimplePost} from '../types'
 
 // 创建帖子
 export function createPost(data: SavePostRequest): Promise<ApiResponse<Post>> {
     return request({
-        url: '/post/create',
+        url: '/post/save',
         method: 'post',
         data
     })
@@ -31,15 +14,32 @@ export function createPost(data: SavePostRequest): Promise<ApiResponse<Post>> {
 export function updatePost(data: SavePostRequest): Promise<ApiResponse<Post>> {
     return request({
         url: '/post/update',
-        method: 'put',
+        method: 'post',
         data
     })
 }
 
 // 删除帖子
-export function deletePost(id: number): Promise<ApiResponse<void>> {
+export function deletePost(id: number): Promise<ApiResponse<string>> {
     return request({
-        url: `/post/${id}`,
+        url: `/post/delete?id=${id}`,
         method: 'delete'
+    })
+}
+
+// 获取帖子详情
+export function getPost(id: number): Promise<ApiResponse<Post>> {
+    return request({
+        url: `/post/get?id=${id}`,
+        method: 'get'
+    })
+}
+
+// 分页查询帖子列表
+export function getPostPage(params: QueryPostPageRequest): Promise<ApiResponse<PageResult<SimplePost>>> {
+    return request({
+        url: '/post/get_page',
+        method: 'get',
+        params
     })
 }

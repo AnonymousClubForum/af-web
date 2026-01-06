@@ -26,19 +26,16 @@
               show-password
           />
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="registerForm.email" placeholder="请输入邮箱（选填）" clearable/>
-        </el-form-item>
-        <el-form-item label="个人简介" prop="bio">
-          <el-input
-              v-model="registerForm.bio"
-              type="textarea"
-              placeholder="请输入个人简介（选填）"
-              :rows="3"
-              maxlength="200"
-              show-word-limit
-          />
-        </el-form-item>
+<!--        <el-form-item label="个人简介" prop="bio">-->
+<!--          <el-input-->
+<!--              v-model="registerForm.bio"-->
+<!--              type="textarea"-->
+<!--              placeholder="请输入个人简介（选填）"-->
+<!--              :rows="3"-->
+<!--              maxlength="200"-->
+<!--              show-word-limit-->
+<!--          />-->
+<!--        </el-form-item>-->
         <el-form-item>
           <el-button type="primary" @click="handleRegister" :loading="loading" style="width: 100%">
             注册
@@ -70,8 +67,7 @@ const registerForm = reactive<SaveUserRequest & { confirmPassword: string }>({
   username: '',
   password: '',
   confirmPassword: '',
-  email: '',
-  bio: ''
+  gender: ''
 })
 
 const validatePassword = (_: any, value: any, callback: any) => {

@@ -5,7 +5,7 @@
         <div class="card-header">
           <el-button @click="goBack" :icon="ArrowLeft">返回</el-button>
           <el-button
-              v-if="userStore.user?.id === post?.userId"
+              v-if="userStore.user?.username === post?.username"
               type="primary"
               @click="editPost"
           >
@@ -19,17 +19,11 @@
 
         <div class="post-meta">
           <div class="author-info">
-            <el-avatar v-if="post.authorAvatar" :src="post.authorAvatar" :size="40"/>
+<!--            <el-avatar v-if="post.authorAvatar" :src="post.authorAvatar" :size="40"/>-->
             <div class="author-details">
-              <div class="author-name">{{ post.author }}</div>
-              <div class="post-time">{{ post.createTime }}</div>
+              <div class="author-name">{{ post.username }}</div>
+              <div class="post-time">{{ post.cTime }}</div>
             </div>
-          </div>
-          <div class="view-count">
-            <el-icon>
-              <View/>
-            </el-icon>
-            <span>{{ post.viewCount }} 次浏览</span>
           </div>
         </div>
 
@@ -46,8 +40,8 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
-import {ArrowLeft, View} from '@element-plus/icons-vue'
-import {getPostDetail} from '../api'
+import {ArrowLeft} from '@element-plus/icons-vue'
+import {getPost} from '../api'
 import type {Post} from '../types'
 import {useUserStore} from '../stores'
 
@@ -68,7 +62,7 @@ const loadPostDetail = async () => {
 
   loading.value = true
   try {
-    const res = await getPostDetail(postId)
+    const res = await getPost(postId)
     if (res.data) {
       post.value = res.data
     }
@@ -140,14 +134,6 @@ onMounted(() => {
           color: #999;
         }
       }
-    }
-
-    .view-count {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: #999;
-      font-size: 14px;
     }
   }
 

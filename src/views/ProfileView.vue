@@ -32,20 +32,20 @@
             <el-input v-model="userForm.username" disabled/>
           </el-form-item>
 
-          <el-form-item label="邮箱" prop="email">
-            <el-input v-model="userForm.email" placeholder="请输入邮箱" clearable/>
+          <el-form-item label="性别" prop="email">
+            <el-input v-model="userForm.gender" placeholder="请输入性别" clearable/>
           </el-form-item>
 
-          <el-form-item label="个人简介" prop="bio">
-            <el-input
-                v-model="userForm.bio"
-                type="textarea"
-                placeholder="请输入个人简介"
-                :rows="4"
-                maxlength="200"
-                show-word-limit
-            />
-          </el-form-item>
+<!--          <el-form-item label="个人简介" prop="bio">-->
+<!--            <el-input-->
+<!--                v-model="userForm.bio"-->
+<!--                type="textarea"-->
+<!--                placeholder="请输入个人简介"-->
+<!--                :rows="4"-->
+<!--                maxlength="200"-->
+<!--                show-word-limit-->
+<!--            />-->
+<!--          </el-form-item>-->
 
           <el-form-item>
             <el-button type="primary" @click="handleUpdate" :loading="loading">
@@ -65,7 +65,7 @@ import {useRouter} from 'vue-router'
 import {ElMessage, type FormInstance, type FormRules, type UploadProps} from 'element-plus'
 import {Plus} from '@element-plus/icons-vue'
 import {getCurrentUser, updateUser} from '../api'
-import type {UpdateUserRequest} from '../types'
+import type {SaveUserRequest} from '../types'
 import {useUserStore} from '../stores'
 
 const router = useRouter()
@@ -79,11 +79,10 @@ const uploadHeaders = computed(() => ({
   Authorization: `Bearer ${userStore.token}`
 }))
 
-const userForm = reactive<UpdateUserRequest & { username: string }>({
-  username: '',
-  avatar: '',
-  email: '',
-  bio: ''
+const userForm = reactive<SaveUserRequest>({
+  username: "",
+  password: "",
+  gender: ""
 })
 
 const rules: FormRules = {
@@ -99,9 +98,7 @@ const loadUserInfo = async () => {
     const res = await getCurrentUser()
     if (res.data) {
       userForm.username = res.data.username
-      userForm.avatar = res.data.avatar || ''
-      userForm.email = res.data.email || ''
-      userForm.bio = res.data.bio || ''
+      userForm.gender = res.data.gender || ''
     }
   } catch (error) {
     console.error('加载用户信息失败:', error)
@@ -113,14 +110,14 @@ const loadUserInfo = async () => {
 // 上传前验证
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
   const isImage = ['image/jpeg', 'image/png', 'image/gif'].includes(rawFile.type)
-  const isLt2M = rawFile.size / 1024 / 1024 < 2
+  const isLt10M = rawFile.size / 1024 / 1024 < 10
 
   if (!isImage) {
     ElMessage.error('头像只能是 JPG/PNG/GIF 格式!')
     return false
   }
-  if (!isLt2M) {
-    ElMessage.error('头像大小不能超过 2MB!')
+  if (!isLt10M) {
+    ElMessage.error('头像大小不能超过 10MB!')
     return false
   }
   return true
@@ -150,16 +147,19 @@ const handleUpdate = async () => {
 
     loading.value = true
     try {
-      const updateData: UpdateUserRequest = {
-        avatar: userForm.avatar,
-        email: userForm.email,
-        bio: userForm.bio
-      }
+      if (userStore.user) {
+        const updateData: SaveUserRequest = {
+          username: userStore.user.username,
+          password: "",
+          avatar: userForm.avatar,
+          gender: userForm.gender
+        }
 
-      const res = await updateUser(updateData)
-      if (res.data) {
-        userStore.updateUser(res.data)
-        ElMessage.success('修改成功')
+        const res = await updateUser(updateData)
+        if (res.data) {
+          userStore.updateUser(updateData)
+          ElMessage.success('修改成功')
+        }
       }
     } catch (error) {
       console.error('更新用户信息失败:', error)

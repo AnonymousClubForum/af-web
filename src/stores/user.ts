@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia'
 import {computed, ref} from 'vue'
-import type {User} from '../types'
+import type {SaveUserRequest, User} from '../types'
+import {ElMessage} from "element-plus";
 
 export const useUserStore = defineStore('user', () => {
     const token = ref<string>(localStorage.getItem('token') || '')
@@ -29,9 +30,16 @@ export const useUserStore = defineStore('user', () => {
     }
 
     // 更新用户信息
-    function updateUser(userData: User) {
-        user.value = userData
-        localStorage.setItem('user', JSON.stringify(userData))
+    function updateUser(userData: SaveUserRequest) {
+        if (!user.value) {
+            ElMessage.error('登录过期')
+            return
+        }
+        if (userData.username)
+            user.value.username = userData.username
+        if (userData.gender)
+            user.value.gender = userData.gender
+        localStorage.setItem('user', JSON.stringify(user.value))
     }
 
     return {
