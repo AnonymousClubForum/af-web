@@ -1,5 +1,5 @@
 import axios, {type AxiosInstance, type AxiosResponse, type InternalAxiosRequestConfig} from 'axios'
-import {ElMessage} from 'element-plus'
+import {ElMessage, ElMessageBox} from 'element-plus'
 
 // 创建 axios 实例
 const service: AxiosInstance = axios.create({
@@ -45,7 +45,7 @@ service.interceptors.response.use(
             const {status} = error.response
             switch (status) {
                 case 401:
-                    ElMessage.error('未授权，请重新登录')
+                    ElMessageBox.alert('未授权，请重新登录')
                     localStorage.removeItem('token')
                     localStorage.removeItem('user')
                     window.location.href = '/login'
