@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml* ./
 # 安装包管理工具（根据你的项目选择：npm/yarn/pnpm）
 RUN npm install -g pnpm
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 # 复制所有源码
 COPY . .
 # 构建生产环境包
