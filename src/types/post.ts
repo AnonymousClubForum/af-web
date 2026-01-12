@@ -1,7 +1,8 @@
 // 帖子相关类型定义
 export interface Post {
     id: number
-    username: number
+    userId: number
+    username: string
     title: string
     content: string
     cTime?: string

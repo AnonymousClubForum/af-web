@@ -57,7 +57,7 @@ service.interceptors.response.use(
                     ElMessage.error('请求资源不存在')
                     break
                 case 500:
-                    ElMessage.error('服务器错误')
+                    ElMessage.error(error.response.data?.message || '服务器错误')
                     break
                 default:
                     ElMessage.error(error.response.data?.message || '请求失败')
