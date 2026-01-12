@@ -64,7 +64,7 @@ import {computed, reactive, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {ElMessage, type FormInstance, type FormRules, type UploadProps} from 'element-plus'
 import {Plus} from '@element-plus/icons-vue'
-import {getCurrentUser, updateUser} from '../api'
+import {updateUser} from '../api'
 import type {SaveUserRequest} from '../types'
 import {useUserStore} from '../stores'
 
@@ -94,17 +94,11 @@ const rules: FormRules = {
 // 加载用户信息
 const loadUserInfo = async () => {
   loading.value = true
-  try {
-    const res = await getCurrentUser()
-    if (res.data) {
-      userForm.username = res.data.username
-      userForm.gender = res.data.gender || ''
-    }
-  } catch (error) {
-    console.error('加载用户信息失败:', error)
-  } finally {
-    loading.value = false
+  if (userStore.user) {
+    userForm.username = userStore.user.username
+    userForm.gender = userStore.user.gender
   }
+  loading.value = false
 }
 
 // 上传前验证

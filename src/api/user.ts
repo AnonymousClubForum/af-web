@@ -19,14 +19,6 @@ export function login(data: LoginRequest): Promise<ApiResponse<LoginResponse>> {
     })
 }
 
-// 获取当前用户信息
-export function getCurrentUser(): Promise<ApiResponse<User>> {
-    return request({
-        url: '/user/get',
-        method: 'get'
-    })
-}
-
 // 更新用户信息
 export function updateUser(data: SaveUserRequest): Promise<ApiResponse<string>> {
     return request({
