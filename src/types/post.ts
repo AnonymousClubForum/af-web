@@ -26,8 +26,7 @@ export interface SavePostRequest {
 export interface QueryPostPageRequest {
     pageNum: number
     pageSize: number
-    username?: string
-    title?: string
-    content?: string
+    userId?: string
+    searchContent?: string
 }
 

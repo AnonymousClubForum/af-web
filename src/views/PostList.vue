@@ -106,7 +106,7 @@ const fetchPostList = async () => {
     const res = await getPostPage({
       pageNum: currentPage.value,
       pageSize: pageSize.value,
-      title: searchKeyword.value || undefined
+      searchContent: searchKeyword.value || undefined
     })
     if (res.data) {
       postList.value = res.data.records
