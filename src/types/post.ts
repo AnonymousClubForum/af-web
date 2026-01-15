@@ -5,16 +5,16 @@ export interface Post {
     username: string
     title: string
     content: string
-    cTime?: string
-    uTime?: string
+    ctime?: string
+    utime?: string
 }
 
 export interface SimplePost {
     id: string
     username: string
     title: string
-    cTime?: string
-    uTime?: string
+    ctime?: string
+    utime?: string
 }
 
 export interface SavePostRequest {

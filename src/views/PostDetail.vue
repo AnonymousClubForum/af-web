@@ -22,7 +22,7 @@
 <!--            <el-avatar v-if="post.authorAvatar" :src="post.authorAvatar" :size="40"/>-->
             <div class="author-details">
               <div class="author-name">{{ post.username }}</div>
-              <div class="post-time">{{ post.cTime }}</div>
+              <div class="post-time">{{ post.ctime }}</div>
             </div>
           </div>
         </div>
