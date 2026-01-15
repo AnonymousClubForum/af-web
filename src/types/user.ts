@@ -1,10 +1,10 @@
 // 用户相关类型定义
 export interface User {
-    id: number
+    id: string
     username: string
     gender?: string
-    avatarId?: number
-    avatarThumbnailId?: number
+    avatarId?: string
+    avatarThumbnailId?: string
 }
 
 export interface SaveUserRequest {

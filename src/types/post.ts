@@ -1,7 +1,7 @@
 // 帖子相关类型定义
 export interface Post {
-    id: number
-    userId: number
+    id: string
+    userId: string
     username: string
     title: string
     content: string
@@ -10,7 +10,7 @@ export interface Post {
 }
 
 export interface SimplePost {
-    id: number
+    id: string
     username: string
     title: string
     cTime?: string
@@ -18,7 +18,7 @@ export interface SimplePost {
 }
 
 export interface SavePostRequest {
-    id?: number
+    id?: string
     title?: string
     content?: string
 }
