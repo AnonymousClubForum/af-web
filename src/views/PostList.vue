@@ -126,7 +126,7 @@ const handleSearch = () => {
 }
 
 // 查看帖子详情
-const viewPost = (id: number) => {
+const viewPost = (id: string) => {
   router.push(`/post/${id}`)
 }
 
@@ -146,7 +146,7 @@ const editPost = (post: Post) => {
 }
 
 // 删除帖子
-const deletePost = async (id: number) => {
+const deletePost = async (id: string) => {
   try {
     await ElMessageBox.confirm('确定要删除这个帖子吗？', '提示', {
       confirmButtonText: '确定',

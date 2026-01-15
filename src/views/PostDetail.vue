@@ -54,7 +54,7 @@ const post = ref<Post | null>(null)
 
 // 加载帖子详情
 const loadPostDetail = async () => {
-  const postId = Number(route.params.id)
+  const postId = String(route.params.id)
   if (!postId) {
     router.replace('/')
     return

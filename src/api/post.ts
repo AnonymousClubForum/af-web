@@ -20,7 +20,7 @@ export function updatePost(data: SavePostRequest): Promise<ApiResponse<Post>> {
 }
 
 // 删除帖子
-export function deletePost(id: number): Promise<ApiResponse<string>> {
+export function deletePost(id: string): Promise<ApiResponse<string>> {
     return request({
         url: `/post/delete?id=${id}`,
         method: 'delete'
@@ -28,7 +28,7 @@ export function deletePost(id: number): Promise<ApiResponse<string>> {
 }
 
 // 获取帖子详情
-export function getPost(id: number): Promise<ApiResponse<Post>> {
+export function getPost(id: string): Promise<ApiResponse<Post>> {
     return request({
         url: `/post/get?id=${id}`,
         method: 'get'

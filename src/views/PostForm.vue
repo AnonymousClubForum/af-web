@@ -73,7 +73,7 @@ const rules: FormRules = {
 
 // 加载帖子详情（编辑模式）
 const loadPostDetail = async () => {
-  const postId = Number(route.params.id)
+  const postId = String(route.params.id)
   if (!postId) return
 
   loading.value = true
