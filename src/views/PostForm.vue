@@ -105,13 +105,13 @@ const handleSubmit = async () => {
         const res = await updatePost(postForm)
         if (res.data) {
           ElMessage.success('修改成功')
-          router.push(`/post/${res.data}`)
+          router.push(`/posts`)
         }
       } else {
         const res = await createPost(postForm)
         if (res.data) {
           ElMessage.success('发布成功')
-          router.push(`/post/${res.data}`)
+          router.push(`/posts`)
         }
       }
     } catch (error) {
