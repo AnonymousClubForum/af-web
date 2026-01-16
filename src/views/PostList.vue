@@ -26,7 +26,7 @@
             <el-link type="primary" @click="viewPost(row.id)">{{ row.title }}</el-link>
           </template>
         </el-table-column>
-        <el-table-column prop="author" label="作者" width="150">
+        <el-table-column prop="username" label="作者" width="150">
           <template #default="{ row }">
             <div class="author-info">
 <!--              <el-avatar-->
@@ -40,7 +40,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="viewCount" label="浏览量" width="100" align="center"/>
-        <el-table-column prop="createTime" label="发布时间" width="180"/>
+        <el-table-column prop="ctime" label="发布时间" width="180">
+          <template #default="{ row }">
+              <span>{{ row.ctime }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="150" fixed="right">
           <template #default="{ row }">
             <el-button
