@@ -82,7 +82,6 @@ const loadPostDetail = async () => {
     if (res.data) {
       postForm.title = res.data.title
       postForm.content = res.data.content
-      postForm.id = res.data.id
     }
   } catch (error) {
     console.error('加载帖子详情失败:', error)

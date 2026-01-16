@@ -11,6 +11,7 @@ export interface Post {
 
 export interface SimplePost {
     id: string
+    userId: string
     username: string
     title: string
     ctime?: string

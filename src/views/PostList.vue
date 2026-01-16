@@ -29,13 +29,13 @@
         <el-table-column prop="author" label="作者" width="150">
           <template #default="{ row }">
             <div class="author-info">
-              <el-avatar
-                  v-if="row.authorAvatar"
-                  :src="row.authorAvatar"
-                  :size="30"
-                  style="margin-right: 8px"
-              />
-              <span>{{ row.author }}</span>
+<!--              <el-avatar-->
+<!--                  v-if="row.avatar"-->
+<!--                  :src="row.avatar"-->
+<!--                  :size="30"-->
+<!--                  style="margin-right: 8px"-->
+<!--              />-->
+              <span>{{ row.username }}</span>
             </div>
           </template>
         </el-table-column>
