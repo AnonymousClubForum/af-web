@@ -32,8 +32,13 @@
             <el-input v-model="userForm.username" disabled/>
           </el-form-item>
 
-          <el-form-item label="性别" prop="email">
-            <el-input v-model="userForm.gender" placeholder="请输入性别" clearable/>
+          <el-form-item label="性别" prop="gender">
+            <el-radio-group v-model="userForm.gender">
+              <el-radio label="男" />
+              <el-radio label="女" />
+              <el-radio label="其他" />
+              <el-radio label="秘密" />
+            </el-radio-group>
           </el-form-item>
 
 <!--          <el-form-item label="个人简介" prop="bio">-->
@@ -82,15 +87,15 @@ const uploadHeaders = computed(() => ({
 const userForm = reactive<SaveUserRequest>({
   username: "",
   password: "",
-  gender: ""
+  gender: "",
+  avatar: undefined
 })
 
 const rules: FormRules = {
-  email: [
-    {type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur'}
+  gender: [
+    { required: true, message: '请选择您的性别', trigger: 'change' }
   ]
 }
-
 // 加载用户信息
 const loadUserInfo = async () => {
   loading.value = true
@@ -230,6 +235,10 @@ loadUserInfo()
       }
     }
   }
+}
+
+:deep(.el-radio) {
+  margin-right: 20px;
 }
 
 @media (max-width: 768px) {

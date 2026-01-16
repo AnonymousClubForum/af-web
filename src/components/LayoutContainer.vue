@@ -9,10 +9,11 @@
       <div class="menu-brand">
         <router-link to="/">
           <el-link :underline="false">
-            <el-icon>
-              <ChatDotRound/>
-            </el-icon>
-            <span>Anonymous Forum</span>
+            <el-image
+                src="/banner.png"
+                alt="Anonymous Forum"
+                style="width: auto; height: auto"
+            />
           </el-link>
         </router-link>
       </div>

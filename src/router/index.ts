@@ -67,7 +67,7 @@ router.beforeEach((to, _, next) => {
     const userStore = useUserStore()
 
     // 设置页面标题
-    document.title = to.meta.title ? `${to.meta.title} - 论坛` : '论坛'
+    document.title = to.meta.title ? `${to.meta.title} - 没名字论坛` : '没名字论坛'
 
     // 需要登录的页面
     if (to.meta.requiresAuth && !userStore.isLoggedIn) {
