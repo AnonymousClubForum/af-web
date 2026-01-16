@@ -2,7 +2,7 @@ import request from '../utils/request'
 import type {ApiResponse, PageResult, Post, QueryPostPageRequest, SavePostRequest, SimplePost} from '../types'
 
 // 创建帖子
-export function createPost(data: SavePostRequest): Promise<ApiResponse<Post>> {
+export function createPost(data: SavePostRequest): Promise<ApiResponse<string>> {
     return request({
         url: '/post/save',
         method: 'post',
@@ -11,7 +11,7 @@ export function createPost(data: SavePostRequest): Promise<ApiResponse<Post>> {
 }
 
 // 更新帖子
-export function updatePost(data: SavePostRequest): Promise<ApiResponse<Post>> {
+export function updatePost(data: SavePostRequest): Promise<ApiResponse<string>> {
     return request({
         url: '/post/update',
         method: 'post',

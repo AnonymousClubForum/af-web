@@ -67,7 +67,7 @@ const rules: FormRules = {
   ],
   content: [
     {required: true, message: '请输入帖子内容', trigger: 'blur'},
-    {min: 10, max: 5000, message: '内容长度在 10 到 5000 个字符', trigger: 'blur'}
+    {min: 1, max: 10000, message: '内容长度在 1 到 10000 个字符', trigger: 'blur'}
   ]
 }
 
@@ -106,13 +106,13 @@ const handleSubmit = async () => {
         const res = await updatePost(postForm)
         if (res.data) {
           ElMessage.success('修改成功')
-          router.push(`/post/${res.data.id}`)
+          router.push(`/post/${res.data}`)
         }
       } else {
         const res = await createPost(postForm)
         if (res.data) {
           ElMessage.success('发布成功')
-          router.push(`/post/${res.data.id}`)
+          router.push(`/post/${res.data}`)
         }
       }
     } catch (error) {
