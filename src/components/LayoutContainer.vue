@@ -45,7 +45,6 @@
 <script setup lang="ts">
 import {computed} from 'vue'
 import {useRoute} from 'vue-router'
-import {ChatDotRound} from '@element-plus/icons-vue'
 import {useUserStore} from '../stores'
 
 const route = useRoute()
