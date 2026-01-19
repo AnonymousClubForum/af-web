@@ -1,16 +1,19 @@
 <template>
   <div class="comment-list-container">
-    <el-card v-loading="loading">
+    <el-card v-loading="loading" shadow="hover" border-radius="12px">
       <!-- 发布一级评论区域 -->
       <div class="comment-post">
-      <textarea
-          v-model="commentContent"
-          placeholder="请输入评论内容..."
-          class="comment-input"
-          :disabled="!props.postId"
-      ></textarea>
-        <button @click="handlePostComment(undefined)" class="post-btn"
-                :disabled="!props.postId || !commentContent.trim()">
+        <textarea
+            v-model="commentContent"
+            placeholder="分享你的观点和看法..."
+            class="comment-input"
+            :disabled="!props.postId"
+        ></textarea>
+        <button
+            @click="handlePostComment(undefined)"
+            class="post-btn"
+            :disabled="!props.postId || !commentContent.trim()"
+        >
           发布评论
         </button>
       </div>
@@ -29,14 +32,18 @@
           </div>
 
           <!-- 回复框 -->
-          <div class="reply-box" v-if="activeReplyId === comment.id">
-          <textarea
-              v-model="replyContent"
-              placeholder="请输入回复内容..."
-              class="reply-input"
-          ></textarea>
+          <div class="reply-box" v-if="activeReplyId === comment.id" :data-parent-id="comment.id">
+            <textarea
+                v-model="replyContent"
+                placeholder="友善回复，文明交流哦～"
+                class="reply-input"
+            ></textarea>
             <div class="reply-actions">
-              <button @click="handlePostComment(comment.id)" class="reply-post-btn" :disabled="!replyContent.trim()">
+              <button
+                  @click="handlePostComment(comment.id)"
+                  class="reply-post-btn"
+                  :disabled="!replyContent.trim()"
+              >
                 发布回复
               </button>
               <button @click="activeReplyId = undefined" class="cancel-btn">取消</button>
@@ -69,10 +76,10 @@
           </div>
         </div>
       </div>
-      <div class="empty-tip" v-else>暂无评论</div>
+      <div class="empty-tip" v-else>✨ 暂无评论，来说点什么吧～</div>
 
       <!-- 分页区域 -->
-      <div class="pagination">
+      <div class="pagination main-pagination">
         <el-pagination
             v-model:current-page="pageNum"
             v-model:page-size="pageSize"
@@ -177,7 +184,7 @@ const handlePostComment = async (parentId?: string) => {
       content
     })
     if (res.code === 200) {
-      ElMessage.info(parentId ? '回复成功！' : '发布成功！')
+      ElMessage.success(parentId ? '回复成功！' : '发布成功！')
       // 清空输入框
       if (parentId) {
         replyContent.value = ''
@@ -208,7 +215,7 @@ const handleDeleteComment = async (id: string) => {
   try {
     const res = await deleteComment(id)
     if (res.code === 200) {
-      ElMessage.info('删除成功！')
+      ElMessage.success('删除成功！')
       // 重新加载当前页评论
       loadCommentList()
     } else {
@@ -230,7 +237,7 @@ const showReplyBox = (parentId: string) => {
   // 滚动到回复框位置（可选）
   setTimeout(() => {
     const replyBox = document.querySelector(`.reply-box[data-parent-id="${parentId}"]`)
-    replyBox?.scrollIntoView({behavior: 'smooth'})
+    replyBox?.scrollIntoView({behavior: 'smooth', block: 'nearest'})
   }, 0)
 }
 
@@ -281,86 +288,138 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* 全局容器样式 */
 .comment-list-container {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 0 20px;
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
+/* 发布评论区域 */
 .comment-post {
-  margin-bottom: 30px;
+  margin-bottom: 28px;
 }
 
 .comment-input, .reply-input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #e5e5e5;
-  border-radius: 4px;
+  padding: 14px 16px;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
   resize: none;
-  margin-bottom: 10px;
+  font-size: 15px;
+  line-height: 1.6;
+  box-sizing: border-box;
+  transition: all 0.25s ease;
+  background-color: #fff;
 }
 
 .comment-input {
-  height: 100px;
+  height: 110px;
+  margin-bottom: 12px;
 }
 
 .reply-input {
-  height: 60px;
+  height: 70px;
+  margin-bottom: 10px;
 }
 
+/* 输入框聚焦/禁用样式 */
+.comment-input:focus, .reply-input:focus {
+  outline: none;
+  border-color: #409eff;
+  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.1);
+}
+
+.comment-input:disabled {
+  background-color: #fafafa;
+  color: #c9c9c9;
+  cursor: not-allowed;
+}
+
+/* 按钮通用样式 */
 .post-btn, .reply-post-btn {
   background-color: #409eff;
   color: #fff;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 9px 20px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.post-btn:hover, .reply-post-btn:hover {
+  background-color: #3393e8;
 }
 
 .post-btn:disabled, .reply-post-btn:disabled {
-  background-color: #a0cfff;
+  background-color: #b3d4fc;
   cursor: not-allowed;
 }
 
 .cancel-btn {
-  margin-left: 10px;
-  padding: 8px 16px;
-  border: 1px solid #e5e5e5;
-  border-radius: 4px;
+  margin-left: 12px;
+  padding: 9px 20px;
+  border: 1px solid #e8e8e8;
+  background-color: #fff;
+  color: #666;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+  border-color: #d0d0d0;
+  color: #333;
+}
+
+/* 一级评论列表样式 */
+.comment-list {
+  margin-top: 8px;
 }
 
 .comment-item {
-  padding: 15px 0;
-  border-bottom: 1px solid #f5f5f5;
+  padding: 20px 0;
+  border-bottom: 1px solid #f5f7fa;
+  transition: all 0.2s ease;
+}
+
+.comment-item:hover {
+  background-color: #fbfdff;
 }
 
 .comment-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 8px;
+  align-items: center;
+  margin-bottom: 12px;
 }
 
 .username {
   font-weight: 600;
-  color: #333;
+  color: #1f2329;
+  font-size: 15px;
 }
 
 .time {
-  color: #999;
+  color: #909399;
   font-size: 12px;
 }
 
 .comment-content {
-  color: #666;
-  line-height: 1.5;
-  margin-bottom: 10px;
+  color: #303133;
+  line-height: 1.7;
+  margin-bottom: 14px;
+  font-size: 15px;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .comment-actions {
   display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
+  gap: 18px;
+  margin-bottom: 8px;
 }
 
 .reply-btn {
@@ -368,7 +427,14 @@ onMounted(() => {
   border: none;
   background: transparent;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.reply-btn:hover {
+  color: #3393e8;
 }
 
 .delete-btn {
@@ -376,59 +442,78 @@ onMounted(() => {
   border: none;
   background: transparent;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
+  transition: all 0.2s ease;
 }
 
+.delete-btn:hover {
+  color: #e65252;
+}
+
+/* 回复框样式 */
 .reply-box {
-  margin: 10px 0 20px 20px;
-  padding: 10px;
-  border: 1px solid #f0f0f0;
-  border-radius: 4px;
+  margin: 12px 0 20px 24px;
+  padding: 16px;
+  border: 1px solid #f0f4f9;
+  border-radius: 10px;
+  background-color: #fbfdff;
 }
 
+/* 二级评论样式 【重点美化，层级分明】 */
 .sub-comment-list {
-  margin-left: 20px;
-  padding-left: 10px;
-  border-left: 2px solid #f0f0f0;
+  margin-left: 24px;
+  padding-left: 16px;
+  border-left: 2px solid #e5edfa;
+  margin-top: 8px;
 }
 
 .sub-comment-item {
-  padding: 10px 0;
-  border-bottom: 1px solid #f8f8f8;
+  padding: 16px 0;
+  border-bottom: 1px solid #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+}
+
+.sub-comment-item:hover {
+  background-color: #f9fcff;
 }
 
 .sub-comment-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 5px;
+  align-items: center;
+  margin-bottom: 6px;
 }
 
 .sub-comment-content {
-  color: #666;
+  color: #303133;
   font-size: 14px;
-  line-height: 1.4;
-  margin-bottom: 5px;
+  line-height: 1.6;
+  margin-bottom: 6px;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
+/* 空状态样式 */
 .empty-tip {
   text-align: center;
-  color: #999;
-  padding: 20px 0;
+  color: #909399;
+  padding: 40px 0;
+  font-size: 15px;
 }
 
+/* 分页样式 */
 .pagination {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
-  gap: 10px;
+  margin-top: 24px;
+  gap: 8px;
 }
 
-.pagination button {
-  padding: 4px 12px;
-  border: 1px solid #e5e5e5;
-  border-radius: 4px;
-  cursor: pointer;
+.main-pagination {
+  margin-top: 32px;
 }
 
 .pagination button:disabled {
