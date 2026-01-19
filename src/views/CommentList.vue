@@ -1,6 +1,12 @@
 <template>
   <div class="comment-list-container">
     <el-card v-loading="loading" shadow="hover" border-radius="12px">
+      <template #header>
+        <div class="card-header">
+          <h1>评论</h1>
+        </div>
+      </template>
+
       <!-- 发布一级评论区域 -->
       <div class="comment-post">
         <textarea
