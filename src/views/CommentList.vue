@@ -1,6 +1,6 @@
 <template>
   <div class="comment-list-container">
-    <el-card v-loading="loading" shadow="hover" border-radius="12px">
+    <el-card v-loading="loading">
       <template #header>
         <div class="card-header">
           <h1>评论</h1>
