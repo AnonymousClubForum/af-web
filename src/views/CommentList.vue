@@ -91,6 +91,7 @@
 import {onMounted, ref, watch} from 'vue'
 import {createComment, deleteComment, getCommentPage} from '../api'
 import type {Comment} from '../types'
+import {ElMessage} from "element-plus";
 
 // 从父组件接收props
 const props = defineProps<{
@@ -165,7 +166,7 @@ const loadCommentList = async () => {
 const handlePostComment = async (parentId?: string) => {
   const content = parentId ? replyContent.value.trim() : commentContent.value.trim()
   if (!content) {
-    alert(parentId ? '请输入回复内容！' : '请输入评论内容！')
+    ElMessage.error(parentId ? '请输入回复内容！' : '请输入评论内容！')
     return
   }
 
@@ -176,7 +177,7 @@ const handlePostComment = async (parentId?: string) => {
       content
     })
     if (res.code === 200) {
-      alert(parentId ? '回复成功！' : '发布成功！')
+      ElMessage.info(parentId ? '回复成功！' : '发布成功！')
       // 清空输入框
       if (parentId) {
         replyContent.value = ''
@@ -187,11 +188,11 @@ const handlePostComment = async (parentId?: string) => {
       // 重新加载当前页评论
       loadCommentList()
     } else {
-      alert((parentId ? '回复' : '发布') + '失败：' + res.message)
+      ElMessage.error((parentId ? '回复' : '发布') + '失败：' + res.message)
     }
   } catch (error) {
     console.error((parentId ? '回复' : '发布') + '评论异常:', error)
-    alert((parentId ? '回复' : '发布') + '评论出错，请重试！')
+    ElMessage.error((parentId ? '回复' : '发布') + '评论出错，请重试！')
   }
 }
 
@@ -207,15 +208,15 @@ const handleDeleteComment = async (id: string) => {
   try {
     const res = await deleteComment(id)
     if (res.code === 200) {
-      alert('删除成功！')
+      ElMessage.info('删除成功！')
       // 重新加载当前页评论
       loadCommentList()
     } else {
-      alert('删除失败：' + res.message)
+      ElMessage.error('删除失败：' + res.message)
     }
   } catch (error) {
     console.error('删除评论异常:', error)
-    alert('删除评论出错，请重试！')
+    ElMessage.error('删除评论出错，请重试！')
   }
 }
 

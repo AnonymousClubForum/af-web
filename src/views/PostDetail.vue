@@ -19,7 +19,7 @@
 
         <div class="post-meta">
           <div class="author-info">
-<!--            <el-avatar v-if="post.authorAvatar" :src="post.authorAvatar" :size="40"/>-->
+            <!--            <el-avatar v-if="post.authorAvatar" :src="post.authorAvatar" :size="40"/>-->
             <div class="author-details">
               <div class="author-name">{{ post.username }}</div>
               <div class="post-time">{{ post.ctime }}</div>
@@ -32,12 +32,9 @@
         <div class="post-body">
           {{ post.content }}
         </div>
-
-        <el-divider/>
-
-        <CommentList :postId="post.id" />
       </div>
     </el-card>
+    <CommentList v-if="post" :postId="post.id"/>
   </div>
 </template>
 

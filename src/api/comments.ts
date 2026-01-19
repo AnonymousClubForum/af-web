@@ -1,5 +1,5 @@
 import request from '../utils/request'
-import type {ApiResponse, PageResult, Comment, QueryCommentPageRequest, SaveCommentRequest} from "../types";
+import type {ApiResponse, Comment, PageResult, QueryCommentPageRequest, SaveCommentRequest} from "../types";
 
 /**
  * 发布评论
