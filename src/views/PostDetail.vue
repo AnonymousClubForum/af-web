@@ -32,6 +32,9 @@
         <div class="post-body">
           {{ post.content }}
         </div>
+
+        <el-divider/>
+
         <CommentList :postId="post.id" />
       </div>
     </el-card>

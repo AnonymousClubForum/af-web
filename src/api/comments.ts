@@ -1,5 +1,5 @@
 import request from '../utils/request'
-import type {ApiResponse, QueryCommentPageRequest, SaveCommentRequest} from "../types";
+import type {ApiResponse, PageResult, Comment, QueryCommentPageRequest, SaveCommentRequest} from "../types";
 
 /**
  * 发布评论
@@ -29,7 +29,7 @@ export function deleteComment(id: string): Promise<ApiResponse<string>> {
  * 分页获取评论
  * @param params - 分页参数
  */
-export function getCommentPage(params: QueryCommentPageRequest): Promise<ApiResponse<string>> {
+export function getCommentPage(params: QueryCommentPageRequest): Promise<ApiResponse<PageResult<Comment>>> {
     return request({
         url: '/comment/get_page',
         method: 'get',

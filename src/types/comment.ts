@@ -4,6 +4,7 @@ export interface Comment {
     userId: string
     username: string
     content: string
+    subComments?: Comment[]
     ctime?: string
     utime?: string
 }
