@@ -32,6 +32,7 @@
         <div class="post-body">
           {{ post.content }}
         </div>
+        <CommentList :postId="post.id" />
       </div>
     </el-card>
   </div>
@@ -44,6 +45,7 @@ import {ArrowLeft} from '@element-plus/icons-vue'
 import {getPost} from '../api'
 import type {Post} from '../types'
 import {useUserStore} from '../stores'
+import CommentList from "./CommentList.vue";
 
 const router = useRouter()
 const route = useRoute()
