@@ -19,7 +19,7 @@
               :before-upload="beforeAvatarUpload"
               :on-error="handleUploadError"
           >
-            <el-avatar v-if="userForm.avatar" :src="userForm.avatar" :size="120"/>
+            <el-avatar v-if="userForm.avatarUrl" :src="userForm.avatarUrl" :size="120"/>
             <el-icon v-else class="avatar-uploader-icon" :size="60">
               <Plus/>
             </el-icon>
@@ -27,7 +27,7 @@
           </el-upload>
         </div>
 
-        <el-form :model="userForm" :rules="rules" ref="userFormRef" label-width="80px">
+        <el-form :model="userForm" ref="userFormRef" label-width="80px">
           <el-form-item label="用户名">
             <el-input v-model="userForm.username" disabled/>
           </el-form-item>
@@ -67,11 +67,12 @@
 <script setup lang="ts">
 import {computed, reactive, ref} from 'vue'
 import {useRouter} from 'vue-router'
-import {ElMessage, type FormInstance, type FormRules, type UploadProps} from 'element-plus'
+import {ElMessage, type FormInstance, type UploadProps} from 'element-plus'
 import {Plus} from '@element-plus/icons-vue'
 import {updateUser} from '../api'
 import type {SaveUserRequest} from '../types'
 import {useUserStore} from '../stores'
+import {loadImage} from "../utils/loadImage.ts";
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -79,43 +80,38 @@ const userStore = useUserStore()
 const userFormRef = ref<FormInstance>()
 const loading = ref(false)
 
-const uploadUrl = computed(() => import.meta.env.VITE_API_BASE_URL + '/user/upload/avatar')
+const uploadUrl = computed(() => '/user/avatar/upload')
 const uploadHeaders = computed(() => ({
-  Authorization: `Bearer ${userStore.token}`
+  Authorization: `${userStore.token}`
 }))
 
-const userForm = reactive<SaveUserRequest>({
+const userForm = reactive<SaveUserRequest & { avatarUrl: string }>({
   username: "",
   password: "",
   gender: "",
-  avatar: undefined
+  avatarUrl: ""
 })
 
-const rules: FormRules = {
-  gender: [
-    { required: true, message: '请选择您的性别', trigger: 'change' }
-  ]
-}
 // 加载用户信息
 const loadUserInfo = async () => {
   loading.value = true
   if (userStore.user) {
     userForm.username = userStore.user.username
     userForm.gender = userStore.user.gender
+    if (userStore.user.avatarId) {
+      userForm.avatarUrl = await loadImage(userStore.user.avatarId)
+    }
   }
   loading.value = false
 }
 
 // 上传前验证
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
-  const isImage = ['image/jpeg', 'image/png', 'image/gif'].includes(rawFile.type)
-  const isLt10M = rawFile.size / 1024 / 1024 < 10
-
-  if (!isImage) {
+  if (!(['image/jpeg', 'image/png', 'image/gif'].includes(rawFile.type))) {
     ElMessage.error('头像只能是 JPG/PNG/GIF 格式!')
     return false
   }
-  if (!isLt10M) {
+  if (rawFile.size / 1024 / 1024 > 10) {
     ElMessage.error('头像大小不能超过 10MB!')
     return false
   }
@@ -125,8 +121,16 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
 // 上传成功
 const handleAvatarSuccess = (response: any) => {
   if (response.code === 200 || response.code === 0) {
-    userForm.avatar = response.data
+    if (!userStore.user) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      ElMessage.error('未授权，请重新登录')
+      router.push('/login')
+      return
+    }
+    userStore.user.avatarId = response.data
     ElMessage.success('头像上传成功')
+    loadUserInfo()
   } else {
     ElMessage.error(response.message || '头像上传失败')
   }
@@ -150,7 +154,6 @@ const handleUpdate = async () => {
         const updateData: SaveUserRequest = {
           username: userStore.user.username,
           password: "",
-          avatar: userForm.avatar,
           gender: userForm.gender
         }
 
@@ -235,10 +238,6 @@ loadUserInfo()
       }
     }
   }
-}
-
-:deep(.el-radio) {
-  margin-right: 20px;
 }
 
 @media (max-width: 768px) {

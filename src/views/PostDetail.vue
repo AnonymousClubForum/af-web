@@ -45,7 +45,7 @@ import {ArrowLeft} from '@element-plus/icons-vue'
 import {getPost} from '../api'
 import type {Post} from '../types'
 import {useUserStore} from '../stores'
-import CommentList from "./CommentList.vue";
+import CommentList from "../components/CommentList.vue";
 
 const router = useRouter()
 const route = useRoute()

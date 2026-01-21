@@ -26,16 +26,6 @@
               show-password
           />
         </el-form-item>
-<!--        <el-form-item label="个人简介" prop="bio">-->
-<!--          <el-input-->
-<!--              v-model="registerForm.bio"-->
-<!--              type="textarea"-->
-<!--              placeholder="请输入个人简介（选填）"-->
-<!--              :rows="3"-->
-<!--              maxlength="200"-->
-<!--              show-word-limit-->
-<!--          />-->
-<!--        </el-form-item>-->
         <el-form-item>
           <el-button type="primary" @click="handleRegister" :loading="loading" style="width: 100%">
             注册
@@ -66,8 +56,7 @@ const loading = ref(false)
 const registerForm = reactive<SaveUserRequest & { confirmPassword: string }>({
   username: '',
   password: '',
-  confirmPassword: '',
-  gender: ''
+  confirmPassword: ''
 })
 
 const validatePassword = (_: any, value: any, callback: any) => {
