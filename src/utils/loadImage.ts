@@ -1,7 +1,7 @@
 // 加载图片并展示
-import {downloadFile} from "../api";
 
 export const loadImage = async (fileId: string) => {
-    const blob = await downloadFile(fileId)
+    const res = await fetch(`/storage/file/download?file_id=${fileId}`)
+    const blob = await res.blob()
     return URL.createObjectURL(blob)
 }
