@@ -1,6 +1,5 @@
 import axios, {type AxiosInstance, type AxiosResponse, type InternalAxiosRequestConfig} from 'axios'
 import {ElMessage} from 'element-plus'
-import router from "../router";
 
 // 创建 axios 实例
 const service: AxiosInstance = axios.create({
@@ -49,7 +48,7 @@ service.interceptors.response.use(
                     localStorage.removeItem('token')
                     localStorage.removeItem('user')
                     ElMessage.error('未授权，请重新登录')
-                    router.push('/login')
+                    window.location.href = '/login'
                     break
                 case 403:
                     ElMessage.error('拒绝访问')
