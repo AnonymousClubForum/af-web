@@ -34,23 +34,23 @@
 
           <el-form-item label="性别" prop="gender">
             <el-radio-group v-model="userForm.gender">
-              <el-radio label="男" />
-              <el-radio label="女" />
-              <el-radio label="其他" />
-              <el-radio label="秘密" />
+              <el-radio label="男"/>
+              <el-radio label="女"/>
+              <el-radio label="其他"/>
+              <el-radio label="秘密"/>
             </el-radio-group>
           </el-form-item>
 
-<!--          <el-form-item label="个人简介" prop="bio">-->
-<!--            <el-input-->
-<!--                v-model="userForm.bio"-->
-<!--                type="textarea"-->
-<!--                placeholder="请输入个人简介"-->
-<!--                :rows="4"-->
-<!--                maxlength="200"-->
-<!--                show-word-limit-->
-<!--            />-->
-<!--          </el-form-item>-->
+          <!--          <el-form-item label="个人简介" prop="bio">-->
+          <!--            <el-input-->
+          <!--                v-model="userForm.bio"-->
+          <!--                type="textarea"-->
+          <!--                placeholder="请输入个人简介"-->
+          <!--                :rows="4"-->
+          <!--                maxlength="200"-->
+          <!--                show-word-limit-->
+          <!--            />-->
+          <!--          </el-form-item>-->
 
           <el-form-item>
             <el-button type="primary" @click="handleUpdate" :loading="loading">
@@ -65,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, reactive, ref} from 'vue'
+import {computed, onMounted, reactive, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {ElMessage, type FormInstance, type UploadProps} from 'element-plus'
 import {Plus} from '@element-plus/icons-vue'
@@ -184,7 +184,9 @@ const handleLogout = () => {
 }
 
 // 页面加载时获取用户信息
-loadUserInfo()
+onMounted(() => {
+  loadUserInfo()
+})
 </script>
 
 <style scoped>
