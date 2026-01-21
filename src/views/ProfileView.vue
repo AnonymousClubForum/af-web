@@ -80,7 +80,7 @@ const userStore = useUserStore()
 const userFormRef = ref<FormInstance>()
 const loading = ref(false)
 
-const uploadUrl = computed(() => '/api/user/avatar/upload')
+const uploadUrl = computed(() => '/platform/user/avatar/upload')
 const uploadHeaders = computed(() => ({
   Authorization: `${userStore.token}`
 }))

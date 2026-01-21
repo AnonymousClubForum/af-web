@@ -7,7 +7,7 @@ import request from '../utils/request'
  */
 export function downloadFile(id: string): Promise<Blob> {
     return request({
-        url: '/file/download',
+        url: '/storage/file/download',
         method: 'get',
         params: {id}
     })

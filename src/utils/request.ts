@@ -3,7 +3,7 @@ import {ElMessage} from 'element-plus'
 
 // 创建 axios 实例
 const service: AxiosInstance = axios.create({
-    baseURL: '/api',
+    baseURL: '',
     timeout: 3000
 })
 

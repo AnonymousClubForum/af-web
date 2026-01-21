@@ -4,7 +4,7 @@ import type {ApiResponse, LoginRequest, LoginResponse, SaveUserRequest, User} fr
 // 用户注册
 export function register(data: SaveUserRequest): Promise<ApiResponse<User>> {
     return request({
-        url: '/user/register',
+        url: '/platform/user/register',
         method: 'post',
         data
     })
@@ -13,7 +13,7 @@ export function register(data: SaveUserRequest): Promise<ApiResponse<User>> {
 // 用户登录
 export function login(data: LoginRequest): Promise<ApiResponse<LoginResponse>> {
     return request({
-        url: '/user/login',
+        url: '/platform/user/login',
         method: 'post',
         data
     })
@@ -22,7 +22,7 @@ export function login(data: LoginRequest): Promise<ApiResponse<LoginResponse>> {
 // 更新用户信息
 export function updateUser(data: SaveUserRequest): Promise<ApiResponse<string>> {
     return request({
-        url: '/user/update',
+        url: '/platform/user/update',
         method: 'post',
         data
     })

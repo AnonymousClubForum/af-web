@@ -13,7 +13,7 @@ export function createPost(data: SavePostRequest): Promise<ApiResponse<string>> 
 // 更新帖子
 export function updatePost(data: SavePostRequest): Promise<ApiResponse<string>> {
     return request({
-        url: '/post/update',
+        url: '/platform/post/update',
         method: 'post',
         data
     })
@@ -22,7 +22,7 @@ export function updatePost(data: SavePostRequest): Promise<ApiResponse<string>> 
 // 删除帖子
 export function deletePost(id: string): Promise<ApiResponse<string>> {
     return request({
-        url: `/post/delete?id=${id}`,
+        url: `/platform/post/delete?id=${id}`,
         method: 'delete'
     })
 }
@@ -30,7 +30,7 @@ export function deletePost(id: string): Promise<ApiResponse<string>> {
 // 获取帖子详情
 export function getPost(id: string): Promise<ApiResponse<Post>> {
     return request({
-        url: `/post/get?id=${id}`,
+        url: `/platform/post/get?id=${id}`,
         method: 'get'
     })
 }
@@ -38,7 +38,7 @@ export function getPost(id: string): Promise<ApiResponse<Post>> {
 // 分页查询帖子列表
 export function getPostPage(params: QueryPostPageRequest): Promise<ApiResponse<PageResult<SimplePost>>> {
     return request({
-        url: '/post/get_page',
+        url: '/platform/post/get_page',
         method: 'get',
         params
     })

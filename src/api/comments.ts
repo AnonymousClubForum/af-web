@@ -7,7 +7,7 @@ import type {ApiResponse, Comment, PageResult, QueryCommentPageRequest, SaveComm
  */
 export function createComment(data: SaveCommentRequest): Promise<ApiResponse<string>> {
     return request({
-        url: '/comment/save',
+        url: '/platform/comment/save',
         method: 'post',
         data
     })
@@ -19,7 +19,7 @@ export function createComment(data: SaveCommentRequest): Promise<ApiResponse<str
  */
 export function deleteComment(id: string): Promise<ApiResponse<string>> {
     return request({
-        url: '/comment/delete',
+        url: '/platform/comment/delete',
         method: 'delete',
         params: {id}
     })
@@ -31,7 +31,7 @@ export function deleteComment(id: string): Promise<ApiResponse<string>> {
  */
 export function getCommentPage(params: QueryCommentPageRequest): Promise<ApiResponse<PageResult<Comment>>> {
     return request({
-        url: '/comment/get_page',
+        url: '/platform/comment/get_page',
         method: 'get',
         params
     })
