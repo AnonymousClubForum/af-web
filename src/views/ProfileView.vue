@@ -91,7 +91,8 @@ const loadUserInfo = async () => {
   if (userStore.user) {
     userForm.username = userStore.user.username
     userForm.gender = userStore.user.gender
-    userForm.avatarUrl = getImageUrl(userStore.user.avatarId)
+    userStore.user.avatarUrl = getImageUrl(userStore.user.avatarId)
+    userForm.avatarUrl = userStore.user.avatarUrl
   }
   loading.value = false
 }
@@ -133,6 +134,7 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = async (rawFile) => {
         return false
       }
       userStore.user.avatarId = res.data
+      userStore.user.avatarUrl = getImageUrl(userStore.user.avatarId)
       ElMessage.success('头像上传成功')
     } else {
       ElMessage.error(res.msg || '头像上传失败')
