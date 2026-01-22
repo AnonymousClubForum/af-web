@@ -146,6 +146,15 @@ onMounted(() => {
     line-height: 1.8;
     color: #333;
     padding: 10px 0;
+
+    /* 优化图片渲染样式 */
+
+    :deep(img) {
+      max-width: 100%;
+      max-height: 500px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
   }
 }
 </style>

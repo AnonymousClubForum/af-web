@@ -58,7 +58,7 @@ const loading = ref(false)
 const isEdit = ref(false)
 
 const postForm = reactive<SavePostRequest>({
-  id: route.params.id ? String(route.params.id): undefined,
+  id: route.params.id ? String(route.params.id) : undefined,
   title: '',
   content: ''
 })
@@ -76,7 +76,8 @@ const handleUploadImage = async (event: any, insertImage: Function) => {
   if (!file) return;
   try {
     const res = await uploadFile(file);
-    const imageUrl = String('/storage/file/download?id=' + res.data)
+    console.log(res.data)
+    const imageUrl = '/storage/file/download?id=' + String(res.data)
     insertImage({ // 插入图片到Markdown编辑器中
       url: imageUrl,
       desc: file.name, // 图片描述
@@ -90,7 +91,7 @@ const handleUploadImage = async (event: any, insertImage: Function) => {
 
 // 加载帖子详情（编辑模式）
 const loadPostDetail = async () => {
-  const postId = route.params.id ? String(route.params.id): undefined
+  const postId = route.params.id ? String(route.params.id) : undefined
   if (!postId) return
 
   loading.value = true
