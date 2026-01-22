@@ -39,7 +39,7 @@
         <div class="comment-actions">
           <button class="action-btn reply-btn" @click="showReplyBox(comment.id)">回复</button>
           <button class="action-btn expand-btn" v-if="comment.subComments?.length && openSubComment !== comment.id"
-                  @click="openSubComment === comment.id">展开评论
+                  @click="openSubComment = comment.id">展开评论
           </button>
           <button class="action-btn collapse-btn" v-if="openSubComment === comment.id"
                   @click="openSubComment = undefined">折叠评论
