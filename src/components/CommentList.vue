@@ -26,10 +26,14 @@
     <!-- 一级评论列表 -->
     <div class="comment-list" v-if="commentList.length">
       <div class="comment-item" v-for="comment in commentList" :key="comment.id">
-        <div class="comment-header">
-          <el-avatar :src="getImageUrl(comment.avatarId)" :size="40"/>
-          <span class="username">{{ comment.username }}</span>
-          <span class="time">{{ comment.ctime }}</span>
+        <div class="comment-meta">
+          <div class="author-info">
+            <el-avatar :src="getImageUrl(comment.avatarId)" :size="32"/>
+            <div class="author-details">
+              <div class="author-name">{{ comment.username }}</div>
+              <div class="post-time">{{ comment.ctime }}</div>
+            </div>
+          </div>
         </div>
         <div class="comment-content">{{ comment.content }}</div>
         <div class="comment-actions">
@@ -59,10 +63,14 @@
         <!-- 二级评论列表 -->
         <div class="sub-comment-list" v-if="comment.subComments?.length">
           <div class="sub-comment-item" v-for="subComment in comment.subComments" :key="subComment.id">
-            <div class="sub-comment-header">
-              <el-avatar :src="getImageUrl(subComment.avatarId)" :size="40"/>
-              <span class="username">{{ subComment.username }}</span>
-              <span class="time">{{ subComment.ctime }}</span>
+            <div class="sub-comment-meta">
+              <div class="author-info">
+                <el-avatar :src="getImageUrl(subComment.avatarId)" :size="24"/>
+                <div class="author-details">
+                  <span class="author-name">{{ subComment.username }}</span>
+                  <span class="post-time">{{ subComment.ctime }}</span>
+                </div>
+              </div>
             </div>
             <div class="sub-comment-content">{{ subComment.content }}</div>
             <div class="sub-comment-actions">
@@ -390,22 +398,30 @@ onMounted(() => {
   background-color: #fbfdff;
 }
 
-.comment-header {
+.comment-meta {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
-}
+  justify-content: space-between;
+  padding: 12px 0;
 
-.username {
-  font-weight: 600;
-  color: #1f2329;
-  font-size: 15px;
-}
+  .author-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
-.time {
-  color: #909399;
-  font-size: 12px;
+    .author-details {
+      .author-name {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 4px;
+      }
+
+      .post-time {
+        font-size: 12px;
+        color: #999;
+      }
+    }
+  }
 }
 
 .comment-content {
@@ -480,11 +496,30 @@ onMounted(() => {
   background-color: #f9fcff;
 }
 
-.sub-comment-header {
+.sub-comment-meta {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 6px;
+  justify-content: space-between;
+  padding: 8px 0;
+
+  .author-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    .author-details {
+      .author-name {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 4px;
+      }
+
+      .post-time {
+        font-size: 12px;
+        color: #999;
+      }
+    }
+  }
 }
 
 .sub-comment-content {

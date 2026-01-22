@@ -13,7 +13,7 @@
             size="default"
         >
           <template #append>
-            <el-button :icon="Search" @click="handleSearch" type="primary"/>
+            <el-button type="primary" :icon="Search" @click="handleSearch"/>
           </template>
         </el-input>
         <el-button type="primary" @click="goToCreatePost" class="create-btn">发布帖子</el-button>
@@ -28,45 +28,40 @@
       </div>
 
       <!-- 帖子卡片项 -->
-      <div class="post-card" v-for="row in postList" :key="row.id">
+      <div class="post-card" v-for="post in postList" :key="post.id">
         <div class="post-main">
           <div class="post-title">
-            <el-link type="primary" @click="viewPost(row.id)" class="title-link">
-              {{ row.title }}
+            <el-link type="primary" @click="viewPost(post.id)" class="title-link">
+              {{ post.title }}
             </el-link>
           </div>
           <div class="post-meta">
-            <div class="author-box">
-              <el-avatar
-                  :src="getImageUrl(row.avatarId)"
-                  :size="36"
-                  style="margin-right: 8px"
-              />
-              <span class="author-name">{{ row.username }}</span>
-            </div>
-            <div class="post-info">
-              <!--              <span class="view-count"><i class="el-icon-view"></i> {{ row.viewCount }}</span>-->
-              <span class="create-time">{{ row.ctime }}</span>
+            <div class="author-info">
+              <el-avatar :src="getImageUrl(post.avatarId)" :size="36"/>
+              <div class="author-details">
+                <div class="author-name">{{ post.username }}</div>
+                <div class="post-time">{{ post.ctime }}</div>
+              </div>
             </div>
           </div>
         </div>
         <!-- 操作按钮 -->
         <div class="post-action">
           <el-button
-              v-if="userStore.user?.id === row.userId"
+              v-if="userStore.user?.id === post.userId"
               type="primary"
               link
               size="small"
-              @click="editPost(row.id)"
+              @click="editPost(post.id)"
           >
             编辑
           </el-button>
           <el-button
-              v-if="userStore.user?.id === row.userId"
+              v-if="userStore.user?.id === post.userId"
               type="danger"
               link
               size="small"
-              @click="deletePost(row.id)"
+              @click="deletePost(post.id)"
           >
             删除
           </el-button>
@@ -274,27 +269,31 @@ onMounted(() => {
   color: #409eff;
 }
 
-/* 帖子元信息 作者+浏览量+时间 */
+/* 帖子元信息 作者+时间 */
 .post-meta {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  color: #909399;
-  font-size: 14px;
-}
+  padding: 15px 0;
 
-.author-box {
-  display: flex;
-  align-items: center;
-}
+  .author-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 
-.author-name {
-  font-size: 14px;
-}
+    .author-details {
+      .author-name {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 4px;
+      }
 
-.post-info {
-  display: flex;
-  gap: 20px;
+      .post-time {
+        font-size: 12px;
+        color: #999;
+      }
+    }
+  }
 }
 
 /* 操作按钮区域 */
