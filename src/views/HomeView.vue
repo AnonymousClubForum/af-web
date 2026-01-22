@@ -8,7 +8,7 @@
             <p>一个简单、快速的交流平台</p>
             <el-space>
               <el-button type="primary" size="large" @click="goToPostList">
-                浏览帖子
+                进入论坛
               </el-button>
               <el-button
                   v-if="!userStore.isLoggedIn"

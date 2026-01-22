@@ -16,7 +16,6 @@
             <el-button type="primary" :icon="Search" @click="handleSearch"/>
           </template>
         </el-input>
-        <el-button type="primary" @click="goToCreatePost" class="create-btn">发布帖子</el-button>
       </div>
     </div>
 
@@ -81,6 +80,8 @@
           @current-change="handleCurrentChange"
       />
     </div>
+
+    <el-button type="primary" @click="goToCreatePost" class="floating-create-btn" :icon="Plus">发布</el-button>
   </div>
 </template>
 
@@ -88,7 +89,7 @@
 import {onMounted, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {ElMessage, ElMessageBox} from 'element-plus'
-import {Search} from '@element-plus/icons-vue'
+import {Plus, Search} from '@element-plus/icons-vue'
 import {deletePost as deletePostApi, getPostPage} from '../api'
 import type {SimplePost} from '../types'
 import {useUserStore} from '../stores'
@@ -218,8 +219,28 @@ onMounted(() => {
   gap: 12px;
 }
 
-.create-btn {
-  white-space: nowrap;
+/* 右下角浮动发布按钮样式 */
+.floating-create-btn {
+  position: fixed; /* 固定定位，随页面滚动 */
+  right: 40px; /* 距离右侧40px */
+  bottom: 40px; /* 距离底部40px */
+  width: 45px; /* 圆形按钮宽度 */
+  height: 45px; /* 圆形按钮高度 */
+  border-radius: 50%; /* 圆形样式 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(64, 158, 255, 0.4); /* 阴影提升层次感 */
+  z-index: 999; /* 确保在最上层 */
+  font-size: 14px;
+  border: none;
+  transition: all 0.2s ease; /* 过渡动画 */
+}
+
+/* 悬浮效果 */
+.floating-create-btn:hover {
+  transform: scale(1.05); /* 轻微放大 */
+  box-shadow: 0 6px 20px rgba(64, 158, 255, 0.5); /* 加深阴影 */
 }
 
 /* 帖子列表容器 */
