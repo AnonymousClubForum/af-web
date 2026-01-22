@@ -1,103 +1,103 @@
 <template>
-  <div class="comment-list-container">
-    <el-card v-loading="loading">
-      <template #header>
-        <div class="card-header">
-          <h1>评论</h1>
-        </div>
-      </template>
+  <el-card v-loading="loading">
+    <template #header>
+      <div class="card-header">
+        <h1>评论</h1>
+      </div>
+    </template>
 
-      <!-- 发布一级评论区域 -->
-      <div class="comment-post">
+    <!-- 发布一级评论区域 -->
+    <div class="comment-post">
         <textarea
             v-model="commentContent"
             placeholder="分享你的观点和看法..."
             class="comment-input"
             :disabled="!props.postId"
         ></textarea>
-        <button
-            @click="handlePostComment(undefined)"
-            class="post-btn"
-            :disabled="!props.postId || !commentContent.trim()"
-        >
-          发布评论
-        </button>
-      </div>
+      <button
+          @click="handlePostComment(undefined)"
+          class="post-btn"
+          :disabled="!props.postId || !commentContent.trim()"
+      >
+        发布评论
+      </button>
+    </div>
 
-      <!-- 一级评论列表 -->
-      <div class="comment-list" v-if="commentList.length">
-        <div class="comment-item" v-for="comment in commentList" :key="comment.id">
-          <div class="comment-header">
-            <span class="username">{{ comment.username }}</span>
-            <span class="time">{{ comment.ctime }}</span>
-          </div>
-          <div class="comment-content">{{ comment.content }}</div>
-          <div class="comment-actions">
-            <button class="reply-btn" @click="showReplyBox(comment.id)">回复</button>
-            <button class="delete-btn" @click="handleDeleteComment(comment.id)">删除</button>
-          </div>
+    <!-- 一级评论列表 -->
+    <div class="comment-list" v-if="commentList.length">
+      <div class="comment-item" v-for="comment in commentList" :key="comment.id">
+        <div class="comment-header">
+          <el-avatar :src="comment.avatarUrl ? comment.avatarUrl : '/defaultAvatar.png'" :size="40"/>
+          <span class="username">{{ comment.username }}</span>
+          <span class="time">{{ comment.ctime }}</span>
+        </div>
+        <div class="comment-content">{{ comment.content }}</div>
+        <div class="comment-actions">
+          <button class="reply-btn" @click="showReplyBox(comment.id)">回复</button>
+          <button class="delete-btn" @click="handleDeleteComment(comment.id)">删除</button>
+        </div>
 
-          <!-- 回复框 -->
-          <div class="reply-box" v-if="activeReplyId === comment.id" :data-parent-id="comment.id">
+        <!-- 回复框 -->
+        <div class="reply-box" v-if="activeReplyId === comment.id" :data-parent-id="comment.id">
             <textarea
                 v-model="replyContent"
                 placeholder="友善回复，文明交流哦～"
                 class="reply-input"
             ></textarea>
-            <div class="reply-actions">
-              <button
-                  @click="handlePostComment(comment.id)"
-                  class="reply-post-btn"
-                  :disabled="!replyContent.trim()"
-              >
-                发布回复
-              </button>
-              <button @click="activeReplyId = undefined" class="cancel-btn">取消</button>
+          <div class="reply-actions">
+            <button
+                @click="handlePostComment(comment.id)"
+                class="reply-post-btn"
+                :disabled="!replyContent.trim()"
+            >
+              发布回复
+            </button>
+            <button @click="activeReplyId = undefined" class="cancel-btn">取消</button>
+          </div>
+        </div>
+
+        <!-- 二级评论列表 -->
+        <div class="sub-comment-list" v-if="comment.subComments?.length">
+          <div class="sub-comment-item" v-for="subComment in comment.subComments" :key="subComment.id">
+            <div class="sub-comment-header">
+              <el-avatar :src="subComment.avatarUrl ? subComment.avatarUrl : '/defaultAvatar.png'" :size="40"/>
+              <span class="username">{{ subComment.username }}</span>
+              <span class="time">{{ subComment.ctime }}</span>
+            </div>
+            <div class="sub-comment-content">{{ subComment.content }}</div>
+            <div class="sub-comment-actions">
+              <button class="delete-btn" @click="handleDeleteComment(subComment.id)">删除</button>
             </div>
           </div>
-
-          <!-- 二级评论列表 -->
-          <div class="sub-comment-list" v-if="comment.subComments?.length">
-            <div class="sub-comment-item" v-for="subComment in comment.subComments" :key="subComment.id">
-              <div class="sub-comment-header">
-                <span class="username">{{ subComment.username }}</span>
-                <span class="time">{{ subComment.ctime }}</span>
-              </div>
-              <div class="sub-comment-content">{{ subComment.content }}</div>
-              <div class="sub-comment-actions">
-                <button class="delete-btn" @click="handleDeleteComment(subComment.id)">删除</button>
-              </div>
-            </div>
-            <div class="pagination">
-              <el-pagination
-                  v-model:current-page="subPageNum"
-                  v-model:page-size="subPageSize"
-                  :page-sizes="[10, 20, 50, 100]"
-                  :total="subTotal"
-                  layout="total, sizes, prev, pager, next"
-                  @size-change="handleSubSizeChange"
-                  @current-change="handleSubCurrentChange"
-              />
-            </div>
+          <div class="pagination">
+            <el-pagination
+                v-model:current-page="subPageNum"
+                v-model:page-size="subPageSize"
+                :page-sizes="[10, 20, 50, 100]"
+                :total="subTotal"
+                layout="total, sizes, prev, pager, next"
+                @size-change="handleSubSizeChange"
+                @current-change="handleSubCurrentChange"
+            />
           </div>
         </div>
       </div>
-      <div class="empty-tip" v-else>✨ 暂无评论，来说点什么吧～</div>
+    </div>
+    <div class="empty-tip" v-else>✨ 暂无评论，来说点什么吧～</div>
 
-      <!-- 分页区域 -->
-      <div class="pagination main-pagination">
-        <el-pagination
-            v-model:current-page="pageNum"
-            v-model:page-size="pageSize"
-            :page-sizes="[10, 20, 50, 100]"
-            :total="total"
-            layout="total, sizes, prev, pager, next"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-        />
-      </div>
-    </el-card>
-  </div>
+    <!-- 分页区域 -->
+    <div class="pagination main-pagination">
+      <el-pagination
+          v-model:current-page="pageNum"
+          v-model:page-size="pageSize"
+          :page-sizes="[10, 20, 50, 100]"
+          :total="total"
+          layout="total, sizes, prev, pager, next"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+      />
+    </div>
+  </el-card>
 </template>
 
 <script setup lang="ts">
@@ -105,6 +105,7 @@ import {onMounted, ref, watch} from 'vue'
 import {createComment, deleteComment, getCommentPage} from '../api'
 import type {Comment} from '../types'
 import {ElMessage} from "element-plus";
+import {loadImage} from "../utils/loadImage.ts";
 
 // 从父组件接收props
 const props = defineProps<{
@@ -149,6 +150,9 @@ const loadCommentList = async () => {
       total.value = res.data.total
       // 2. 为每个一级评论查询二级评论
       for (const comment of commentList.value) {
+        if (comment.avatarId) {
+          comment.avatarUrl = await loadImage(comment.avatarId)
+        }
         const subRes = await getCommentPage({
           pageNum: subPageNum.value,
           pageSize: subPageSize.value,
@@ -158,6 +162,11 @@ const loadCommentList = async () => {
         if (subRes.code === 200) {
           comment.subComments = subRes.data.records
           subTotal.value = subRes.data.total
+          for (const subComment of comment.subComments) {
+            if (subComment.avatarId) {
+              subComment.avatarUrl = await loadImage(subComment.avatarId)
+            }
+          }
         } else {
           console.error("加载评论失败:", subRes.message)
         }
@@ -294,12 +303,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 全局容器样式 */
-.comment-list-container {
-  padding: 20px;
-  max-width: 900px;
-  margin: 0 auto;
-}
 
 /* 发布评论区域 */
 .comment-post {
