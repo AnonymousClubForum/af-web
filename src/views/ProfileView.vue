@@ -12,8 +12,8 @@
         <div class="avatar-section">
           <el-upload
               class="avatar-uploader"
-              :action="uploadUrl"
-              :headers="uploadHeaders"
+              action="/platform/user/avatar/upload"
+              :headers="{Authorization: `${userStore.token}`}"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload"
@@ -65,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onMounted, reactive, ref} from 'vue'
+import {onMounted, reactive, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {ElMessage, type FormInstance, type UploadProps} from 'element-plus'
 import {Plus} from '@element-plus/icons-vue'
@@ -79,11 +79,6 @@ const userStore = useUserStore()
 
 const userFormRef = ref<FormInstance>()
 const loading = ref(false)
-
-const uploadUrl = computed(() => '/platform/user/avatar/upload')
-const uploadHeaders = computed(() => ({
-  Authorization: `${userStore.token}`
-}))
 
 const userForm = reactive<SaveUserRequest & { avatarUrl: string }>({
   username: "",
