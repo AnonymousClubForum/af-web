@@ -12,7 +12,7 @@
         <div class="avatar-section">
           <el-upload
               class="avatar-uploader"
-              action="/platform/user/avatar/upload"
+              :action="'/platform/user/avatar/upload'"
               :headers="{Authorization: `${userStore.token}`}"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
