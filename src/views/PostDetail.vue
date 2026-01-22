@@ -30,7 +30,7 @@
         <el-divider/>
 
         <div class="post-body">
-          <v-md-preview-html :text="post.content"/>
+          <v-md-preview :text="post.content"/>
         </div>
       </div>
     </el-card>
