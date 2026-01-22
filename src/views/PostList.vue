@@ -81,7 +81,7 @@
       />
     </div>
 
-    <el-button type="primary" @click="goToCreatePost" class="floating-create-btn" :icon="Plus">发布</el-button>
+    <el-button type="primary" @click="goToCreatePost" class="floating-create-btn" :icon="Plus"/>
   </div>
 </template>
 
