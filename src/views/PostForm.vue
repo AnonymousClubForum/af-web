@@ -24,7 +24,7 @@
               v-model="postForm.content"
               height="500px"
               placeholder="请输入帖子内容"
-              left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr ｜ image | save "
+              left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr ｜ image "
               right-toolbar="preview | fullscreen"
               :disabled-menus="[]"
               @upload-image="handleUploadImage"

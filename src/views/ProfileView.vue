@@ -104,7 +104,7 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
     ElMessage.error('头像只能是 JPG/PNG/GIF 格式!')
     return false
   }
-  if (rawFile.size / 1024 / 1024 > 10) {
+  if (rawFile.size / 1024 / 1024 >= 10) {
     ElMessage.error('头像大小不能超过 10MB!')
     return false
   }
