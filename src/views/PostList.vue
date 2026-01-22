@@ -37,12 +37,11 @@
           </div>
           <div class="post-meta">
             <div class="author-box">
-              <!--              <el-avatar-->
-              <!--                  v-if="row.avatar"-->
-              <!--                  :src="row.avatar"-->
-              <!--                  :size="36"-->
-              <!--                  style="margin-right: 8px"-->
-              <!--              />-->
+              <el-avatar
+                  :src="row.avatarUrl ? row.avatarUrl : '/defaultAvatar.png'"
+                  :size="36"
+                  style="margin-right: 8px"
+              />
               <span class="author-name">{{ row.username }}</span>
             </div>
             <div class="post-info">
@@ -98,6 +97,7 @@ import {Search} from '@element-plus/icons-vue'
 import {deletePost as deletePostApi, getPostPage} from '../api'
 import type {SimplePost} from '../types'
 import {useUserStore} from '../stores'
+import {loadImage} from "../utils/loadImage.ts";
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -121,6 +121,11 @@ const fetchPostList = async () => {
     if (res.data) {
       postList.value = res.data.records
       total.value = res.data.total
+      for (const post of postList.value) {
+        if (post.avatarId) {
+          post.avatarUrl = await loadImage(post.avatarId)
+        }
+      }
     }
   } catch (error) {
     console.error('获取帖子列表失败:', error)

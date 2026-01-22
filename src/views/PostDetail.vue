@@ -19,7 +19,7 @@
 
         <div class="post-meta">
           <div class="author-info">
-            <!--            <el-avatar v-if="post.authorAvatar" :src="post.authorAvatar" :size="40"/>-->
+            <el-avatar :src="post.avatarUrl ? post.avatarUrl : '/defaultAvatar.png'" :size="40"/>
             <div class="author-details">
               <div class="author-name">{{ post.username }}</div>
               <div class="post-time">{{ post.ctime }}</div>
@@ -46,6 +46,7 @@ import {getPost} from '../api'
 import type {Post} from '../types'
 import {useUserStore} from '../stores'
 import CommentList from "../components/CommentList.vue";
+import {loadImage} from "../utils/loadImage.ts";
 
 const router = useRouter()
 const route = useRoute()
@@ -67,6 +68,9 @@ const loadPostDetail = async () => {
     const res = await getPost(postId)
     if (res.data) {
       post.value = res.data
+      if (post.value.avatarId) {
+        post.value.avatarUrl = await loadImage(post.value.avatarId)
+      }
     }
   } catch (error) {
     console.error('加载帖子详情失败:', error)

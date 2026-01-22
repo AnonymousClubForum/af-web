@@ -100,6 +100,7 @@ const loadUserInfo = async () => {
     userForm.gender = userStore.user.gender
     if (userStore.user.avatarId) {
       userForm.avatarUrl = await loadImage(userStore.user.avatarId)
+      userStore.user.avatarUrl = userForm.avatarUrl
     }
   }
   loading.value = false
