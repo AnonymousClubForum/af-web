@@ -1,10 +1,14 @@
 import type {ApiResponse} from '../types'
-import axios from "axios";
+import request from "../utils/request.ts";
 
 // 上传文件
 export function uploadFile(file: File): Promise<ApiResponse<string>> {
     const formData = new FormData();
     formData.append("file", file);
 
-    return axios.post("/storage/file/upload", formData)
+    return request({
+        url: '/storage/file/upload',
+        method: 'post',
+        data: formData
+    })
 }

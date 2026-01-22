@@ -77,9 +77,8 @@ const handleUploadImage = async (event: any, insertImage: Function) => {
   try {
     const res = await uploadFile(file);
     console.log(res.data)
-    const imageUrl = '/storage/file/download?id=' + String(res.data)
     insertImage({ // 插入图片到Markdown编辑器中
-      url: imageUrl,
+      url: `/storage/file/download?id=${res.data}`,
       desc: file.name, // 图片描述
     });
     ElMessage.success('图片上传成功');
