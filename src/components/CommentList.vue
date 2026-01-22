@@ -72,7 +72,7 @@
             <div class="sub-comment-item" v-for="subComment in comment.subComments" :key="subComment.id">
               <div class="sub-comment-meta">
                 <div class="author-info">
-                  <el-avatar :src="getImageUrl(subComment.avatarId)" :size="24"/>
+                  <el-avatar :src="getImageUrl(subComment.avatarId)" :size="32"/>
                   <div class="author-details">
                     <span class="author-name">{{ subComment.username }}</span>
                     <span class="post-time">{{ subComment.ctime }}</span>
@@ -81,7 +81,7 @@
               </div>
               <div class="sub-comment-content">{{ subComment.content }}</div>
               <div class="sub-comment-actions">
-                <button class="delete-btn" @click="handleDeleteComment(subComment.id)">删除</button>
+                <button class="action-btn delete-btn" @click="handleDeleteComment(subComment.id)">删除</button>
               </div>
             </div>
             <div class="pagination">
