@@ -20,7 +20,7 @@
         </el-form-item>
 
         <el-form-item label="内容" prop="content">
-          <VMdTextareaEditor
+          <v-md-textarea-editor
               v-model="postForm.content"
               height="500px"
               placeholder="请输入Markdown格式的帖子内容"
