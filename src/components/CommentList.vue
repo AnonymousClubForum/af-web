@@ -27,7 +27,7 @@
     <div class="comment-list" v-if="commentList.length">
       <div class="comment-item" v-for="comment in commentList" :key="comment.id">
         <div class="comment-header">
-          <el-avatar :src="comment.avatarUrl ? comment.avatarUrl : '/defaultAvatar.png'" :size="40"/>
+          <el-avatar :src="getImageUrl(comment.avatarId)" :size="40"/>
           <span class="username">{{ comment.username }}</span>
           <span class="time">{{ comment.ctime }}</span>
         </div>
@@ -60,7 +60,7 @@
         <div class="sub-comment-list" v-if="comment.subComments?.length">
           <div class="sub-comment-item" v-for="subComment in comment.subComments" :key="subComment.id">
             <div class="sub-comment-header">
-              <el-avatar :src="subComment.avatarUrl ? subComment.avatarUrl : '/defaultAvatar.png'" :size="40"/>
+              <el-avatar :src="getImageUrl(subComment.avatarId)" :size="40"/>
               <span class="username">{{ subComment.username }}</span>
               <span class="time">{{ subComment.ctime }}</span>
             </div>
@@ -105,7 +105,7 @@ import {onMounted, ref, watch} from 'vue'
 import {createComment, deleteComment, getCommentPage} from '../api'
 import type {Comment} from '../types'
 import {ElMessage} from "element-plus";
-import {loadImage} from "../utils/loadImage.ts";
+import {getImageUrl} from "../utils/loadImage.ts";
 
 // 从父组件接收props
 const props = defineProps<{
@@ -150,9 +150,6 @@ const loadCommentList = async () => {
       total.value = res.data.total
       // 2. 为每个一级评论查询二级评论
       for (const comment of commentList.value) {
-        if (comment.avatarId) {
-          comment.avatarUrl = await loadImage(comment.avatarId)
-        }
         const subRes = await getCommentPage({
           pageNum: subPageNum.value,
           pageSize: subPageSize.value,
@@ -162,11 +159,6 @@ const loadCommentList = async () => {
         if (subRes.code === 200) {
           comment.subComments = subRes.data.records
           subTotal.value = subRes.data.total
-          for (const subComment of comment.subComments) {
-            if (subComment.avatarId) {
-              subComment.avatarUrl = await loadImage(subComment.avatarId)
-            }
-          }
         } else {
           console.error("加载评论失败:", subRes.message)
         }

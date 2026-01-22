@@ -19,7 +19,7 @@
               :before-upload="beforeAvatarUpload"
               :on-error="handleUploadError"
           >
-            <el-avatar v-if="userForm.avatarUrl" :src="userForm.avatarUrl" :size="120"/>
+            <el-avatar v-if="userForm.avatarId" :src="getImageUrl(userForm.avatarId)" :size="120"/>
             <el-icon v-else class="avatar-uploader-icon" :size="60">
               <Plus/>
             </el-icon>
@@ -72,7 +72,7 @@ import {Plus} from '@element-plus/icons-vue'
 import {updateUser} from '../api'
 import type {SaveUserRequest} from '../types'
 import {useUserStore} from '../stores'
-import {loadImage} from "../utils/loadImage.ts";
+import {getImageUrl} from "../utils/loadImage.ts";
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -80,11 +80,11 @@ const userStore = useUserStore()
 const userFormRef = ref<FormInstance>()
 const loading = ref(false)
 
-const userForm = reactive<SaveUserRequest & { avatarUrl: string }>({
+const userForm = reactive<SaveUserRequest & { avatarId: string | undefined }>({
   username: "",
   password: "",
   gender: "",
-  avatarUrl: ""
+  avatarId: undefined
 })
 
 // 加载用户信息
@@ -93,10 +93,7 @@ const loadUserInfo = async () => {
   if (userStore.user) {
     userForm.username = userStore.user.username
     userForm.gender = userStore.user.gender
-    if (userStore.user.avatarId) {
-      userForm.avatarUrl = await loadImage(userStore.user.avatarId)
-      userStore.user.avatarUrl = userForm.avatarUrl
-    }
+    userForm.avatarId = userStore.user.avatarId
   }
   loading.value = false
 }

@@ -29,7 +29,7 @@
         </template>
         <template v-else>
           <el-menu-item index="/profile">
-            <el-avatar :src="userStore.user?.avatarUrl ? userStore.user.avatarUrl : '/defaultAvatar.png'" :size="24"/>
+            <el-avatar :src="getImageUrl(userStore.user?.avatarId)" :size="24"/>
             <span>{{ userStore.user?.username }}</span>
           </el-menu-item>
         </template>
@@ -43,27 +43,14 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onMounted} from 'vue'
+import {computed} from 'vue'
 import {useRoute} from 'vue-router'
 import {useUserStore} from '../stores'
-import {loadImage} from "../utils/loadImage.ts";
+import {getImageUrl} from "../utils/loadImage.ts";
 
 const route = useRoute()
 const userStore = useUserStore()
 const activeMenu = computed(() => route.path)
-
-const loadAvatar = async () => {
-  if (userStore.user) {
-    if (userStore.user.avatarId) {
-      userStore.user.avatarUrl = await loadImage(userStore.user.avatarId)
-    }
-  }
-}
-
-// 页面加载时获取用户头像
-onMounted(() => {
-  loadAvatar()
-})
 </script>
 
 <style scoped>

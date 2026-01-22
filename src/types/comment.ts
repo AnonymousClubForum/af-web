@@ -4,7 +4,6 @@ export interface Comment {
     userId: string
     username: string
     avatarId?: string
-    avatarUrl?: string
     content: string
     subComments?: Comment[]
     ctime?: string
