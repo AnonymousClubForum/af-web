@@ -12,7 +12,6 @@
             <el-image
                 src="/banner.png"
                 alt="Anonymous Forum"
-                style="width: auto; height: auto"
             />
           </el-link>
         </router-link>

@@ -67,7 +67,7 @@
         </div>
 
         <!-- 二级评论列表 -->
-        <div class="sub-comment-list" v-if="openSubComment = comment.id">
+        <div class="sub-comment-list" v-if="openSubComment === comment.id">
           <el-card v-loading="loading">
             <div class="sub-comment-item" v-for="subComment in comment.subComments" :key="subComment.id">
               <div class="sub-comment-meta">
@@ -408,7 +408,7 @@ onMounted(() => {
   background-color: #fbfdff;
 }
 
-.comment-meta {
+.comment-meta, .sub-comment-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -508,32 +508,6 @@ onMounted(() => {
 
 .sub-comment-item:hover {
   background-color: #f9fcff;
-}
-
-.sub-comment-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
-
-  .author-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    .author-details {
-      .author-name {
-        font-weight: 500;
-        color: #333;
-        margin-bottom: 4px;
-      }
-
-      .post-time {
-        font-size: 12px;
-        color: #999;
-      }
-    }
-  }
 }
 
 .sub-comment-content {
