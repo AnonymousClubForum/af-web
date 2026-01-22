@@ -4,7 +4,7 @@ import type {ApiResponse, PageResult, Post, QueryPostPageRequest, SavePostReques
 // 创建帖子
 export function createPost(data: SavePostRequest): Promise<ApiResponse<string>> {
     return request({
-        url: '/post/save',
+        url: '/platform/post/save',
         method: 'post',
         data
     })

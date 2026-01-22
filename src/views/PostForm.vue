@@ -58,6 +58,7 @@ const loading = ref(false)
 const isEdit = ref(false)
 
 const postForm = reactive<SavePostRequest>({
+  id: route.params.id ? String(route.params.id): undefined,
   title: '',
   content: ''
 })
@@ -88,7 +89,7 @@ const handleUploadImage = async (event: any, insertImage: Function) => {
 
 // 加载帖子详情（编辑模式）
 const loadPostDetail = async () => {
-  const postId = String(route.params.id)
+  const postId = route.params.id ? String(route.params.id): undefined
   if (!postId) return
 
   loading.value = true
