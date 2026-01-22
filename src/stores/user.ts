@@ -2,6 +2,7 @@ import {defineStore} from 'pinia'
 import {computed, ref} from 'vue'
 import type {SaveUserRequest, User} from '../types'
 import {ElMessage} from "element-plus";
+import {getImageUrl} from "../utils/image.ts";
 
 export const useUserStore = defineStore('user', () => {
     const token = ref<string>(localStorage.getItem('token') || '')
@@ -16,6 +17,7 @@ export const useUserStore = defineStore('user', () => {
     // 设置用户信息
     function setUser(userData: User, userToken: string) {
         user.value = userData
+        user.value.avatarUrl = getImageUrl(userData.avatarId)
         token.value = userToken
         localStorage.setItem('user', JSON.stringify(userData))
         localStorage.setItem('token', userToken)
