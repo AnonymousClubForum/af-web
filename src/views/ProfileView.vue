@@ -17,7 +17,7 @@
               :on-error="loadUserInfo"
               :before-upload="beforeAvatarUpload"
           >
-            <el-avatar v-if="userForm.avatarId" :src="getImageUrl(userForm.avatarId)" :size="120"/>
+            <el-avatar v-if="userForm.avatarUrl" :src="userForm.avatarUrl" :size="120"/>
             <el-icon v-else class="avatar-uploader-icon" :size="60">
               <Plus/>
             </el-icon>
@@ -78,11 +78,11 @@ const userStore = useUserStore()
 const userFormRef = ref<FormInstance>()
 const loading = ref(false)
 
-const userForm = reactive<SaveUserRequest & { avatarId: string | undefined }>({
+const userForm = reactive<SaveUserRequest & { avatarUrl: string | undefined }>({
   username: "",
   password: "",
   gender: "",
-  avatarId: undefined
+  avatarUrl: undefined
 })
 
 // 加载用户信息
@@ -91,7 +91,7 @@ const loadUserInfo = async () => {
   if (userStore.user) {
     userForm.username = userStore.user.username
     userForm.gender = userStore.user.gender
-    userForm.avatarId = userStore.user.avatarId
+    userForm.avatarUrl = getImageUrl(userStore.user.avatarId)
   }
   loading.value = false
 }

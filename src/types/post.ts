@@ -4,6 +4,7 @@ export interface Post {
     userId: string
     username: string
     avatarId?: string
+    avatarUrl?: string
     title: string
     content: string
     ctime?: string
@@ -15,6 +16,7 @@ export interface SimplePost {
     userId: string
     username: string
     avatarId?: string
+    avatarUrl?: string
     title: string
     ctime?: string
     utime?: string

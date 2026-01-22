@@ -28,7 +28,7 @@
       <div class="comment-item" v-for="comment in commentList" :key="comment.id">
         <div class="comment-meta">
           <div class="author-info">
-            <el-avatar :src="getImageUrl(comment.avatarId)" :size="32"/>
+            <el-avatar :src="comment.avatarUrl" :size="32"/>
             <div class="author-details">
               <div class="author-name">{{ comment.username }}</div>
               <div class="post-time">{{ comment.ctime }}</div>
@@ -72,7 +72,7 @@
             <div class="sub-comment-item" v-for="subComment in comment.subComments" :key="subComment.id">
               <div class="sub-comment-meta">
                 <div class="author-info">
-                  <el-avatar :src="getImageUrl(subComment.avatarId)" :size="32"/>
+                  <el-avatar :src="subComment.avatarUrl" :size="32"/>
                   <div class="author-details">
                     <span class="author-name">{{ subComment.username }}</span>
                     <span class="post-time">{{ subComment.ctime }}</span>
@@ -168,6 +168,7 @@ const loadCommentList = async () => {
       total.value = res.data.total
       // 2. 为每个一级评论查询二级评论
       for (const comment of commentList.value) {
+        comment.avatarUrl = getImageUrl(comment.avatarId)
         const subRes = await getCommentPage({
           pageNum: subPageNum.value,
           pageSize: subPageSize.value,
@@ -177,6 +178,9 @@ const loadCommentList = async () => {
         if (subRes.code === 200) {
           comment.subComments = subRes.data.records
           subTotal.value = subRes.data.total
+          for (const subComment of comment.subComments) {
+            subComment.avatarUrl = getImageUrl(subComment.avatarId)
+          }
         } else {
           console.error("加载评论失败")
         }

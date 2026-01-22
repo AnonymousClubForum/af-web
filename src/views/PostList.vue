@@ -36,7 +36,7 @@
           </div>
           <div class="post-meta">
             <div class="author-info">
-              <el-avatar :src="getImageUrl(post.avatarId)" :size="36"/>
+              <el-avatar :src="post.avatarUrl" :size="36"/>
               <div class="author-details">
                 <div class="author-name">{{ post.username }}</div>
                 <div class="post-time">{{ post.ctime }}</div>
@@ -117,6 +117,9 @@ const fetchPostList = async () => {
     if (res.data) {
       postList.value = res.data.records
       total.value = res.data.total
+      for (const post of postList.value) {
+        post.avatarUrl = getImageUrl(post.avatarId)
+      }
     }
   } catch (error) {
     console.error('获取帖子列表失败:', error)

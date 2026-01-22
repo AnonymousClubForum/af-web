@@ -28,7 +28,7 @@
         </template>
         <template v-else>
           <el-menu-item index="/profile">
-            <el-avatar :src="getImageUrl(userStore.user?.avatarId)" :size="24"/>
+            <el-avatar :src="userStore.user?.avatarUrl" :size="24"/>
             <span>{{ userStore.user?.username }}</span>
           </el-menu-item>
         </template>
@@ -45,7 +45,6 @@
 import {computed} from 'vue'
 import {useRoute} from 'vue-router'
 import {useUserStore} from '../stores'
-import {getImageUrl} from "../utils/image.ts";
 
 const route = useRoute()
 const userStore = useUserStore()

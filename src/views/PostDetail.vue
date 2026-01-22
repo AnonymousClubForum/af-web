@@ -19,7 +19,7 @@
 
         <div class="post-meta">
           <div class="author-info">
-            <el-avatar :src="getImageUrl(post.avatarId)" :size="40"/>
+            <el-avatar :src="post.avatarUrl" :size="40"/>
             <div class="author-details">
               <div class="author-name">{{ post.username }}</div>
               <div class="post-time">{{ post.ctime }}</div>
@@ -69,6 +69,7 @@ const loadPostDetail = async () => {
     const res = await getPost(postId)
     if (res.data) {
       post.value = res.data
+      post.value.avatarUrl = getImageUrl(post.value.avatarId)
     }
   } catch (error) {
     console.error('加载帖子详情失败:', error)
