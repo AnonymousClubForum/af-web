@@ -45,7 +45,7 @@
 import {computed} from 'vue'
 import {useRoute} from 'vue-router'
 import {useUserStore} from '../stores'
-import {getImageUrl} from "../utils/loadImage.ts";
+import {getImageUrl} from "../utils/image.ts";
 
 const route = useRoute()
 const userStore = useUserStore()

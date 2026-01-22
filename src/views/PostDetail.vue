@@ -47,7 +47,7 @@ import {getPost} from '../api'
 import type {Post} from '../types'
 import {useUserStore} from '../stores'
 import CommentList from "../components/CommentList.vue";
-import {getImageUrl} from "../utils/loadImage.ts";
+import {getImageUrl} from "../utils/image.ts";
 
 const router = useRouter()
 const route = useRoute()

@@ -121,7 +121,7 @@ import {onMounted, ref, watch} from 'vue'
 import {createComment, deleteComment, getCommentPage} from '../api'
 import type {Comment} from '../types'
 import {ElMessage} from "element-plus";
-import {getImageUrl} from "../utils/loadImage.ts";
+import {getImageUrl} from "../utils/image.ts";
 
 // 从父组件接收props
 const props = defineProps<{

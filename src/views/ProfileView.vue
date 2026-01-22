@@ -12,12 +12,10 @@
         <div class="avatar-section">
           <el-upload
               class="avatar-uploader"
-              :action="'/platform/user/avatar/upload'"
-              :headers="{Authorization: `${userStore.token}`}"
               :show-file-list="false"
-              :on-success="handleAvatarSuccess"
+              :on-success="loadUserInfo"
+              :on-error="loadUserInfo"
               :before-upload="beforeAvatarUpload"
-              :on-error="handleUploadError"
           >
             <el-avatar v-if="userForm.avatarId" :src="getImageUrl(userForm.avatarId)" :size="120"/>
             <el-icon v-else class="avatar-uploader-icon" :size="60">
@@ -69,10 +67,10 @@ import {onMounted, reactive, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {ElMessage, type FormInstance, type UploadProps} from 'element-plus'
 import {Plus} from '@element-plus/icons-vue'
-import {updateUser} from '../api'
+import {updateUser, uploadAvatar} from '../api'
 import type {SaveUserRequest} from '../types'
 import {useUserStore} from '../stores'
-import {getImageUrl} from "../utils/loadImage.ts";
+import {blobToFile, compressImage, getImageUrl} from "../utils/image";
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -99,39 +97,52 @@ const loadUserInfo = async () => {
 }
 
 // 上传前验证
-const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
-  if (!(['image/jpeg', 'image/png', 'image/gif'].includes(rawFile.type))) {
-    ElMessage.error('头像只能是 JPG/PNG/GIF 格式!')
+const beforeAvatarUpload: UploadProps['beforeUpload'] = async (rawFile) => {
+  if (!(['image/jpeg', 'image/png'].includes(rawFile.type))) {
+    ElMessage.error('头像只能是 JPG/PNG 格式!')
     return false
   }
   if (rawFile.size / 1024 / 1024 >= 10) {
-    ElMessage.error('头像大小不能超过 10MB!')
+    ElMessage.error('头像大小不能超过10M!')
     return false
   }
-  return true
-}
+  try {
+    // 压缩图片
+    const compressedBlob = await compressImage(rawFile, {
+      initialQuality: 0.7,
+      outputType: rawFile.type as 'image/jpeg' | 'image/png'
+    });
+    const compressedFile = blobToFile(compressedBlob, rawFile);
 
-// 上传成功
-const handleAvatarSuccess = (response: any) => {
-  if (response.code === 200 || response.code === 0) {
-    if (!userStore.user) {
-      localStorage.removeItem('token')
-      localStorage.removeItem('user')
-      ElMessage.error('未授权，请重新登录')
-      router.push('/login')
-      return
+    console.log('原文件大小：', (rawFile.size / 1024).toFixed(2), 'KB');
+    console.log('压缩后大小：', (compressedFile.size / 1024).toFixed(2), 'KB');
+
+    if (compressedFile.size / 1024 >= 128) {
+      ElMessage.error('上传的头像过大!')
+      return false
     }
-    userStore.user.avatarId = response.data
-    ElMessage.success('头像上传成功')
-    loadUserInfo()
-  } else {
-    ElMessage.error(response.message || '头像上传失败')
-  }
-}
 
-// 上传失败
-const handleUploadError = () => {
-  ElMessage.error('头像上传失败')
+    // 手动上传
+    const res = await uploadAvatar(compressedFile)
+    if (res.code === 200 || res.code === 0) {
+      if (!userStore.user) {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        ElMessage.error('未授权，请重新登录')
+        router.push('/login')
+        return false
+      }
+      userStore.user.avatarId = res.data
+      ElMessage.success('头像上传成功')
+    } else {
+      ElMessage.error(res.msg || '头像上传失败')
+    }
+    // 阻止默认上传（因为已经手动上传了压缩后的文件）
+    return false;
+  } catch (error) {
+    console.error('压缩失败：', error);
+  }
+  return false
 }
 
 // 更新用户信息

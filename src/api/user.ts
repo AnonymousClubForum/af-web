@@ -27,3 +27,15 @@ export function updateUser(data: SaveUserRequest): Promise<ApiResponse<string>> 
         data
     })
 }
+
+// 上传文件
+export function uploadAvatar(file: File): Promise<ApiResponse<string>> {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    return request({
+        url: '/platform/user/avatar/upload',
+        method: 'post',
+        data: formData
+    })
+}

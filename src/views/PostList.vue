@@ -93,7 +93,7 @@ import {Plus, Search} from '@element-plus/icons-vue'
 import {deletePost as deletePostApi, getPostPage} from '../api'
 import type {SimplePost} from '../types'
 import {useUserStore} from '../stores'
-import {getImageUrl} from "../utils/loadImage.ts";
+import {getImageUrl} from "../utils/image.ts";
 
 const router = useRouter()
 const userStore = useUserStore()
