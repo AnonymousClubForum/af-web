@@ -34,6 +34,7 @@
         </div>
       </div>
     </el-card>
+    <el-divider/>
     <CommentList v-if="post" :postId="post.id"/>
   </div>
 </template>

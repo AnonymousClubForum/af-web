@@ -37,8 +37,14 @@
         </div>
         <div class="comment-content">{{ comment.content }}</div>
         <div class="comment-actions">
-          <button class="reply-btn" @click="showReplyBox(comment.id)">回复</button>
-          <button class="delete-btn" @click="handleDeleteComment(comment.id)">删除</button>
+          <button class="action-btn reply-btn" @click="showReplyBox(comment.id)">回复</button>
+          <button class="action-btn expand-btn" v-if="comment.subComments?.length && openSubComment !== comment.id"
+                  @click="openSubComment === comment.id">展开评论
+          </button>
+          <button class="action-btn collapse-btn" v-if="openSubComment === comment.id"
+                  @click="openSubComment = undefined">折叠评论
+          </button>
+          <button class="action-btn delete-btn" @click="handleDeleteComment(comment.id)">删除</button>
         </div>
 
         <!-- 回复框 -->
@@ -61,33 +67,35 @@
         </div>
 
         <!-- 二级评论列表 -->
-        <div class="sub-comment-list" v-if="comment.subComments?.length">
-          <div class="sub-comment-item" v-for="subComment in comment.subComments" :key="subComment.id">
-            <div class="sub-comment-meta">
-              <div class="author-info">
-                <el-avatar :src="getImageUrl(subComment.avatarId)" :size="24"/>
-                <div class="author-details">
-                  <span class="author-name">{{ subComment.username }}</span>
-                  <span class="post-time">{{ subComment.ctime }}</span>
+        <div class="sub-comment-list" v-if="openSubComment = comment.id">
+          <el-card v-loading="loading">
+            <div class="sub-comment-item" v-for="subComment in comment.subComments" :key="subComment.id">
+              <div class="sub-comment-meta">
+                <div class="author-info">
+                  <el-avatar :src="getImageUrl(subComment.avatarId)" :size="24"/>
+                  <div class="author-details">
+                    <span class="author-name">{{ subComment.username }}</span>
+                    <span class="post-time">{{ subComment.ctime }}</span>
+                  </div>
                 </div>
               </div>
+              <div class="sub-comment-content">{{ subComment.content }}</div>
+              <div class="sub-comment-actions">
+                <button class="delete-btn" @click="handleDeleteComment(subComment.id)">删除</button>
+              </div>
             </div>
-            <div class="sub-comment-content">{{ subComment.content }}</div>
-            <div class="sub-comment-actions">
-              <button class="delete-btn" @click="handleDeleteComment(subComment.id)">删除</button>
+            <div class="pagination">
+              <el-pagination
+                  v-model:current-page="subPageNum"
+                  v-model:page-size="subPageSize"
+                  :page-sizes="[10, 20, 50, 100]"
+                  :total="subTotal"
+                  layout="total, sizes, prev, pager, next"
+                  @size-change="handleSubSizeChange"
+                  @current-change="handleSubCurrentChange"
+              />
             </div>
-          </div>
-          <div class="pagination">
-            <el-pagination
-                v-model:current-page="subPageNum"
-                v-model:page-size="subPageSize"
-                :page-sizes="[10, 20, 50, 100]"
-                :total="subTotal"
-                layout="total, sizes, prev, pager, next"
-                @size-change="handleSubSizeChange"
-                @current-change="handleSubCurrentChange"
-            />
-          </div>
+          </el-card>
         </div>
       </div>
     </div>
@@ -136,6 +144,8 @@ const commentList = ref<Comment[]>([])
 const commentContent = ref('')
 // 回复内容
 const replyContent = ref('')
+// 当前展开的二级评论ID（对应父评论ID）
+const openSubComment = ref<string>()
 // 当前激活的回复框ID（对应父评论ID）
 const activeReplyId = ref<string>()
 
@@ -439,32 +449,36 @@ onMounted(() => {
   margin-bottom: 8px;
 }
 
-.reply-btn {
-  color: #409eff;
+.action-btn {
   border: none;
   background: transparent;
   cursor: pointer;
   font-size: 13px;
   transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
 }
 
-.reply-btn:hover {
-  color: #3393e8;
+.reply-btn {
+  color: #409eff;
+
+  :hover {
+    color: #3393e8;
+  }
 }
 
 .delete-btn {
   color: #f56c6c;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 13px;
-  transition: all 0.2s ease;
+
+  :hover {
+    color: #e65252;
+  }
 }
 
-.delete-btn:hover {
-  color: #e65252;
+.expand-btn, .collapse-btn {
+  color: #555;
+
+  :hover {
+    color: #333;
+  }
 }
 
 /* 回复框样式 */
@@ -500,12 +514,12 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 0;
+  padding: 12px 0;
 
   .author-info {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 
     .author-details {
       .author-name {
