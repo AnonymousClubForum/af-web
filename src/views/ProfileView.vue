@@ -102,8 +102,8 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = async (rawFile) => {
     ElMessage.error('头像只能是 JPG/PNG 格式!')
     return false
   }
-  if (rawFile.size / 1024 / 1024 >= 10) {
-    ElMessage.error('头像大小不能超过10M!')
+  if (rawFile.size / 1024 / 1024 >= 3) {
+    ElMessage.error('头像大小不能超过3M!')
     return false
   }
   try {

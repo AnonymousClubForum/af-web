@@ -5,7 +5,7 @@ const TARGET_SIZE = 128 * 1024;
 // 最小压缩质量（避免无限循环，保底值）
 const MIN_QUALITY = 0.1;
 // 最大循环次数（防止性能问题）
-const MAX_LOOP = 10;
+const MAX_LOOP = 256;
 // 每次尺寸缩放比例（质量到最低仍超限时，缩小尺寸）
 const SCALE_RATIO = 0.8;
 
