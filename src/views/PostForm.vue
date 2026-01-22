@@ -20,13 +20,13 @@
         </el-form-item>
 
         <el-form-item label="内容" prop="content">
-          <el-input
+          <VMdTextareaEditor
               v-model="postForm.content"
-              type="textarea"
-              placeholder="请输入帖子内容"
-              :rows="15"
-              maxlength="5000"
-              show-word-limit
+              height="500px"
+              placeholder="请输入Markdown格式的帖子内容"
+              @upload-image="handleUploadImage"
+              left-toolbar="undo redo | bold italic header | ul ol | link image"
+              right-toolbar="preview | fullscreen"
           />
         </el-form-item>
 
@@ -47,6 +47,7 @@ import {useRoute, useRouter} from 'vue-router'
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
 import {createPost, getPost, updatePost} from '../api'
 import type {SavePostRequest} from '../types'
+import {uploadFile} from "../api/file.ts";
 
 const router = useRouter()
 const route = useRoute()
@@ -70,6 +71,28 @@ const rules: FormRules = {
     {min: 1, max: 10000, message: '内容长度在 1 到 10000 个字符', trigger: 'blur'}
   ]
 }
+
+// 处理图片上传（核心功能）
+const handleUploadImage = async (event: any, insertImage: Function) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  try {
+    const res = await uploadFile(file);
+    const imageUrl = `/storage/file/download?id=${res.data}`;
+
+    // 插入图片到Markdown编辑器中
+    insertImage({
+      url: imageUrl,
+      desc: file.name, // 图片描述
+    });
+
+    ElMessage.success('图片上传成功');
+  } catch (error) {
+    console.error('图片上传失败:', error);
+    ElMessage.error('图片上传失败，请重试');
+  }
+};
 
 // 加载帖子详情（编辑模式）
 const loadPostDetail = async () => {
@@ -116,6 +139,7 @@ const handleSubmit = async () => {
       }
     } catch (error) {
       console.error('提交失败:', error)
+      ElMessage.error('提交失败，请重试')
     } finally {
       loading.value = false
     }

@@ -30,7 +30,7 @@
         <el-divider/>
 
         <div class="post-body">
-          {{ post.content }}
+          <VMdPreviewHtml :text="post.content"/>
         </div>
       </div>
     </el-card>
@@ -145,8 +145,22 @@ onMounted(() => {
     font-size: 16px;
     line-height: 1.8;
     color: #333;
-    white-space: pre-wrap;
-    word-wrap: break-word;
+    padding: 10px 0;
+
+    /* 优化图片渲染样式 */
+
+    :deep(img) {
+      max-width: 100%;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+
+    :deep(pre) {
+      padding: 16px;
+      border-radius: 8px;
+      margin: 10px 0;
+      overflow-x: auto;
+    }
   }
 }
 </style>
