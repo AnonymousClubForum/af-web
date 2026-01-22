@@ -24,9 +24,10 @@
               v-model="postForm.content"
               height="500px"
               placeholder="请输入帖子内容"
-              @upload-image="handleUploadImage"
-              left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr ｜ link image | image | save "
+              left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr ｜ image | save "
               right-toolbar="preview | fullscreen"
+              :disabled-menus="[]"
+              @upload-image="handleUploadImage"
           />
         </el-form-item>
 
@@ -65,10 +66,6 @@ const rules: FormRules = {
   title: [
     {required: true, message: '请输入帖子标题', trigger: 'blur'},
     {min: 1, max: 100, message: '标题长度在 1 到 100 个字符', trigger: 'blur'}
-  ],
-  content: [
-    {required: true, message: '请输入帖子内容', trigger: 'blur'},
-    {min: 1, max: 10000, message: '内容长度在 1 到 10000 个字符', trigger: 'blur'}
   ]
 }
 
