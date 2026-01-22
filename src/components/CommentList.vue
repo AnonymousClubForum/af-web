@@ -178,11 +178,11 @@ const loadCommentList = async () => {
           comment.subComments = subRes.data.records
           subTotal.value = subRes.data.total
         } else {
-          console.error("加载评论失败:", subRes.message)
+          console.error("加载评论失败")
         }
       }
     } else {
-      console.error('加载评论失败:', res.message)
+      console.error('加载评论失败')
     }
   } catch (error) {
     console.error('加载评论异常:', error)
@@ -220,7 +220,7 @@ const handlePostComment = async (parentId?: string) => {
       // 重新加载当前页评论
       loadCommentList()
     } else {
-      ElMessage.error((parentId ? '回复' : '发布') + '失败：' + res.message)
+      ElMessage.error((parentId ? '回复' : '发布') + '失败')
     }
   } catch (error) {
     console.error((parentId ? '回复' : '发布') + '评论异常:', error)
@@ -244,7 +244,7 @@ const handleDeleteComment = async (id: string) => {
       // 重新加载当前页评论
       loadCommentList()
     } else {
-      ElMessage.error('删除失败：' + res.message)
+      ElMessage.error('删除失败')
     }
   } catch (error) {
     console.error('删除评论异常:', error)
