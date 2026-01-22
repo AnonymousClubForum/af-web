@@ -73,17 +73,12 @@ const rules: FormRules = {
 const handleUploadImage = async (event: any, insertImage: Function) => {
   const file = event.target.files[0];
   if (!file) return;
-
   try {
     const res = await uploadFile(file);
-    const imageUrl = `/storage/file/download?id=${res.data}`;
-
-    // 插入图片到Markdown编辑器中
-    insertImage({
-      url: imageUrl,
+    insertImage({ // 插入图片到Markdown编辑器中
+      url: '/storage/file/download?id=' + res.data,
       desc: file.name, // 图片描述
     });
-
     ElMessage.success('图片上传成功');
   } catch (error) {
     console.error('图片上传失败:', error);
