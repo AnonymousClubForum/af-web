@@ -23,9 +23,9 @@
           <v-md-editor
               v-model="postForm.content"
               height="500px"
-              placeholder="请输入Markdown格式的帖子内容"
+              placeholder="请输入帖子内容"
               @upload-image="handleUploadImage"
-              left-toolbar="undo redo | bold italic header | ul ol | link image"
+              left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr ｜ link image | image | save "
               right-toolbar="preview | fullscreen"
           />
         </el-form-item>
