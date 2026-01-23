@@ -29,7 +29,7 @@ export function updateUser(data: SaveUserRequest): Promise<ApiResponse<string>> 
 }
 
 // 获取当前用户信息
-export function getUser(userId: string | null): Promise<ApiResponse<User>> {
+export function getUser(userId: string | null | undefined): Promise<ApiResponse<User>> {
     return request({
         url: '/platform/user/get',
         method: 'get',

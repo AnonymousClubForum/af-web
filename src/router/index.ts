@@ -47,7 +47,7 @@ const routes = [
     {
         path: '/profile/:id',
         name: 'ProfileView',
-        component: () => import('../views/ProfileEditView.vue'),
+        component: () => import('../views/ProfileView.vue'),
         meta: {title: '用户主页'}
     },
     {

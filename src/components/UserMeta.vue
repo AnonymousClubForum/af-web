@@ -33,6 +33,7 @@ const goToUserProfile = () => {
   display: flex;
   align-items: center;
   gap: 12px;
+  cursor: pointer;
 
   .author-details {
     .author-name {

@@ -58,8 +58,9 @@ const total = ref(0)
 const getData = async () => {
   loading.value = true
   try {
+    const userId = route.params.id ? String(route.params.id) : userStore.user?.id
     // 获取用户基础信息
-    const userRes = await getUser(String(route.params.id))
+    const userRes = await getUser(userId)
     if (userRes.code === 200) {
       user.value = userRes.data
       user.value.avatarUrl = getImageUrl(user.value.avatarId)
