@@ -15,7 +15,7 @@
               :show-file-list="false"
               :before-upload="beforeAvatarUpload"
           >
-            <el-avatar v-if="userForm.avatarUrl" :src="userForm.avatarUrl" :size="120"/>
+            <AvatarItem v-if="userForm.avatarId" :size="120" :id="userForm.avatarId"/>
             <el-icon v-else class="avatar-uploader-icon" :size="60">
               <Plus/>
             </el-icon>
@@ -69,7 +69,7 @@ import {updateUser, uploadAvatar} from '../api'
 import type {SaveUserRequest} from '../types'
 import {useUserStore} from '../stores'
 import {blobToFile, compressImage} from "../utils/image";
-import {downloadUrl} from "../constants";
+import AvatarItem from "../components/AvatarItem.vue";
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -77,11 +77,11 @@ const userStore = useUserStore()
 const userFormRef = ref<FormInstance>()
 const loading = ref(false)
 
-const userForm = reactive<SaveUserRequest & { avatarUrl: string | undefined }>({
+const userForm = reactive<SaveUserRequest & { avatarId: string | undefined }>({
   username: "",
   password: "",
   gender: "",
-  avatarUrl: undefined
+  avatarId: undefined
 })
 
 // 加载用户信息
@@ -90,7 +90,7 @@ const loadUserInfo = async () => {
   await userStore.loadFromServer()
   userForm.username = userStore.user?.username
   userForm.gender = userStore.user?.gender
-  userForm.avatarUrl = downloadUrl + userStore.user?.avatarId
+  userForm.avatarId = userStore.user?.avatarId
   loading.value = false
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div class="author-info" @click="goToUserProfile">
-    <el-avatar :src="props.avatarUrl" :size="props.avatarSize"/>
+    <AvatarItem :size="props.avatarSize" :id="props.avatarId"/>
     <div class="author-details">
       <div class="author-name">{{ props.username }}</div>
       <div class="post-time">{{ props.ctime }}</div>
@@ -10,6 +10,7 @@
 
 <script setup lang="ts">
 import {useRouter} from "vue-router";
+import AvatarItem from "./AvatarItem.vue";
 
 const router = useRouter()
 
@@ -18,7 +19,7 @@ const props = defineProps<{
   userId: string
   username?: string
   ctime?: string
-  avatarUrl?: string
+  avatarId?: string
   avatarSize: number
 }>()
 

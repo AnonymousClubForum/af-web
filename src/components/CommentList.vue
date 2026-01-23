@@ -29,7 +29,7 @@
         <UserMeta :user-id="comment.userId"
                   :username="comment.username"
                   :ctime="comment.ctime"
-                  :avatar-url="downloadUrl+comment.avatarId"
+                  :avatar-id="comment.avatarId"
                   :avatar-size="32"/>
         <div class="comment-content">{{ comment.content }}</div>
         <div class="comment-actions">
@@ -69,7 +69,7 @@
               <UserMeta :user-id="subComment.userId"
                         :username="subComment.username"
                         :ctime="subComment.ctime"
-                        :avatar-url="downloadUrl+subComment.avatarId"
+                        :avatar-id="subComment.avatarId"
                         :avatar-size="32"/>
               <div class="sub-comment-content">{{ subComment.content }}</div>
               <div class="sub-comment-actions">
@@ -114,7 +114,6 @@ import {createComment, deleteComment, getCommentPage} from '../api'
 import type {Comment} from '../types'
 import {ElMessage} from "element-plus";
 import UserMeta from "./UserMeta.vue";
-import {downloadUrl} from "../constants";
 
 // 从父组件接收props
 const props = defineProps<{

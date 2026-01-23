@@ -37,7 +37,7 @@
           <UserMeta :user-id="post.userId"
                     :username="post.username"
                     :ctime="post.ctime"
-                    :avatar-url="downloadUrl+post.avatarId"
+                    :avatar-id="post.avatarId"
                     :avatar-size="36"/>
         </div>
         <!-- 操作按钮 -->
@@ -78,7 +78,6 @@ import {deletePost as deletePostApi, getPostPage} from '../api'
 import type {SimplePost} from '../types'
 import {useUserStore} from '../stores'
 import UserMeta from "./UserMeta.vue";
-import {downloadUrl} from "../constants";
 
 const props = defineProps<{
   userId?: string

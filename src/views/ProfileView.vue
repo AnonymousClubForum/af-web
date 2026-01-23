@@ -16,7 +16,7 @@
           >
             <!-- 用户头像区域 -->
             <div class="avatar-wrapper">
-              <el-avatar class="user-avatar" :size="120" :src="downloadUrl+user.avatarId"/>
+              <AvatarItem class="user-avatar" :size="120" :id="user.avatarId"/>
             </div>
 
             <!-- 用户基本信息区域 -->
@@ -91,7 +91,7 @@ import type {User} from '../types'
 import {useUserStore} from '../stores'
 import PostList from "../components/PostList.vue"
 import {Female, Male, UserFilled} from '@element-plus/icons-vue'
-import {downloadUrl} from "../constants";
+import AvatarItem from "../components/AvatarItem.vue";
 
 const router = useRouter()
 const route = useRoute()

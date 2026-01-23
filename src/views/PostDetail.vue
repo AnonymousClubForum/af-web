@@ -19,7 +19,7 @@
         <UserMeta :user-id="post.userId"
                   :username="post.username"
                   :ctime="post.ctime"
-                  :avatar-url="downloadUrl+post.avatarId"
+                  :avatar-id="post.avatarId"
                   :avatar-size="40"/>
         <el-divider/>
         <div class="post-body">
@@ -41,7 +41,6 @@ import type {Post} from '../types'
 import {useUserStore} from '../stores'
 import CommentList from "../components/CommentList.vue";
 import UserMeta from "../components/UserMeta.vue";
-import {downloadUrl} from "../constants";
 
 const router = useRouter()
 const route = useRoute()
