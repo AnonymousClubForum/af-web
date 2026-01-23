@@ -3,21 +3,12 @@
     <el-card class="user-info-card" shadow="hover" v-loading="loading">
       <!-- 用户头像 -->
       <div class="avatar-wrapper">
-        <el-avatar :size="120" :src="user.avatarUrl" fit="cover">
-          <el-icon size="40">
-            <UserFilled/>
-          </el-icon>
-        </el-avatar>
+        <el-avatar :size="120" :src="user.avatarUrl"/>
       </div>
 
       <!-- 用户基本信息 -->
       <div class="user-meta">
-        <h2 class="username">
-          <el-tag type="primary" size="small" v-if="userStore.user?.id === user.id">
-            本人
-          </el-tag>
-          {{ user.username || '用户已注销' }}
-        </h2>
+        <h2 class="username">{{ user.username || '用户已注销' }}</h2>
 
         <el-descriptions :column="1" bordered class="user-desc">
           <el-descriptions-item label="性别">
@@ -30,14 +21,12 @@
 
         <!-- 仅本人可见的操作按钮 -->
         <div class="user-actions" v-if="userStore.user?.id === user.id">
-          <el-button type="primary" icon="User" size="small" @click="goToEditProfile">
-            编辑资料
-          </el-button>
+          <el-button type="primary" icon="User" size="small" @click="goToEditProfile">编辑资料</el-button>
         </div>
       </div>
     </el-card>
 
-    <PostList/>
+    <PostList :user-id="user.id"/>
   </div>
 </template>
 
@@ -47,7 +36,6 @@ import {useRoute, useRouter} from 'vue-router'
 import {getUser} from '../api'
 import type {User} from '../types'
 import {getImageUrl} from '../utils/image.ts'
-import {UserFilled} from '@element-plus/icons-vue'
 import {useUserStore} from '../stores'
 import PostList from "../components/PostList.vue";
 

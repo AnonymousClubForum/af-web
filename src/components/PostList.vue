@@ -80,6 +80,10 @@ import {useUserStore} from '../stores'
 import {getImageUrl} from "../utils/image.ts";
 import UserMeta from "./UserMeta.vue";
 
+const props = defineProps<{
+  userId?: string
+}>()
+
 const router = useRouter()
 const userStore = useUserStore()
 
@@ -97,6 +101,7 @@ const fetchPostList = async () => {
     const res = await getPostPage({
       pageNum: currentPage.value,
       pageSize: pageSize.value,
+      userId: props.userId,
       searchContent: searchKeyword.value || undefined
     })
     if (res.data) {
@@ -145,7 +150,7 @@ const deletePost = async (id: string) => {
 
     await deletePostApi(id)
     ElMessage.success('删除成功')
-    fetchPostList()
+    await fetchPostList()
   } catch (error) {
     if (error !== 'cancel') {
       console.error('删除帖子失败:', error)
