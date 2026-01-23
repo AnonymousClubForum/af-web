@@ -42,13 +42,17 @@
 </template>
 
 <script setup lang="ts">
-import {computed} from 'vue'
+import {computed, onMounted} from 'vue'
 import {useRoute} from 'vue-router'
 import {useUserStore} from '../stores'
 
 const route = useRoute()
 const userStore = useUserStore()
 const activeMenu = computed(() => route.path)
+
+onMounted(() => {
+  userStore.loadFromServer()
+})
 </script>
 
 <style scoped>

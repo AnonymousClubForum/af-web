@@ -78,7 +78,8 @@ const handleLogin = async () => {
     try {
       const res = await login(loginForm)
       if (res.data) {
-        userStore.setUser(res.data.user, res.data.token)
+        userStore.setUser(res.data.user)
+        userStore.setToken(res.data.token)
         ElMessage.success('登录成功')
         router.push('/')
       }

@@ -28,6 +28,14 @@ export function updateUser(data: SaveUserRequest): Promise<ApiResponse<string>> 
     })
 }
 
+// 获取当前用户信息
+export function getUser(): Promise<ApiResponse<User>> {
+    return request({
+        url: '/platform/user/get',
+        method: 'get'
+    })
+}
+
 // 上传文件
 export function uploadAvatar(file: File): Promise<ApiResponse<string>> {
     const formData = new FormData();

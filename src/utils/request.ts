@@ -1,5 +1,6 @@
 import axios, {type AxiosInstance, type AxiosResponse, type InternalAxiosRequestConfig} from 'axios'
-import {ElMessage} from 'element-plus'
+import {ElLoading, ElMessage} from 'element-plus'
+import {useUserStore} from "../stores";
 
 // 创建 axios 实例
 const service: AxiosInstance = axios.create({
@@ -10,10 +11,9 @@ const service: AxiosInstance = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-        // 从 localStorage 获取 token
-        const token = localStorage.getItem('token')
-        if (token && config.headers) {
-            config.headers.Authorization = token
+        // 从 userStore 获取 token
+        if (useUserStore().isLoggedIn && config.headers) {
+            config.headers.Authorization = useUserStore().token
         }
         return config
     },
@@ -45,10 +45,16 @@ service.interceptors.response.use(
             const {status} = error.response
             switch (status) {
                 case 401:
-                    localStorage.removeItem('token')
-                    localStorage.removeItem('user')
-                    ElMessage.error('未授权，请重新登录')
-                    window.location.href = '/login'
+                    useUserStore().clear()
+                    const loadingInstance = ElLoading.service({
+                        lock: true, // 锁定页面滚动和所有交互
+                        background: 'rgba(0, 0, 0, 0.7)' // 半透明黑色背景，强化“锁定”视觉效果
+                    });
+                    ElMessage.error('未授权，请重新登录');
+                    setTimeout(() => {
+                        loadingInstance.close();
+                        window.location.href = '/login';
+                    }, 1000);
                     break
                 case 403:
                     ElMessage.error('拒绝访问')

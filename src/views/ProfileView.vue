@@ -13,8 +13,6 @@
           <el-upload
               class="avatar-uploader"
               :show-file-list="false"
-              :on-success="loadUserInfo"
-              :on-error="loadUserInfo"
               :before-upload="beforeAvatarUpload"
           >
             <el-avatar v-if="userForm.avatarUrl" :src="userForm.avatarUrl" :size="120"/>
@@ -54,7 +52,7 @@
             <el-button type="primary" @click="handleUpdate" :loading="loading">
               保存修改
             </el-button>
-            <el-button @click="resetForm">重置</el-button>
+            <el-button @click="loadUserInfo">重置</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -70,7 +68,7 @@ import {Plus} from '@element-plus/icons-vue'
 import {updateUser, uploadAvatar} from '../api'
 import type {SaveUserRequest} from '../types'
 import {useUserStore} from '../stores'
-import {blobToFile, compressImage, getImageUrl} from "../utils/image";
+import {blobToFile, compressImage} from "../utils/image";
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -88,12 +86,10 @@ const userForm = reactive<SaveUserRequest & { avatarUrl: string | undefined }>({
 // 加载用户信息
 const loadUserInfo = async () => {
   loading.value = true
-  if (userStore.user) {
-    userForm.username = userStore.user.username
-    userForm.gender = userStore.user.gender
-    userStore.user.avatarUrl = getImageUrl(userStore.user.avatarId)
-    userForm.avatarUrl = userStore.user.avatarUrl
-  }
+  await userStore.loadFromServer()
+  userForm.username = userStore.user?.username
+  userForm.gender = userStore.user?.gender
+  userForm.avatarUrl = userStore.user?.avatarUrl
   loading.value = false
 }
 
@@ -126,15 +122,15 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = async (rawFile) => {
     // 手动上传
     const res = await uploadAvatar(compressedFile)
     if (res.code === 200 || res.code === 0) {
-      if (!userStore.user) {
-        localStorage.removeItem('token')
-        localStorage.removeItem('user')
+      const user = userStore.user
+      if (!user) {
         ElMessage.error('未授权，请重新登录')
         router.push('/login')
         return false
       }
-      userStore.user.avatarId = res.data
-      userStore.user.avatarUrl = getImageUrl(userStore.user.avatarId)
+      user.avatarId = res.data
+      userStore.setUser(user)
+      await loadUserInfo()
       ElMessage.success('头像上传成功')
     } else {
       ElMessage.error(res.msg || '头像上传失败')
@@ -156,18 +152,16 @@ const handleUpdate = async () => {
 
     loading.value = true
     try {
-      if (userStore.user) {
-        const updateData: SaveUserRequest = {
-          username: userStore.user.username,
-          password: "",
-          gender: userForm.gender
-        }
+      const updateData: SaveUserRequest = {
+        username: userForm.username,
+        password: userForm.password,
+        gender: userForm.gender
+      }
 
-        const res = await updateUser(updateData)
-        if (res.data) {
-          userStore.updateUser(updateData)
-          ElMessage.success('修改成功')
-        }
+      const res = await updateUser(updateData)
+      if (res.data) {
+        await loadUserInfo()
+        ElMessage.success('修改成功')
       }
     } catch (error) {
       console.error('更新用户信息失败:', error)
@@ -177,14 +171,9 @@ const handleUpdate = async () => {
   })
 }
 
-// 重置表单
-const resetForm = () => {
-  loadUserInfo()
-}
-
 // 退出登录
 const handleLogout = () => {
-  userStore.clearUser()
+  userStore.clear()
   ElMessage.success('已退出登录')
   router.push('/login')
 }
