@@ -27,7 +27,7 @@
           <el-menu-item index="/register">注册</el-menu-item>
         </template>
         <template v-else>
-          <el-menu-item index="/profile">
+          <el-menu-item :index="`/profile/${userStore.user?.id}`">
             <el-avatar :src="userStore.user?.avatarUrl" :size="24"/>
             <span>{{ userStore.user?.username }}</span>
           </el-menu-item>
