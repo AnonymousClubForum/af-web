@@ -5,7 +5,9 @@ import {getUser} from "../api";
 
 export const useUserStore = defineStore('user', () => {
     const token = ref<string>(localStorage.getItem('token') || '')
-    const user = ref<User | null>(null)
+    const user = ref<User | null>(
+        localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null
+    )
 
     const isLoggedIn = computed(() => !!token.value)
 
@@ -25,6 +27,7 @@ export const useUserStore = defineStore('user', () => {
 
     // 设置用户信息
     function setUser(userData: User) {
+        localStorage.setItem('user', JSON.stringify(userData))
         user.value = userData
     }
 
@@ -32,6 +35,7 @@ export const useUserStore = defineStore('user', () => {
     function clear() {
         user.value = null
         token.value = ''
+        localStorage.removeItem('user')
         localStorage.removeItem('token')
     }
 
