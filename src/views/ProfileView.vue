@@ -1,89 +1,79 @@
 <template>
   <div class="user-profile-container">
-    <!-- 外层容器，限制最大宽度并居中 -->
     <div class="profile-wrapper">
-      <!-- 响应式栅格布局：宽屏左右分栏，窄屏上下分布 -->
-      <el-row :gutter="20" class="profile-row">
-        <!-- 左侧用户信息：大屏占3列，小屏占12列 -->
-        <el-col :xs="12" :lg="3">
-          <el-card
-              class="user-info-card"
-              shadow="hover"
-              v-loading="loading"
-              loading-text="正在加载用户信息..."
-              border
-              radius="12px"
-          >
-            <!-- 用户头像区域 -->
-            <div class="avatar-wrapper">
-              <AvatarItem class="user-avatar" :size="120" :id="user.avatarId"/>
-            </div>
+      <el-card
+          class="user-info-card"
+          shadow="hover"
+          v-loading="loading"
+          loading-text="正在加载用户信息..."
+          border
+          radius="12px"
+      >
+        <!-- 用户头像区域 -->
+        <div class="avatar-wrapper">
+          <AvatarItem class="user-avatar" :size="120" :id="user.avatarId"/>
+        </div>
 
-            <!-- 用户基本信息区域 -->
-            <div class="user-meta">
-              <el-space direction="vertical">
-                <!-- 用户名 + 本人标签 -->
-                <h2 class="username">
-                  {{ user.username || '用户已注销' }}
-                  <el-tag
-                      size="small"
-                      type="info"
-                      v-if="user.id === userStore.user?.id"
-                  >
-                    我自己
-                  </el-tag>
-                </h2>
-              </el-space>
-
-              <!-- 分割线 -->
-              <el-divider content-position="center">基本信息</el-divider>
-
-              <!-- 用户信息描述列表 -->
-              <el-descriptions
-                  :column="1"
-                  bordered
-                  class="user-desc"
+        <!-- 用户基本信息区域 -->
+        <div class="user-meta">
+          <el-space direction="vertical">
+            <!-- 用户名 + 本人标签 -->
+            <h2 class="username">
+              {{ user.username || '用户已注销' }}
+              <el-tag
                   size="small"
+                  type="info"
+                  v-if="user.id === userStore.user?.id"
               >
-                <el-descriptions-item label="性别">
-                  <el-icon :size="16" class="gender-icon">
-                    <Male v-if="user.gender === '男'"/>
-                    <Female v-if="user.gender === '女'"/>
-                    <UserFilled v-else/>
-                  </el-icon>
-                  {{ user.gender || '未设置' }}
-                </el-descriptions-item>
-              </el-descriptions>
+                我自己
+              </el-tag>
+            </h2>
+          </el-space>
 
-              <!-- 仅本人可见的操作按钮组 -->
-              <div class="user-actions" v-if="userStore.user?.id === user.id">
-                <el-space>
-                  <el-button
-                      type="primary"
-                      icon="User"
-                      size="small"
-                      @click="goToEditProfile"
-                      round
-                  >
-                    编辑资料
-                  </el-button>
-                </el-space>
-              </div>
-            </div>
-          </el-card>
-        </el-col>
+          <!-- 分割线 -->
+          <el-divider content-position="center">基本信息</el-divider>
 
-        <!-- 右侧帖子列表：大屏占9列，小屏占12列 -->
-        <el-col :xs="12" :lg="9">
-          <PostList :user-id="user.id"/>
-        </el-col>
-      </el-row>
+          <!-- 用户信息描述列表 -->
+          <el-descriptions
+              :column="1"
+              bordered
+              class="user-desc"
+              size="small"
+          >
+            <el-descriptions-item label="性别">
+              <el-icon :size="16" class="gender-icon">
+                <Male v-if="user.gender === '男'"/>
+                <Female v-if="user.gender === '女'"/>
+                <UserFilled v-else/>
+              </el-icon>
+              {{ user.gender || '未设置' }}
+            </el-descriptions-item>
+          </el-descriptions>
+
+          <!-- 仅本人可见的操作按钮组 -->
+          <div class="user-actions" v-if="userStore.user?.id === user.id">
+            <el-space>
+              <el-button
+                  type="primary"
+                  icon="User"
+                  size="small"
+                  @click="goToEditProfile"
+                  round
+              >
+                编辑资料
+              </el-button>
+            </el-space>
+          </div>
+        </div>
+      </el-card>
+
+      <PostList :user-id="userId"/>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref, watch} from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import {ElMessage} from 'element-plus'
 import {getUser} from '../api'
@@ -105,13 +95,13 @@ const user = ref<User>({
   gender: '',
   avatarId: ''
 })
+const userId = computed(() => route.params.id ? String(route.params.id) : undefined)
 
 // 初始化用户数据
 const getData = async () => {
   loading.value = true
   try {
-    const userId = route.params.id ? String(route.params.id) : userStore.user?.id
-    const userRes = await getUser(userId)
+    const userRes = await getUser(userId.value)
     if (userRes.code === 200) {
       user.value = userRes.data
     }
@@ -157,15 +147,11 @@ onMounted(() => {
 
 /* 内容容器：限制最大宽度并居中 */
 .profile-wrapper {
-  max-width: 1200px;
+  max-width: 985px;
   margin: 0 auto;
 }
 
-.profile-row {
-  width: 100%;
-}
-
-/* 左侧用户信息卡片 */
+/* 用户信息卡片 */
 .user-info-card {
   height: fit-content;
   padding: 24px 16px;
@@ -219,25 +205,5 @@ onMounted(() => {
   margin-top: 20px;
   display: flex;
   justify-content: center;
-}
-
-/* 响应式适配：小屏幕样式调整 */
-@media (max-width: 768px) {
-  .user-profile-container {
-    padding: 15px 10px;
-  }
-
-  .user-info-card {
-    margin-bottom: 20px;
-    padding: 20px 12px;
-  }
-
-  .user-avatar {
-    --el-avatar-size: 100px; /* 小屏缩小头像 */
-  }
-
-  .username {
-    font-size: 20px;
-  }
 }
 </style>
