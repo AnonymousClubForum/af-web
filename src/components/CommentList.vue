@@ -40,7 +40,9 @@
           <el-button v-if="openSubComment === comment.id"
                      type="default" link size="small" @click="openSubComment = undefined">折叠评论
           </el-button>
-          <el-button type="danger" link size="small" @click="handleDeleteComment(comment.id)">删除</el-button>
+          <el-button v-if="comment.userId === userStore.user?.id"
+                     type="danger" link size="small" @click="handleDeleteComment(comment.id)">删除
+          </el-button>
         </div>
 
         <!-- 回复框 -->
@@ -72,7 +74,7 @@
                         :avatar-id="subComment.avatarId"
                         :avatar-size="32"/>
               <div class="sub-comment-content">{{ subComment.content }}</div>
-              <div class="sub-comment-actions">
+              <div class="sub-comment-actions" v-if="subComment.userId === userStore.user?.id">
                 <el-button type="danger" link size="small" @click="handleDeleteComment(subComment.id)">删除</el-button>
               </div>
             </div>
@@ -82,7 +84,7 @@
                   v-model:page-size="subPageSize"
                   :page-sizes="[10, 20, 50, 100]"
                   :total="subTotal"
-                  layout="total, sizes, prev, pager, next"
+                  layout="prev, pager, next"
                   @size-change="handleSubSizeChange"
                   @current-change="handleSubCurrentChange"
               />
@@ -114,11 +116,13 @@ import {createComment, deleteComment, getCommentPage} from '../api'
 import type {Comment} from '../types'
 import {ElMessage} from "element-plus";
 import UserMeta from "./UserMeta.vue";
+import {useUserStore} from "../stores";
 
 // 从父组件接收props
 const props = defineProps<{
   postId: string // 必传的帖子ID
 }>()
+const userStore = useUserStore()
 
 // 页面参数
 const pageNum = ref(1)
