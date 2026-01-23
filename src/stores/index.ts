@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', () => {
     // 获取用户信息
     async function loadFromServer() {
         if (isLoggedIn.value) {
-            const userApiResponse = await getUser()
+            const userApiResponse = await getUser(null)
             setUser(userApiResponse.data)
         }
     }

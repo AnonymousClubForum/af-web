@@ -16,19 +16,12 @@
 
       <div v-if="post" class="post-content">
         <h1 class="post-title">{{ post.title }}</h1>
-
-        <div class="post-meta">
-          <div class="author-info">
-            <el-avatar :src="post.avatarUrl" :size="40"/>
-            <div class="author-details">
-              <div class="author-name">{{ post.username }}</div>
-              <div class="post-time">{{ post.ctime }}</div>
-            </div>
-          </div>
-        </div>
-
+        <UserMeta :user-id="post.userId"
+                  :username="post.username"
+                  :ctime="post.ctime"
+                  :avatar-url="post.avatarUrl"
+                  :avatar-size="40"/>
         <el-divider/>
-
         <div class="post-body">
           <v-md-preview :text="post.content"/>
         </div>
@@ -48,6 +41,7 @@ import type {Post} from '../types'
 import {useUserStore} from '../stores'
 import CommentList from "../components/CommentList.vue";
 import {getImageUrl} from "../utils/image.ts";
+import UserMeta from "../components/UserMeta.vue";
 
 const router = useRouter()
 const route = useRoute()
@@ -60,7 +54,7 @@ const post = ref<Post | null>(null)
 const loadPostDetail = async () => {
   const postId = String(route.params.id)
   if (!postId) {
-    router.replace('/')
+    await router.replace('/')
     return
   }
 
@@ -114,32 +108,6 @@ onMounted(() => {
     font-weight: bold;
     margin: 0 0 20px 0;
     color: #333;
-  }
-
-  .post-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 0;
-
-    .author-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-
-      .author-details {
-        .author-name {
-          font-weight: 500;
-          color: #333;
-          margin-bottom: 4px;
-        }
-
-        .post-time {
-          font-size: 12px;
-          color: #999;
-        }
-      }
-    }
   }
 
   .post-body {

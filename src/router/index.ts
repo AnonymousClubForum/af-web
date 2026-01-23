@@ -22,8 +22,8 @@ const routes = [
     },
     {
         path: '/posts',
-        name: 'PostList',
-        component: () => import('../views/PostList.vue'),
+        name: 'PostListView',
+        component: () => import('../views/PostListView.vue'),
         meta: {title: '帖子列表'}
     },
     {
@@ -45,9 +45,15 @@ const routes = [
         meta: {title: '帖子详情'}
     },
     {
-        path: '/profile',
+        path: '/profile/:id',
         name: 'ProfileView',
-        component: () => import('../views/ProfileView.vue'),
+        component: () => import('../views/ProfileEditView.vue'),
+        meta: {title: '用户主页'}
+    },
+    {
+        path: '/profile/edit',
+        name: 'ProfileEditView',
+        component: () => import('../views/ProfileEditView.vue'),
         meta: {title: '个人中心', requiresAuth: true}
     },
     {

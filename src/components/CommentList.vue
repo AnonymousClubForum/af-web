@@ -26,25 +26,21 @@
     <!-- 一级评论列表 -->
     <div class="comment-list" v-if="commentList.length">
       <div class="comment-item" v-for="comment in commentList" :key="comment.id">
-        <div class="comment-meta">
-          <div class="author-info">
-            <el-avatar :src="comment.avatarUrl" :size="32"/>
-            <div class="author-details">
-              <div class="author-name">{{ comment.username }}</div>
-              <div class="post-time">{{ comment.ctime }}</div>
-            </div>
-          </div>
-        </div>
+        <UserMeta :user-id="comment.userId"
+                  :username="comment.username"
+                  :ctime="comment.ctime"
+                  :avatar-url="comment.avatarUrl"
+                  :avatar-size="32"/>
         <div class="comment-content">{{ comment.content }}</div>
         <div class="comment-actions">
-          <button class="action-btn reply-btn" @click="showReplyBox(comment.id)">回复</button>
-          <button class="action-btn expand-btn" v-if="comment.subComments?.length && openSubComment !== comment.id"
-                  @click="openSubComment = comment.id">展开评论
-          </button>
-          <button class="action-btn collapse-btn" v-if="openSubComment === comment.id"
-                  @click="openSubComment = undefined">折叠评论
-          </button>
-          <button class="action-btn delete-btn" @click="handleDeleteComment(comment.id)">删除</button>
+          <el-button type="primary" link size="small" @click="showReplyBox(comment.id)">回复</el-button>
+          <el-button v-if="comment.subComments?.length && openSubComment !== comment.id"
+                     type="default" link size="small" @click="openSubComment = comment.id">展开评论
+          </el-button>
+          <el-button v-if="openSubComment === comment.id"
+                     type="default" link size="small" @click="openSubComment = undefined">折叠评论
+          </el-button>
+          <el-button type="danger" link size="small" @click="handleDeleteComment(comment.id)">删除</el-button>
         </div>
 
         <!-- 回复框 -->
@@ -70,18 +66,14 @@
         <div class="sub-comment-list" v-if="openSubComment === comment.id">
           <el-card v-loading="loading">
             <div class="sub-comment-item" v-for="subComment in comment.subComments" :key="subComment.id">
-              <div class="sub-comment-meta">
-                <div class="author-info">
-                  <el-avatar :src="subComment.avatarUrl" :size="32"/>
-                  <div class="author-details">
-                    <span class="author-name">{{ subComment.username }}</span>
-                    <span class="post-time">{{ subComment.ctime }}</span>
-                  </div>
-                </div>
-              </div>
+              <UserMeta :user-id="subComment.userId"
+                        :username="subComment.username"
+                        :ctime="subComment.ctime"
+                        :avatar-url="subComment.avatarUrl"
+                        :avatar-size="32"/>
               <div class="sub-comment-content">{{ subComment.content }}</div>
               <div class="sub-comment-actions">
-                <button class="action-btn delete-btn" @click="handleDeleteComment(subComment.id)">删除</button>
+                <el-button type="danger" link size="small" @click="handleDeleteComment(subComment.id)">删除</el-button>
               </div>
             </div>
             <div class="pagination">
@@ -122,6 +114,7 @@ import {createComment, deleteComment, getCommentPage} from '../api'
 import type {Comment} from '../types'
 import {ElMessage} from "element-plus";
 import {getImageUrl} from "../utils/image.ts";
+import UserMeta from "./UserMeta.vue";
 
 // 从父组件接收props
 const props = defineProps<{
@@ -222,7 +215,7 @@ const handlePostComment = async (parentId?: string) => {
         commentContent.value = ''
       }
       // 重新加载当前页评论
-      loadCommentList()
+      await loadCommentList()
     } else {
       ElMessage.error((parentId ? '回复' : '发布') + '失败')
     }
@@ -246,7 +239,7 @@ const handleDeleteComment = async (id: string) => {
     if (res.code === 200) {
       ElMessage.success('删除成功！')
       // 重新加载当前页评论
-      loadCommentList()
+      await loadCommentList()
     } else {
       ElMessage.error('删除失败')
     }
@@ -412,32 +405,6 @@ onMounted(() => {
   background-color: #fbfdff;
 }
 
-.comment-meta, .sub-comment-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
-
-  .author-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    .author-details {
-      .author-name {
-        font-weight: 500;
-        color: #333;
-        margin-bottom: 4px;
-      }
-
-      .post-time {
-        font-size: 12px;
-        color: #999;
-      }
-    }
-  }
-}
-
 .comment-content {
   color: #303133;
   line-height: 1.7;
@@ -451,38 +418,6 @@ onMounted(() => {
   display: flex;
   gap: 18px;
   margin-bottom: 8px;
-}
-
-.action-btn {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 13px;
-  transition: all 0.2s ease;
-}
-
-.reply-btn {
-  color: #409eff;
-
-  :hover {
-    color: #3393e8;
-  }
-}
-
-.delete-btn {
-  color: #f56c6c;
-
-  :hover {
-    color: #e65252;
-  }
-}
-
-.expand-btn, .collapse-btn {
-  color: #555;
-
-  :hover {
-    color: #333;
-  }
 }
 
 /* 回复框样式 */

@@ -33,8 +33,10 @@ declare module 'vue' {
     ElSpace: typeof import('element-plus/es')['ElSpace']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     LayoutContainer: typeof import('./src/components/LayoutContainer.vue')['default']
+    PostList: typeof import('./src/components/PostList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    UserMeta: typeof import('./src/components/UserMeta.vue')['default']
   }
   export interface GlobalDirectives {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

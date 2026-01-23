@@ -34,35 +34,19 @@
               {{ post.title }}
             </el-link>
           </div>
-          <div class="post-meta">
-            <div class="author-info">
-              <el-avatar :src="post.avatarUrl" :size="36"/>
-              <div class="author-details">
-                <div class="author-name">{{ post.username }}</div>
-                <div class="post-time">{{ post.ctime }}</div>
-              </div>
-            </div>
-          </div>
+          <UserMeta :user-id="post.userId"
+                    :username="post.username"
+                    :ctime="post.ctime"
+                    :avatar-url="post.avatarUrl"
+                    :avatar-size="36"/>
         </div>
         <!-- 操作按钮 -->
         <div class="post-action">
-          <el-button
-              v-if="userStore.user?.id === post.userId"
-              type="primary"
-              link
-              size="small"
-              @click="editPost(post.id)"
-          >
-            编辑
+          <el-button v-if="userStore.user?.id === post.userId" type="primary"
+                     link size="small" @click="editPost(post.id)">编辑
           </el-button>
-          <el-button
-              v-if="userStore.user?.id === post.userId"
-              type="danger"
-              link
-              size="small"
-              @click="deletePost(post.id)"
-          >
-            删除
+          <el-button v-if="userStore.user?.id === post.userId" type="danger"
+                     link size="small" @click="deletePost(post.id)">删除
           </el-button>
         </div>
       </div>
@@ -94,6 +78,7 @@ import {deletePost as deletePostApi, getPostPage} from '../api'
 import type {SimplePost} from '../types'
 import {useUserStore} from '../stores'
 import {getImageUrl} from "../utils/image.ts";
+import UserMeta from "./UserMeta.vue";
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -141,11 +126,6 @@ const viewPost = (id: string) => {
 
 // 创建帖子
 const goToCreatePost = () => {
-  if (!userStore.isLoggedIn) {
-    ElMessage.warning('请先登录')
-    router.push('/login')
-    return
-  }
   router.push('/post/create')
 }
 
@@ -291,33 +271,6 @@ onMounted(() => {
 
 .title-link:hover {
   color: #409eff;
-}
-
-/* 帖子元信息 作者+时间 */
-.post-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px 0;
-
-  .author-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    .author-details {
-      .author-name {
-        font-weight: 500;
-        color: #333;
-        margin-bottom: 4px;
-      }
-
-      .post-time {
-        font-size: 12px;
-        color: #999;
-      }
-    }
-  }
 }
 
 /* 操作按钮区域 */
