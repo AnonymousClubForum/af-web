@@ -16,7 +16,7 @@
           >
             <!-- 用户头像区域 -->
             <div class="avatar-wrapper">
-              <el-avatar class="user-avatar" :size="120" :src="user.avatarUrl"/>
+              <el-avatar class="user-avatar" :size="120" :src="downloadUrl+user.avatarId"/>
             </div>
 
             <!-- 用户基本信息区域 -->
@@ -88,10 +88,10 @@ import {useRoute, useRouter} from 'vue-router'
 import {ElMessage} from 'element-plus'
 import {getUser} from '../api'
 import type {User} from '../types'
-import {getImageUrl} from '../utils/image.ts'
 import {useUserStore} from '../stores'
 import PostList from "../components/PostList.vue"
 import {Female, Male, UserFilled} from '@element-plus/icons-vue'
+import {downloadUrl} from "../constants";
 
 const router = useRouter()
 const route = useRoute()
@@ -103,8 +103,7 @@ const user = ref<User>({
   id: '',
   username: '',
   gender: '',
-  avatarId: '',
-  avatarUrl: ''
+  avatarId: ''
 })
 
 // 初始化用户数据
@@ -115,7 +114,6 @@ const getData = async () => {
     const userRes = await getUser(userId)
     if (userRes.code === 200) {
       user.value = userRes.data
-      user.value.avatarUrl = getImageUrl(user.value.avatarId)
     }
   } catch (error) {
     console.error('获取用户信息失败：', error)

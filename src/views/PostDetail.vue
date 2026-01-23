@@ -19,7 +19,7 @@
         <UserMeta :user-id="post.userId"
                   :username="post.username"
                   :ctime="post.ctime"
-                  :avatar-url="post.avatarUrl"
+                  :avatar-url="downloadUrl+post.avatarId"
                   :avatar-size="40"/>
         <el-divider/>
         <div class="post-body">
@@ -40,8 +40,8 @@ import {getPost} from '../api'
 import type {Post} from '../types'
 import {useUserStore} from '../stores'
 import CommentList from "../components/CommentList.vue";
-import {getImageUrl} from "../utils/image.ts";
 import UserMeta from "../components/UserMeta.vue";
+import {downloadUrl} from "../constants";
 
 const router = useRouter()
 const route = useRoute()
@@ -63,7 +63,6 @@ const loadPostDetail = async () => {
     const res = await getPost(postId)
     if (res.data) {
       post.value = res.data
-      post.value.avatarUrl = getImageUrl(post.value.avatarId)
     }
   } catch (error) {
     console.error('加载帖子详情失败:', error)

@@ -69,6 +69,7 @@ import {updateUser, uploadAvatar} from '../api'
 import type {SaveUserRequest} from '../types'
 import {useUserStore} from '../stores'
 import {blobToFile, compressImage} from "../utils/image";
+import {downloadUrl} from "../constants";
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -89,7 +90,7 @@ const loadUserInfo = async () => {
   await userStore.loadFromServer()
   userForm.username = userStore.user?.username
   userForm.gender = userStore.user?.gender
-  userForm.avatarUrl = userStore.user?.avatarUrl
+  userForm.avatarUrl = downloadUrl + userStore.user?.avatarId
   loading.value = false
 }
 
@@ -107,7 +108,7 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = async (rawFile) => {
     // 压缩图片
     const compressedBlob = await compressImage(rawFile, {
       initialQuality: 0.7,
-      outputType: rawFile.type as 'image/jpeg' | 'image/png'
+      outputType: rawFile.type as 'image/jpeg' | 'image/png' | 'image/webp'
     });
     const compressedFile = blobToFile(compressedBlob, rawFile);
 

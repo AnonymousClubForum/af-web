@@ -28,7 +28,7 @@
         </template>
         <template v-else>
           <el-menu-item :index="`/profile/${userStore.user?.id}`">
-            <el-avatar :src="userStore.user?.avatarUrl" :size="24"/>
+            <el-avatar :src="downloadUrl+userStore.user?.avatarId" :size="24"/>
             <span>{{ userStore.user?.username }}</span>
           </el-menu-item>
         </template>
@@ -45,6 +45,7 @@
 import {computed, onMounted} from 'vue'
 import {useRoute} from 'vue-router'
 import {useUserStore} from '../stores'
+import {downloadUrl} from "../constants";
 
 const route = useRoute()
 const userStore = useUserStore()

@@ -4,7 +4,6 @@ export interface User {
     username: string
     gender?: string
     avatarId?: string
-    avatarUrl?: string
 }
 
 export interface SaveUserRequest {

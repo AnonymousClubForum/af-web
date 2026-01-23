@@ -37,7 +37,7 @@
           <UserMeta :user-id="post.userId"
                     :username="post.username"
                     :ctime="post.ctime"
-                    :avatar-url="post.avatarUrl"
+                    :avatar-url="downloadUrl+post.avatarId"
                     :avatar-size="36"/>
         </div>
         <!-- 操作按钮 -->
@@ -77,8 +77,8 @@ import {Plus, Search} from '@element-plus/icons-vue'
 import {deletePost as deletePostApi, getPostPage} from '../api'
 import type {SimplePost} from '../types'
 import {useUserStore} from '../stores'
-import {getImageUrl} from "../utils/image.ts";
 import UserMeta from "./UserMeta.vue";
+import {downloadUrl} from "../constants";
 
 const props = defineProps<{
   userId?: string
@@ -107,9 +107,6 @@ const fetchPostList = async () => {
     if (res.data) {
       postList.value = res.data.records
       total.value = res.data.total
-      for (const post of postList.value) {
-        post.avatarUrl = getImageUrl(post.avatarId)
-      }
     }
   } catch (error) {
     console.error('获取帖子列表失败:', error)

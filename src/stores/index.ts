@@ -1,7 +1,6 @@
 import {defineStore} from 'pinia'
 import {computed, ref} from 'vue'
 import type {User} from '../types'
-import {getImageUrl} from "../utils/image.ts";
 import {getUser} from "../api";
 
 export const useUserStore = defineStore('user', () => {
@@ -27,7 +26,6 @@ export const useUserStore = defineStore('user', () => {
     // 设置用户信息
     function setUser(userData: User) {
         user.value = userData
-        user.value.avatarUrl = getImageUrl(user.value.avatarId)
     }
 
     // 清除用户信息

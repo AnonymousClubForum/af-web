@@ -29,7 +29,7 @@
         <UserMeta :user-id="comment.userId"
                   :username="comment.username"
                   :ctime="comment.ctime"
-                  :avatar-url="comment.avatarUrl"
+                  :avatar-url="downloadUrl+comment.avatarId"
                   :avatar-size="32"/>
         <div class="comment-content">{{ comment.content }}</div>
         <div class="comment-actions">
@@ -69,7 +69,7 @@
               <UserMeta :user-id="subComment.userId"
                         :username="subComment.username"
                         :ctime="subComment.ctime"
-                        :avatar-url="subComment.avatarUrl"
+                        :avatar-url="downloadUrl+subComment.avatarId"
                         :avatar-size="32"/>
               <div class="sub-comment-content">{{ subComment.content }}</div>
               <div class="sub-comment-actions">
@@ -113,8 +113,8 @@ import {onMounted, ref, watch} from 'vue'
 import {createComment, deleteComment, getCommentPage} from '../api'
 import type {Comment} from '../types'
 import {ElMessage} from "element-plus";
-import {getImageUrl} from "../utils/image.ts";
 import UserMeta from "./UserMeta.vue";
+import {downloadUrl} from "../constants";
 
 // 从父组件接收props
 const props = defineProps<{
@@ -161,7 +161,6 @@ const loadCommentList = async () => {
       total.value = res.data.total
       // 2. 为每个一级评论查询二级评论
       for (const comment of commentList.value) {
-        comment.avatarUrl = getImageUrl(comment.avatarId)
         const subRes = await getCommentPage({
           pageNum: subPageNum.value,
           pageSize: subPageSize.value,
@@ -171,9 +170,6 @@ const loadCommentList = async () => {
         if (subRes.code === 200) {
           comment.subComments = subRes.data.records
           subTotal.value = subRes.data.total
-          for (const subComment of comment.subComments) {
-            subComment.avatarUrl = getImageUrl(subComment.avatarId)
-          }
         } else {
           console.error("加载评论失败")
         }
