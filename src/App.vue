@@ -17,18 +17,20 @@
         </router-link>
       </div>
       <div class="menu-items">
-        <el-switch v-model="isDark" active-action-icon="moon-night" inactive-action-icon="sunny"
-                   style="margin-right: 15px;"/>
-        <el-menu-item index="/">首页</el-menu-item>
-        <el-menu-item index="/posts">帖子列表</el-menu-item>
-        <el-menu-item v-if="userStore.isLoggedIn" index="/post/create">
-          发布帖子
+        <el-menu-item>
+          <el-switch v-model="isDark" active-action-icon="moon-night" inactive-action-icon="sunny"
+                     style="margin-right: 15px;"/>
         </el-menu-item>
+        <el-menu-item index="/">首页</el-menu-item>
         <template v-if="!userStore.isLoggedIn">
           <el-menu-item index="/login">登录</el-menu-item>
           <el-menu-item index="/register">注册</el-menu-item>
         </template>
         <template v-else>
+          <el-menu-item index="/posts">帖子列表</el-menu-item>
+          <el-menu-item index="/post/create">
+            发布帖子
+          </el-menu-item>
           <el-menu-item :index="`/profile/${userStore.user?.id}`">
             <AvatarItem :id="userStore.user?.avatarId" :size="24"/>
             <span>{{ userStore.user?.username }}</span>

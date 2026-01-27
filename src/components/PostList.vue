@@ -27,9 +27,9 @@
       </div>
 
       <!-- 帖子卡片项 -->
-      <el-card v-for="post in postList" class="post-card" :key="post.id">
-        <div class="post-main" @click="viewPost(post.id)">
-          <div class="post-title">{{ post.title }}</div>
+      <el-card v-for="post in postList" :key="post.id" class="post-card">
+        <div class="post-main">
+          <div class="post-title" @click="viewPost(post.id)">{{ post.title }}</div>
           <UserMeta :avatar-id="post.avatarId"
                     :avatar-size="36"
                     :ctime="post.ctime"
@@ -240,23 +240,13 @@ onMounted(() => {
   padding: 8px 0;
 }
 
-.post-main:hover .post-title {
-  text-decoration: underline;
-}
-
-/* 帖子主体内容 */
-.post-main {
-  flex: 1;
-  cursor: pointer;
-
-  :hover {
-    text-decoration: underline
-  }
-}
-
 .post-title {
   font-size: 24px;
   margin-bottom: 12px;
+
+  :hover {
+    text-decoration: underline;
+  }
 }
 
 /* 操作按钮区域：绝对定位到右上角 */
