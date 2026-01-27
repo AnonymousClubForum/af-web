@@ -15,13 +15,6 @@ export default defineConfig({
             resolvers: [ElementPlusResolver()],
         }),
     ],
-    optimizeDeps: {
-        include: [
-            '@kangc/v-md-editor',
-            '@kangc/v-md-editor/lib/preview',
-            '@kangc/v-md-editor/lib/theme/github.js'
-        ],
-    },
     server: {
         port: 5173,
         host: '0.0.0.0',
