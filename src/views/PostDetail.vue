@@ -23,7 +23,10 @@
                   :username="post.username"/>
         <el-divider/>
         <div class="post-body">
-          <MdPreview :modelValue="post.content" :theme="isDark ? 'dark' : 'light'"/>
+          <MdPreview :modelValue="post.content"
+                     :theme="isDark ? 'dark' : 'light'"
+                     style="background-color: rgba(0,0,0,0)"
+          />
         </div>
       </div>
     </el-card>

@@ -23,9 +23,9 @@
           <MdEditor
               v-model="postForm.content"
               :theme="isDark ? 'dark' : 'light'"
+              :toolbars="['bold','underline','italic','strikeThrough','-','link','image','=','preview','previewOnly']"
               height="500px"
               placeholder="请输入帖子内容"
-              style="background-color: rgba(0,0,0,0)"
               @onUploadImg="handleUploadImage"
           />
         </el-form-item>
@@ -87,7 +87,7 @@ const handleUploadImage = async (files: Array<File>, callback: (urls: string[] |
         })
       })
   )
-  callback(res.map((item: any) => `/storage/file/download?id=${item.data.data}`))
+  callback(res.map((item: any) => `/storage/file/download?id=${item.data}`))
 };
 
 // 加载帖子详情（编辑模式）
