@@ -23,6 +23,7 @@
           <MdEditor
               v-model="postForm.content"
               :theme="themeStore.isDark ? 'dark' : 'light'"
+              style="background-color: rgba(0,0,0,0)"
               height="500px"
               placeholder="请输入帖子内容"
               @onUploadImg="handleUploadImage"

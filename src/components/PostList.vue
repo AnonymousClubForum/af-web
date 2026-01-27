@@ -27,7 +27,9 @@
       </div>
 
       <!-- 帖子卡片项 -->
-      <el-card v-for="post in postList" :key="post.id" style="cursor: pointer" @click="viewPost(post.id)">
+      <el-card v-for="post in postList" :key="post.id"
+               style="cursor: pointer; :hover {transform: scale(1.05)}"
+               @click="viewPost(post.id)">
         <div class="post-main">
           <div class="post-title">{{ post.title }}</div>
           <UserMeta :avatar-id="post.avatarId"

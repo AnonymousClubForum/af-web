@@ -1,9 +1,9 @@
 <template>
-  <div class="author-info" @click="goToUserProfile">
+  <div class="user-meta" @click="goToUserProfile">
     <AvatarItem :id="props.avatarId" :size="props.avatarSize"/>
-    <div class="author-details">
-      <div class="author-name">{{ props.username }}</div>
-      <div class="post-time">{{ props.ctime }}</div>
+    <div class="details">
+      <div class="name">{{ props.username }}</div>
+      <div class="time">{{ props.ctime }}</div>
     </div>
   </div>
 </template>
@@ -30,20 +30,26 @@ const goToUserProfile = () => {
 </script>
 
 <style scoped>
-.author-info {
+.user-meta {
   display: flex;
   align-items: center;
   gap: 12px;
   cursor: pointer;
 
-  .author-details {
-    .author-name {
+  :hover {
+    .name {
+      text-decoration: underline;
+    }
+  }
+
+  .details {
+    .name {
       font-weight: 500;
       color: var(--el-text-color-primary);
       margin-bottom: 4px;
     }
 
-    .post-time {
+    .time {
       font-size: 12px;
       color: var(--el-text-color-secondary);
     }
