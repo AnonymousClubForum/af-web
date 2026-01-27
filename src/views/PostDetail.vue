@@ -105,16 +105,14 @@ onMounted(() => {
     font-size: 28px;
     font-weight: bold;
     margin: 0 0 20px 0;
-    color: #333;
+    color: var(--el-text-color-primary);
   }
 
   .post-body {
     font-size: 16px;
     line-height: 1.8;
-    color: #333;
+    color: var(--el-text-color-primary);
     padding: 10px 0;
-
-    /* 优化图片渲染样式 */
 
     :deep(img) {
       max-width: 100%;

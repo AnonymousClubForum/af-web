@@ -138,7 +138,7 @@ const goToLogin = () => {
 
   h2 {
     margin: 0;
-    color: #333;
+    color: var(--el-text-color-primary);
   }
 }
 

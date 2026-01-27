@@ -140,7 +140,6 @@ onMounted(() => {
 <style scoped>
 /* 全局容器样式 */
 .user-profile-container {
-  background-color: #f5f7fa;
   min-height: 100vh;
   padding: 20px 15px;
 }
@@ -156,11 +155,10 @@ onMounted(() => {
   height: fit-content;
   padding: 24px 16px;
   transition: all 0.3s ease; /* 过渡动画 */
-}
 
-/* 卡片hover效果 */
-.user-info-card:hover {
-  box-shadow: 0 8px 24px rgba(149, 157, 165, 0.2);
+  :hover {
+    box-shadow: 0 8px 24px var(--el-box-shadow);
+  }
 }
 
 .avatar-wrapper {
@@ -172,8 +170,8 @@ onMounted(() => {
 
 /* 头像样式：增加边框和hover缩放 */
 .user-avatar {
-  border: 4px solid #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 4px solid var(--el-border-color);
+  box-shadow: 0 2px 8px var(--el-box-shadow);
   transition: transform 0.3s ease;
 }
 
@@ -189,12 +187,10 @@ onMounted(() => {
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 8px;
-  color: #1f2937;
 }
 
 .user-desc {
   margin: 16px 0;
-  --el-descriptions-item-label-color: #4b5563;
 }
 
 .gender-icon {

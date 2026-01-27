@@ -81,7 +81,7 @@ const handleLogin = async () => {
         userStore.setUser(res.data.user)
         userStore.setToken(res.data.token)
         ElMessage.success('登录成功')
-        router.push('/')
+        await router.push('/')
       }
     } catch (error) {
       console.error('登录失败:', error)
@@ -116,7 +116,7 @@ const goToRegister = () => {
 
   h2 {
     margin: 0;
-    color: #333;
+    color: var(--el-text-color-primary);
   }
 }
 

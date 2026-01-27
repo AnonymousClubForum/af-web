@@ -65,13 +65,13 @@ const goToCreatePost = () => {
 
   h1 {
     font-size: 48px;
-    color: #333;
+    color: var(--el-text-color-primary);
     margin-bottom: 20px;
   }
 
   p {
     font-size: 18px;
-    color: #666;
+    color: var(--el-text-color-secondary);
     margin-bottom: 40px;
   }
 }

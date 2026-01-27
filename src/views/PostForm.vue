@@ -2,13 +2,13 @@
   <div class="post-form-container">
     <el-card>
       <template #header>
-        <div class="card-header">
+        <el-header class="card-header">
           <h2>{{ isEdit ? '编辑帖子' : '发布帖子' }}</h2>
           <el-button @click="goBack">返回</el-button>
-        </div>
+        </el-header>
       </template>
 
-      <el-form :model="postForm" :rules="rules" ref="postFormRef" label-width="80px">
+      <el-form :model="postForm" :rules="rules" ref="postFormRef" label-position="top">
         <el-form-item label="标题" prop="title">
           <el-input
               v-model="postForm.title"
@@ -24,19 +24,19 @@
               v-model="postForm.content"
               height="500px"
               placeholder="请输入帖子内容"
-              left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr ｜ image "
+              left-toolbar="undo redo clear | h bold italic strikethrough ｜ image "
               right-toolbar="preview | fullscreen"
               :disabled-menus="[]"
               @upload-image="handleUploadImage"
           />
         </el-form-item>
 
-        <el-form-item>
+        <div style="align-items: end; width: 100%">
           <el-button type="primary" @click="handleSubmit" :loading="loading">
             {{ isEdit ? '保存修改' : '发布' }}
           </el-button>
           <el-button @click="goBack">取消</el-button>
-        </el-form-item>
+        </div>
       </el-form>
     </el-card>
   </div>
@@ -121,13 +121,13 @@ const handleSubmit = async () => {
         const res = await updatePost(postForm)
         if (res.data) {
           ElMessage.success('修改成功')
-          router.push(`/posts`)
+          await router.push(`/posts`)
         }
       } else {
         const res = await createPost(postForm)
         if (res.data) {
           ElMessage.success('发布成功')
-          router.push(`/posts`)
+          await router.push(`/posts`)
         }
       }
     } catch (error) {

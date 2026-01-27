@@ -27,7 +27,7 @@
       </div>
 
       <!-- 帖子卡片项 -->
-      <div class="post-card" v-for="post in postList" :key="post.id">
+      <el-card v-for="post in postList" :key="post.id">
         <div class="post-main">
           <div class="post-title">
             <el-link type="primary" @click="viewPost(post.id)" class="title-link">
@@ -49,7 +49,7 @@
                      link size="small" @click="deletePost(post.id)">删除
           </el-button>
         </div>
-      </div>
+      </el-card>
     </div>
 
     <!-- 分页组件 位置不变 -->
@@ -194,7 +194,7 @@ onMounted(() => {
   margin: 0;
   font-size: 22px;
   font-weight: 600;
-  color: #303133;
+  color: var(--el-text-color-primary);
 }
 
 .header-action {
@@ -214,7 +214,6 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 16px rgba(64, 158, 255, 0.4); /* 阴影提升层次感 */
   z-index: 999; /* 确保在最上层 */
   font-size: 14px;
   border: none;
@@ -224,7 +223,6 @@ onMounted(() => {
 /* 悬浮效果 */
 .floating-create-btn:hover {
   transform: scale(1.05); /* 轻微放大 */
-  box-shadow: 0 6px 20px rgba(64, 158, 255, 0.5); /* 加深阴影 */
 }
 
 /* 帖子列表容器 */
@@ -232,26 +230,6 @@ onMounted(() => {
   display: grid;
   gap: 16px;
   margin-bottom: 30px;
-}
-
-/* 核心：帖子卡片样式 重点美化 */
-.post-card {
-  background: #fff;
-  border-radius: 12px;
-  border: 1px solid #e4e7ed;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  transition: all 0.2s ease-in-out;
-  cursor: default;
-}
-
-/* 悬浮动效 提升质感 */
-.post-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  border-color: #dcdfe6;
 }
 
 /* 帖子主体内容 */
@@ -266,12 +244,7 @@ onMounted(() => {
 .title-link {
   font-size: 18px;
   font-weight: 500;
-  color: #1f2329;
-  text-decoration: none;
-}
-
-.title-link:hover {
-  color: #409eff;
+  color: var(--el-text-color-primary);
 }
 
 /* 操作按钮区域 */
@@ -296,11 +269,6 @@ onMounted(() => {
 @media (max-width: 768px) {
   .post-list-container {
     padding: 10px 16px;
-  }
-
-  .post-card {
-    flex-direction: column;
-    align-items: flex-start;
   }
 
   .post-action {

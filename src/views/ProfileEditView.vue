@@ -217,22 +217,14 @@ onMounted(() => {
       cursor: pointer;
 
       .avatar-uploader-icon {
-        border: 2px dashed #d9d9d9;
+        border: 2px dashed var(--el-border-color);
         border-radius: 50%;
         transition: all 0.3s;
-
-        &:hover {
-          border-color: #409eff;
-        }
-      }
-
-      .avatar-uploader-icon {
-        color: #8c939d;
       }
 
       .upload-tip {
         font-size: 12px;
-        color: #999;
+        color: var(--el-text-color-secondary);
       }
     }
   }

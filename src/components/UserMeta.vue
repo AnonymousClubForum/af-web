@@ -39,13 +39,13 @@ const goToUserProfile = () => {
   .author-details {
     .author-name {
       font-weight: 500;
-      color: #333;
+      color: var(--el-text-color-primary);
       margin-bottom: 4px;
     }
 
     .post-time {
       font-size: 12px;
-      color: #999;
+      color: var(--el-text-color-secondary);
     }
   }
 }

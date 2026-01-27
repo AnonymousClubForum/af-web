@@ -70,14 +70,14 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   padding: 0 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px var(--el-border-color);
 
   .menu-brand {
     display: flex;
     align-items: center;
+    align-self: center;
     font-size: 20px;
     font-weight: bold;
-    color: #409eff;
   }
 
   .menu-items {
@@ -88,6 +88,5 @@ onMounted(() => {
 
 .layout-main {
   flex: 1;
-  background-color: #f5f7fa;
 }
 </style>
