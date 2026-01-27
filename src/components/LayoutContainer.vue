@@ -17,7 +17,6 @@
         </router-link>
       </div>
       <div class="menu-items">
-        <ToggleDarkMode/>
         <el-menu-item index="/">首页</el-menu-item>
         <el-menu-item index="/posts">帖子列表</el-menu-item>
         <el-menu-item v-if="userStore.isLoggedIn" index="/post/create">
@@ -47,7 +46,6 @@ import {computed, onMounted} from 'vue'
 import {useRoute} from 'vue-router'
 import {useUserStore} from '../stores'
 import AvatarItem from "./AvatarItem.vue";
-import ToggleDarkMode from "./ToggleDarkMode.vue";
 
 const route = useRoute()
 const userStore = useUserStore()

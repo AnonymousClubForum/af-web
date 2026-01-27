@@ -42,7 +42,6 @@ declare module 'vue' {
     PostList: typeof import('./src/components/PostList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    ToggleDarkMode: typeof import('./src/components/ToggleDarkMode.vue')['default']
     UserMeta: typeof import('./src/components/UserMeta.vue')['default']
   }
   export interface GlobalDirectives {

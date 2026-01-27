@@ -22,6 +22,7 @@
         <el-form-item label="内容" prop="content">
           <MdEditor
               v-model="postForm.content"
+              :theme="themeStore.isDark ? 'dark' : 'light'"
               height="500px"
               placeholder="请输入帖子内容"
               @onUploadImg="handleUploadImage"
@@ -47,9 +48,11 @@ import {createPost, getPost, updatePost} from '../api'
 import type {SavePostRequest} from '../types'
 import {uploadFile} from "../api/file.ts";
 import {MdEditor} from "md-editor-v3";
+import {useThemeStore} from "../stores";
 
 const router = useRouter()
 const route = useRoute()
+const themeStore = useThemeStore()
 
 const postFormRef = ref<FormInstance>()
 const loading = ref(false)
