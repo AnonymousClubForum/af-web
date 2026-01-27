@@ -4,12 +4,6 @@
       <template #header>
         <div class="card-header">
           <h2>个人中心</h2>
-          <el-switch
-              v-model="themeStore.isDark"
-              active-text="深色模式"
-              inactive-text="浅色模式"
-              @change="themeStore.toggleDarkMode()"
-          />
           <el-button type="danger" @click="handleLogout">退出登录</el-button>
         </div>
       </template>
@@ -73,13 +67,12 @@ import {ElMessage, type FormInstance, type UploadProps} from 'element-plus'
 import {Plus} from '@element-plus/icons-vue'
 import {updateUser, uploadAvatar} from '../api'
 import type {SaveUserRequest} from '../types'
-import {useThemeStore, useUserStore} from '../stores'
+import {useUserStore} from '../stores'
 import {blobToFile, compressImage} from "../utils/image";
 import AvatarItem from "../components/AvatarItem.vue";
 
 const router = useRouter()
 const userStore = useUserStore()
-const themeStore = useThemeStore()
 
 const userFormRef = ref<FormInstance>()
 const loading = ref(false)

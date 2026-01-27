@@ -23,9 +23,7 @@
                   :username="post.username"/>
         <el-divider/>
         <div class="post-body">
-          <MdPreview :modelValue="post.content"
-                     :theme="themeStore.isDark ? 'dark' : 'light'"
-          />
+          <MdPreview :modelValue="post.content" :theme="isDark ? 'dark' : 'light'"/>
         </div>
       </div>
     </el-card>
@@ -37,10 +35,11 @@
 <script lang="ts" setup>
 import {onMounted, ref} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
+import {useDark} from "@vueuse/core";
 import {ArrowLeft} from '@element-plus/icons-vue'
 import {getPost} from '../api'
 import type {Post} from '../types'
-import {useThemeStore, useUserStore} from '../stores'
+import {useUserStore} from '../stores'
 import CommentList from "../components/CommentList.vue";
 import UserMeta from "../components/UserMeta.vue";
 import {MdPreview} from "md-editor-v3";
@@ -48,7 +47,7 @@ import {MdPreview} from "md-editor-v3";
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
-const themeStore = useThemeStore()
+const isDark = useDark()
 
 const loading = ref(false)
 const post = ref<Post | null>(null)

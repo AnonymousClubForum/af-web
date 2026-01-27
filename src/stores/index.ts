@@ -49,24 +49,3 @@ export const useUserStore = defineStore('user', () => {
         clear
     }
 })
-
-export const useThemeStore = defineStore('theme', () => {
-    const isDark = ref<boolean>(
-        localStorage.getItem('theme') ?
-            localStorage.getItem('theme') === 'dark' :
-            window.matchMedia('(prefers-color-scheme: dark)').matches
-    )
-
-    // 获取用户信息
-    async function toggleDarkMode() {
-        // 更新 html 根元素的 dark 类
-        document.documentElement.classList.toggle('dark', isDark.value)
-        // 保存到本地存储，刷新页面不丢失
-        localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
-    }
-
-    return {
-        isDark,
-        toggleDarkMode
-    }
-})

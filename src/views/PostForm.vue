@@ -22,10 +22,10 @@
         <el-form-item label="内容" prop="content">
           <MdEditor
               v-model="postForm.content"
-              :theme="themeStore.isDark ? 'dark' : 'light'"
-              style="background-color: rgba(0,0,0,0)"
+              :theme="isDark ? 'dark' : 'light'"
               height="500px"
               placeholder="请输入帖子内容"
+              style="background-color: rgba(0,0,0,0)"
               @onUploadImg="handleUploadImage"
           />
         </el-form-item>
@@ -44,16 +44,16 @@
 <script lang="ts" setup>
 import {onMounted, reactive, ref} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
+import {useDark} from "@vueuse/core";
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
 import {createPost, getPost, updatePost} from '../api'
 import type {SavePostRequest} from '../types'
 import {uploadFile} from "../api/file.ts";
 import {MdEditor} from "md-editor-v3";
-import {useThemeStore} from "../stores";
 
 const router = useRouter()
 const route = useRoute()
-const themeStore = useThemeStore()
+const isDark = useDark()
 
 const postFormRef = ref<FormInstance>()
 const loading = ref(false)
