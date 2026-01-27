@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <!-- 帖子列表 卡片布局（核心改造点） -->
+    <!-- 帖子列表 卡片布局 -->
     <div v-loading="loading" class="post-card-list">
       <!-- 无数据占位 -->
       <div v-if="postList.length === 0 && !loading" class="empty-tip">
@@ -27,7 +27,7 @@
       </div>
 
       <!-- 帖子卡片项 -->
-      <el-card v-for="post in postList" :key="post.id" style="display: flex; justify-content: space-between">
+      <el-card v-for="post in postList" class="post-card" :key="post.id">
         <div class="post-main" @click="viewPost(post.id)">
           <div class="post-title">{{ post.title }}</div>
           <UserMeta :avatar-id="post.avatarId"
@@ -229,6 +229,21 @@ onMounted(() => {
   margin-bottom: 30px;
 }
 
+.post-card {
+  position: relative; /* 为操作按钮绝对定位提供参考 */
+  padding-right: 120px; /* 为右上角操作按钮预留空间，避免内容被遮挡 */
+}
+
+/* 帖子主体内容 */
+.post-main {
+  cursor: pointer;
+  padding: 8px 0;
+}
+
+.post-main:hover .post-title {
+  text-decoration: underline;
+}
+
 /* 帖子主体内容 */
 .post-main {
   flex: 1;
@@ -244,9 +259,13 @@ onMounted(() => {
   margin-bottom: 12px;
 }
 
-/* 操作按钮区域 */
+/* 操作按钮区域：绝对定位到右上角 */
 .post-action {
-  margin-left: 16px;
+  position: absolute;
+  top: 16px; /* 距离卡片顶部 */
+  right: 16px; /* 距离卡片右侧 */
+  display: flex;
+  gap: 8px; /* 按钮之间的间距 */
 }
 
 /* 无数据提示 */
@@ -268,9 +287,16 @@ onMounted(() => {
     padding: 10px 16px;
   }
 
+  .post-card {
+    padding-right: 0; /* 小屏幕取消右侧内边距 */
+    padding-bottom: 30px; /* 为操作按钮预留底部空间 */
+  }
+
   .post-action {
-    margin-left: 0;
-    margin-top: 12px;
+    position: relative; /* 小屏幕改为相对定位 */
+    top: 0;
+    right: 0;
+    justify-content: flex-end; /* 右对齐 */
   }
 
   .page-header {

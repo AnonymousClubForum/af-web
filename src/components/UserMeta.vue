@@ -36,12 +36,6 @@ const goToUserProfile = () => {
   gap: 12px;
   cursor: pointer;
 
-  :hover {
-    .name {
-      text-decoration: underline;
-    }
-  }
-
   .details {
     .name {
       font-weight: 500;
@@ -54,5 +48,9 @@ const goToUserProfile = () => {
       color: var(--el-text-color-secondary);
     }
   }
+}
+
+.user-meta :hover .name {
+  text-decoration: underline;
 }
 </style>
