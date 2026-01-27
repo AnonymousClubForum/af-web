@@ -124,8 +124,17 @@ const goToLogin = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 20px;
+}
+
+/* 浅色模式渐变 */
+:root .register-container {
+  background: linear-gradient(120deg, #F5F7F9, #C9D9E9);
+}
+
+/* 深色模式渐变 */
+.dark .register-container {
+  background: linear-gradient(120deg, #1E1E1E, #232323);
 }
 
 .register-card {

@@ -35,12 +35,14 @@ declare module 'vue' {
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElRow: typeof import('element-plus/es')['ElRow']
     ElSpace: typeof import('element-plus/es')['ElSpace']
+    ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTag: typeof import('element-plus/es')['ElTag']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     LayoutContainer: typeof import('./src/components/LayoutContainer.vue')['default']
     PostList: typeof import('./src/components/PostList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ToggleDarkMode: typeof import('./src/components/ToggleDarkMode.vue')['default']
     UserMeta: typeof import('./src/components/UserMeta.vue')['default']
   }
   export interface GlobalDirectives {
