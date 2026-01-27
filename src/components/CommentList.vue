@@ -10,74 +10,76 @@
     <div class="comment-post">
       <el-input
           v-model="commentContent"
-          placeholder="分享你的观点和看法..."
+          :disabled="!props.postId"
           :rows="4"
           class="comment-input"
-          :disabled="!props.postId"
+          placeholder="分享你的观点和看法..."
+          type="textarea"
       ></el-input>
       <el-button
-          @click="handlePostComment(undefined)"
-          type="primary"
           :disabled="!props.postId || !commentContent.trim()"
+          type="primary"
+          @click="handlePostComment(undefined)"
       >
         发布评论
       </el-button>
     </div>
 
     <!-- 一级评论列表 -->
-    <div class="comment-list" v-if="commentList.length">
-      <div class="comment-item" v-for="comment in commentList" :key="comment.id">
-        <UserMeta :user-id="comment.userId"
-                  :username="comment.username"
+    <div v-if="commentList.length" class="comment-list">
+      <div v-for="comment in commentList" :key="comment.id" class="comment-item">
+        <UserMeta :avatar-id="comment.avatarId"
+                  :avatar-size="32"
                   :ctime="comment.ctime"
-                  :avatar-id="comment.avatarId"
-                  :avatar-size="32"/>
+                  :user-id="comment.userId"
+                  :username="comment.username"/>
         <div class="comment-content">{{ comment.content }}</div>
         <div class="comment-actions">
-          <el-button type="primary" link size="small" @click="showReplyBox(comment.id)">回复</el-button>
+          <el-button link size="small" type="primary" @click="showReplyBox(comment.id)">回复</el-button>
           <el-button v-if="comment.subComments?.length && openSubComment !== comment.id"
-                     type="default" link size="small" @click="openSubComment = comment.id">展开评论
+                     link size="small" type="default" @click="openSubComment = comment.id">展开评论
           </el-button>
           <el-button v-if="openSubComment === comment.id"
-                     type="default" link size="small" @click="openSubComment = undefined">折叠评论
+                     link size="small" type="default" @click="openSubComment = undefined">折叠评论
           </el-button>
           <el-button v-if="comment.userId === userStore.user?.id"
-                     type="danger" link size="small" @click="handleDeleteComment(comment.id)">删除
+                     link size="small" type="danger" @click="handleDeleteComment(comment.id)">删除
           </el-button>
         </div>
 
         <!-- 回复框 -->
-        <div class="reply-box" v-if="activeReplyId === comment.id" :data-parent-id="comment.id">
+        <div v-if="activeReplyId === comment.id" :data-parent-id="comment.id" class="reply-box">
           <el-input
               v-model="replyContent"
-              placeholder="友善回复，文明交流哦～"
               :rows="4"
               class="reply-input"
+              placeholder="友善回复，文明交流哦～"
+              type="textarea"
           ></el-input>
           <div class="reply-actions">
             <el-button
-                @click="handlePostComment(comment.id)"
-                type="primary"
                 :disabled="!replyContent.trim()"
+                type="primary"
+                @click="handlePostComment(comment.id)"
             >
               发布回复
             </el-button>
-            <el-button @click="activeReplyId = undefined" type="default">取消</el-button>
+            <el-button type="default" @click="activeReplyId = undefined">取消</el-button>
           </div>
         </div>
 
         <!-- 二级评论列表 -->
-        <div class="sub-comment-list" v-if="openSubComment === comment.id">
+        <div v-if="openSubComment === comment.id" class="sub-comment-list">
           <el-card v-loading="loading">
-            <div class="sub-comment-item" v-for="subComment in comment.subComments" :key="subComment.id">
-              <UserMeta :user-id="subComment.userId"
-                        :username="subComment.username"
+            <div v-for="subComment in comment.subComments" :key="subComment.id" class="sub-comment-item">
+              <UserMeta :avatar-id="subComment.avatarId"
+                        :avatar-size="32"
                         :ctime="subComment.ctime"
-                        :avatar-id="subComment.avatarId"
-                        :avatar-size="32"/>
+                        :user-id="subComment.userId"
+                        :username="subComment.username"/>
               <div class="sub-comment-content">{{ subComment.content }}</div>
-              <div class="sub-comment-actions" v-if="subComment.userId === userStore.user?.id">
-                <el-button type="danger" link size="small" @click="handleDeleteComment(subComment.id)">删除</el-button>
+              <div v-if="subComment.userId === userStore.user?.id" class="sub-comment-actions">
+                <el-button link size="small" type="danger" @click="handleDeleteComment(subComment.id)">删除</el-button>
               </div>
             </div>
             <div class="pagination">
@@ -95,7 +97,7 @@
         </div>
       </div>
     </div>
-    <div class="empty-tip" v-else>✨ 暂无评论，来说点什么吧～</div>
+    <div v-else class="empty-tip">✨ 暂无评论，来说点什么吧～</div>
 
     <!-- 分页区域 -->
     <div class="pagination main-pagination">
@@ -112,7 +114,7 @@
   </el-card>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {onMounted, ref, watch} from 'vue'
 import {createComment, deleteComment, getCommentPage} from '../api'
 import type {Comment} from '../types'

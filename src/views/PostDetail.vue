@@ -3,7 +3,7 @@
     <el-card v-loading="loading">
       <template #header>
         <div class="card-header">
-          <el-button @click="goBack" :icon="ArrowLeft">返回</el-button>
+          <el-button :icon="ArrowLeft" @click="goBack">返回</el-button>
           <el-button
               v-if="userStore.user?.username === post?.username"
               type="primary"
@@ -16,14 +16,14 @@
 
       <div v-if="post" class="post-content">
         <h1 class="post-title">{{ post.title }}</h1>
-        <UserMeta :user-id="post.userId"
-                  :username="post.username"
+        <UserMeta :avatar-id="post.avatarId"
+                  :avatar-size="40"
                   :ctime="post.ctime"
-                  :avatar-id="post.avatarId"
-                  :avatar-size="40"/>
+                  :user-id="post.userId"
+                  :username="post.username"/>
         <el-divider/>
         <div class="post-body">
-          <v-md-preview :text="post.content"/>
+          <MdPreview :modelValue="post.content"/>
         </div>
       </div>
     </el-card>
@@ -32,7 +32,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {onMounted, ref} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import {ArrowLeft} from '@element-plus/icons-vue'
@@ -41,6 +41,7 @@ import type {Post} from '../types'
 import {useUserStore} from '../stores'
 import CommentList from "../components/CommentList.vue";
 import UserMeta from "../components/UserMeta.vue";
+import {MdPreview} from "md-editor-v3";
 
 const router = useRouter()
 const route = useRoute()

@@ -6,28 +6,28 @@
           <h2>用户注册</h2>
         </div>
       </template>
-      <el-form :model="registerForm" :rules="rules" ref="registerFormRef" label-width="80px">
+      <el-form ref="registerFormRef" :model="registerForm" :rules="rules" label-width="80px">
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="registerForm.username" placeholder="请输入用户名" clearable/>
+          <el-input v-model="registerForm.username" clearable placeholder="请输入用户名"/>
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input
               v-model="registerForm.password"
-              type="password"
               placeholder="请输入密码"
               show-password
+              type="password"
           />
         </el-form-item>
         <el-form-item label="确认密码" prop="confirmPassword">
           <el-input
               v-model="registerForm.confirmPassword"
-              type="password"
               placeholder="请再次输入密码"
               show-password
+              type="password"
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleRegister" :loading="loading" style="width: 100%">
+          <el-button :loading="loading" style="width: 100%" type="primary" @click="handleRegister">
             注册
           </el-button>
         </el-form-item>
@@ -41,7 +41,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {reactive, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'

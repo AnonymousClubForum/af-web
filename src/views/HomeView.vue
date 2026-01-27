@@ -7,7 +7,7 @@
             <h1>欢迎来到Anonymous Forum</h1>
             <p>一个简单、快速的交流平台</p>
             <el-space>
-              <el-button type="primary" size="large" @click="goToPostList">
+              <el-button size="large" type="primary" @click="goToPostList">
                 进入论坛
               </el-button>
               <el-button
@@ -32,7 +32,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {useRouter} from 'vue-router'
 import {useUserStore} from '../stores'
 

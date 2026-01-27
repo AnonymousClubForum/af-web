@@ -7,7 +7,7 @@
   />
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {onMounted, ref} from 'vue'
 
 // 定义深色模式状态

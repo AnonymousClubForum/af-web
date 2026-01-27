@@ -11,19 +11,19 @@
       <div class="profile-content">
         <div class="avatar-section">
           <el-upload
-              class="avatar-uploader"
-              :show-file-list="false"
               :before-upload="beforeAvatarUpload"
+              :show-file-list="false"
+              class="avatar-uploader"
           >
-            <AvatarItem v-if="userForm.avatarId" :size="120" :id="userForm.avatarId"/>
-            <el-icon v-else class="avatar-uploader-icon" :size="60">
+            <AvatarItem v-if="userForm.avatarId" :id="userForm.avatarId" :size="120"/>
+            <el-icon v-else :size="60" class="avatar-uploader-icon">
               <Plus/>
             </el-icon>
             <div class="upload-tip">点击上传头像</div>
           </el-upload>
         </div>
 
-        <el-form :model="userForm" ref="userFormRef" label-width="80px">
+        <el-form ref="userFormRef" :model="userForm" label-width="80px">
           <el-form-item label="用户名">
             <el-input v-model="userForm.username" disabled/>
           </el-form-item>
@@ -49,7 +49,7 @@
           <!--          </el-form-item>-->
 
           <el-form-item>
-            <el-button type="primary" @click="handleUpdate" :loading="loading">
+            <el-button :loading="loading" type="primary" @click="handleUpdate">
               保存修改
             </el-button>
             <el-button @click="loadUserInfo">重置</el-button>
@@ -60,7 +60,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {onMounted, reactive, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {ElMessage, type FormInstance, type UploadProps} from 'element-plus'

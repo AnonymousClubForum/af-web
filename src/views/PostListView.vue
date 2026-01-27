@@ -2,7 +2,7 @@
   <PostList/>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import PostList from "../components/PostList.vue";
 </script>
 

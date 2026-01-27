@@ -1,9 +1,10 @@
 <template>
-  <el-avatar :src="props.id ? `/storage/file/download?id=${props.id}` : '/defaultAvatar.png'"
-             :size="props.size" fallback="/defaultAvatar.png"/>
+  <el-avatar :size="props.size"
+             :src="props.id ? `/storage/file/download?id=${props.id}` : '/defaultAvatar.png'"
+             fallback="/defaultAvatar.png"/>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 // 组件接收的 props
 const props = defineProps<{
   id?: string

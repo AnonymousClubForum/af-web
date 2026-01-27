@@ -8,31 +8,28 @@
         </el-header>
       </template>
 
-      <el-form :model="postForm" :rules="rules" ref="postFormRef" label-position="top">
+      <el-form ref="postFormRef" :model="postForm" :rules="rules" label-position="top">
         <el-form-item label="标题" prop="title">
           <el-input
               v-model="postForm.title"
-              placeholder="请输入帖子标题"
-              maxlength="100"
-              show-word-limit
               clearable
+              maxlength="100"
+              placeholder="请输入帖子标题"
+              show-word-limit
           />
         </el-form-item>
 
         <el-form-item label="内容" prop="content">
-          <v-md-editor
+          <MdEditor
               v-model="postForm.content"
               height="500px"
               placeholder="请输入帖子内容"
-              left-toolbar="undo redo clear | h bold italic strikethrough ｜ image "
-              right-toolbar="preview | fullscreen"
-              :disabled-menus="[]"
-              @upload-image="handleUploadImage"
+              @onUploadImg="handleUploadImage"
           />
         </el-form-item>
 
         <div style="align-items: end; width: 100%">
-          <el-button type="primary" @click="handleSubmit" :loading="loading">
+          <el-button :loading="loading" type="primary" @click="handleSubmit">
             {{ isEdit ? '保存修改' : '发布' }}
           </el-button>
           <el-button @click="goBack">取消</el-button>
@@ -42,13 +39,14 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {onMounted, reactive, ref} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
 import {createPost, getPost, updatePost} from '../api'
 import type {SavePostRequest} from '../types'
 import {uploadFile} from "../api/file.ts";
+import {MdEditor} from "md-editor-v3";
 
 const router = useRouter()
 const route = useRoute()
@@ -71,20 +69,21 @@ const rules: FormRules = {
 }
 
 // 处理图片上传（核心功能）
-const handleUploadImage = async (event: any, insertImage: Function) => {
-  const file = event.target.files[0];
-  if (!file) return;
-  try {
-    const res = await uploadFile(file);
-    insertImage({ // 插入图片到Markdown编辑器中
-      url: `/storage/file/download?id=${res.data}`,
-      desc: file.name, // 图片描述
-    });
-    ElMessage.success('图片上传成功');
-  } catch (error) {
-    console.error('图片上传失败:', error);
-    ElMessage.error('图片上传失败，请重试');
-  }
+const handleUploadImage = async (files: Array<File>, callback: (urls: string[] | {
+  url: string;
+  alt: string;
+  title: string
+}[]) => void) => {
+  const res = await Promise.all(
+      files.map((file) => {
+        return new Promise((rev, rej) => {
+          uploadFile(file)
+              .then((res) => rev(res))
+              .catch((error) => rej(error));
+        })
+      })
+  )
+  callback(res.map((item: any) => `/storage/file/download?id=${item.data.data}`))
 };
 
 // 加载帖子详情（编辑模式）

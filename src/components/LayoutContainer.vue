@@ -10,8 +10,8 @@
         <router-link to="/">
           <el-link :underline="false">
             <el-image
-                src="/banner.png"
                 alt="Anonymous Forum"
+                src="/banner.png"
             />
           </el-link>
         </router-link>
@@ -29,7 +29,7 @@
         </template>
         <template v-else>
           <el-menu-item :index="`/profile/${userStore.user?.id}`">
-            <AvatarItem :size="24" :id="userStore.user?.avatarId"/>
+            <AvatarItem :id="userStore.user?.avatarId" :size="24"/>
             <span>{{ userStore.user?.username }}</span>
           </el-menu-item>
         </template>
@@ -42,7 +42,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {computed, onMounted} from 'vue'
 import {useRoute} from 'vue-router'
 import {useUserStore} from '../stores'

@@ -5,48 +5,46 @@
       <div class="header-action">
         <el-input
             v-model="searchKeyword"
-            placeholder="搜索帖子标题/内容..."
-            style="width: 300px"
             clearable
+            placeholder="搜索帖子标题/内容..."
+            size="default"
+            style="width: 300px"
             @clear="handleSearch"
             @keyup.enter="handleSearch"
-            size="default"
         >
           <template #append>
-            <el-button type="primary" :icon="Search" @click="handleSearch"/>
+            <el-button :icon="Search" type="primary" @click="handleSearch"/>
           </template>
         </el-input>
       </div>
     </div>
 
     <!-- 帖子列表 卡片布局（核心改造点） -->
-    <div class="post-card-list" v-loading="loading">
+    <div v-loading="loading" class="post-card-list">
       <!-- 无数据占位 -->
-      <div class="empty-tip" v-if="postList.length === 0 && !loading">
+      <div v-if="postList.length === 0 && !loading" class="empty-tip">
         <el-empty description="暂无帖子，快来发布第一个帖子吧～"/>
       </div>
 
       <!-- 帖子卡片项 -->
-      <el-card v-for="post in postList" :key="post.id">
+      <el-card v-for="post in postList" :key="post.id" style="cursor: pointer" @click="viewPost(post.id)">
         <div class="post-main">
-          <div class="post-title">
-            <el-link type="primary" @click="viewPost(post.id)" class="title-link">
-              {{ post.title }}
-            </el-link>
-          </div>
-          <UserMeta :user-id="post.userId"
-                    :username="post.username"
+          <div class="post-title">{{ post.title }}</div>
+          <UserMeta :avatar-id="post.avatarId"
+                    :avatar-size="36"
                     :ctime="post.ctime"
-                    :avatar-id="post.avatarId"
-                    :avatar-size="36"/>
+                    :user-id="post.userId"
+                    :username="post.username"
+                    @click.stop
+          />
         </div>
         <!-- 操作按钮 -->
         <div class="post-action">
-          <el-button v-if="userStore.user?.id === post.userId" type="primary"
-                     link size="small" @click="editPost(post.id)">编辑
+          <el-button v-if="userStore.user?.id === post.userId" link
+                     size="small" type="primary" @click="editPost(post.id)">编辑
           </el-button>
-          <el-button v-if="userStore.user?.id === post.userId" type="danger"
-                     link size="small" @click="deletePost(post.id)">删除
+          <el-button v-if="userStore.user?.id === post.userId" link
+                     size="small" type="danger" @click="deletePost(post.id)">删除
           </el-button>
         </div>
       </el-card>
@@ -65,11 +63,11 @@
       />
     </div>
 
-    <el-button type="primary" @click="goToCreatePost" class="floating-create-btn" :icon="Plus"/>
+    <el-button :icon="Plus" class="floating-create-btn" type="primary" @click="goToCreatePost"/>
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {onMounted, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {ElMessage, ElMessageBox} from 'element-plus'
@@ -239,12 +237,6 @@ onMounted(() => {
 
 .post-title {
   margin-bottom: 12px;
-}
-
-.title-link {
-  font-size: 18px;
-  font-weight: 500;
-  color: var(--el-text-color-primary);
 }
 
 /* 操作按钮区域 */

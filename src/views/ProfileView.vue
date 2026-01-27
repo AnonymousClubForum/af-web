@@ -2,16 +2,16 @@
   <div class="user-profile-container">
     <div class="profile-wrapper">
       <el-card
-          class="user-info-card"
-          shadow="hover"
           v-loading="loading"
-          loading-text="正在加载用户信息..."
           border
+          class="user-info-card"
+          loading-text="正在加载用户信息..."
           radius="12px"
+          shadow="hover"
       >
         <!-- 用户头像区域 -->
         <div class="avatar-wrapper">
-          <AvatarItem class="user-avatar" :size="120" :id="user.avatarId"/>
+          <AvatarItem :id="user.avatarId" :size="120" class="user-avatar"/>
         </div>
 
         <!-- 用户基本信息区域 -->
@@ -21,9 +21,9 @@
             <h2 class="username">
               {{ user.username || '用户已注销' }}
               <el-tag
+                  v-if="user.id === userStore.user?.id"
                   size="small"
                   type="info"
-                  v-if="user.id === userStore.user?.id"
               >
                 我自己
               </el-tag>
@@ -51,14 +51,14 @@
           </el-descriptions>
 
           <!-- 仅本人可见的操作按钮组 -->
-          <div class="user-actions" v-if="userStore.user?.id === user.id">
+          <div v-if="userStore.user?.id === user.id" class="user-actions">
             <el-space>
               <el-button
-                  type="primary"
                   icon="User"
-                  size="small"
-                  @click="goToEditProfile"
                   round
+                  size="small"
+                  type="primary"
+                  @click="goToEditProfile"
               >
                 编辑资料
               </el-button>
@@ -72,7 +72,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {computed, onMounted, ref, watch} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import {ElMessage} from 'element-plus'
