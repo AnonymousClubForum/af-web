@@ -30,7 +30,7 @@
           />
         </el-form-item>
 
-        <div style="align-items: end; width: 100%">
+        <div style="justify-self: right">
           <el-button :loading="loading" type="primary" @click="handleSubmit">
             {{ isEdit ? '保存修改' : '发布' }}
           </el-button>

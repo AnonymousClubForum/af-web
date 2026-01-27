@@ -44,7 +44,7 @@
               <el-icon :size="16" class="gender-icon">
                 <Male v-if="user.gender === '男'"/>
                 <Female v-if="user.gender === '女'"/>
-                <UserFilled v-else/>
+                <UserFilled v-if="user.gender !== '男' && user.gender !== '女'"/>
               </el-icon>
               {{ user.gender || '未设置' }}
             </el-descriptions-item>

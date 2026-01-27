@@ -27,17 +27,14 @@
       </div>
 
       <!-- 帖子卡片项 -->
-      <el-card v-for="post in postList" :key="post.id"
-               style="cursor: pointer; :hover {transform: scale(1.05)}"
-               @click="viewPost(post.id)">
-        <div class="post-main">
+      <el-card v-for="post in postList" :key="post.id" style="display: flex; justify-content: space-between">
+        <div class="post-main" @click="viewPost(post.id)">
           <div class="post-title">{{ post.title }}</div>
           <UserMeta :avatar-id="post.avatarId"
                     :avatar-size="36"
                     :ctime="post.ctime"
                     :user-id="post.userId"
                     :username="post.username"
-                    @click.stop
           />
         </div>
         <!-- 操作按钮 -->
@@ -235,9 +232,15 @@ onMounted(() => {
 /* 帖子主体内容 */
 .post-main {
   flex: 1;
+  cursor: pointer;
+
+  :hover {
+    text-decoration: underline
+  }
 }
 
 .post-title {
+  font-size: 24px;
   margin-bottom: 12px;
 }
 
