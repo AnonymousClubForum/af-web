@@ -96,8 +96,8 @@ const loadUserInfo = async () => {
 
 // 上传前验证
 const beforeAvatarUpload: UploadProps['beforeUpload'] = async (rawFile) => {
-  if (!(['image/jpeg', 'image/png'].includes(rawFile.type))) {
-    ElMessage.error('头像只能是 JPG/PNG 格式!')
+  if (!(['image/jpeg', 'image/png', 'image/webp'].includes(rawFile.type))) {
+    ElMessage.error('头像只能是 JPG/PNG/WEBP 格式!')
     return false
   }
   if (rawFile.size / 1024 / 1024 >= 3) {
