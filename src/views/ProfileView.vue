@@ -1,74 +1,72 @@
 <template>
   <div class="user-profile-container">
-    <div class="profile-wrapper">
-      <el-card
-          v-loading="loading"
-          border
-          class="user-info-card"
-          loading-text="正在加载用户信息..."
-          radius="12px"
-          shadow="hover"
-      >
-        <!-- 用户头像区域 -->
-        <div class="avatar-wrapper">
-          <AvatarItem :id="user.avatarId" :size="120" class="user-avatar"/>
-        </div>
+    <el-card
+        v-loading="loading"
+        border
+        class="user-info-card"
+        loading-text="正在加载用户信息..."
+        radius="12px"
+        shadow="hover"
+    >
+      <!-- 用户头像区域 -->
+      <div class="avatar-wrapper">
+        <AvatarItem :id="user.avatarId" :size="120" class="user-avatar"/>
+      </div>
 
-        <!-- 用户基本信息区域 -->
-        <div class="user-meta">
-          <el-space direction="vertical">
-            <!-- 用户名 + 本人标签 -->
-            <h2 class="username">
-              {{ user.username || '用户已注销' }}
-              <el-tag
-                  v-if="user.id === userStore.user?.id"
-                  size="small"
-                  type="info"
-              >
-                我自己
-              </el-tag>
-            </h2>
+      <!-- 用户基本信息区域 -->
+      <div class="user-meta">
+        <el-space direction="vertical">
+          <!-- 用户名 + 本人标签 -->
+          <h2 class="username">
+            {{ user.username || '用户已注销' }}
+            <el-tag
+                v-if="user.id === userStore.user?.id"
+                size="small"
+                type="info"
+            >
+              我自己
+            </el-tag>
+          </h2>
+        </el-space>
+
+        <!-- 分割线 -->
+        <el-divider content-position="center">基本信息</el-divider>
+
+        <!-- 用户信息描述列表 -->
+        <el-descriptions
+            :column="1"
+            bordered
+            class="user-desc"
+            size="small"
+        >
+          <el-descriptions-item label="性别">
+            <el-icon :size="16" class="gender-icon">
+              <Male v-if="user.gender === '男'"/>
+              <Female v-if="user.gender === '女'"/>
+              <UserFilled v-if="user.gender !== '男' && user.gender !== '女'"/>
+            </el-icon>
+            {{ user.gender || '未设置' }}
+          </el-descriptions-item>
+        </el-descriptions>
+
+        <!-- 仅本人可见的操作按钮组 -->
+        <div v-if="userStore.user?.id === user.id" class="user-actions">
+          <el-space>
+            <el-button
+                icon="User"
+                round
+                size="small"
+                type="primary"
+                @click="goToEditProfile"
+            >
+              编辑资料
+            </el-button>
           </el-space>
-
-          <!-- 分割线 -->
-          <el-divider content-position="center">基本信息</el-divider>
-
-          <!-- 用户信息描述列表 -->
-          <el-descriptions
-              :column="1"
-              bordered
-              class="user-desc"
-              size="small"
-          >
-            <el-descriptions-item label="性别">
-              <el-icon :size="16" class="gender-icon">
-                <Male v-if="user.gender === '男'"/>
-                <Female v-if="user.gender === '女'"/>
-                <UserFilled v-if="user.gender !== '男' && user.gender !== '女'"/>
-              </el-icon>
-              {{ user.gender || '未设置' }}
-            </el-descriptions-item>
-          </el-descriptions>
-
-          <!-- 仅本人可见的操作按钮组 -->
-          <div v-if="userStore.user?.id === user.id" class="user-actions">
-            <el-space>
-              <el-button
-                  icon="User"
-                  round
-                  size="small"
-                  type="primary"
-                  @click="goToEditProfile"
-              >
-                编辑资料
-              </el-button>
-            </el-space>
-          </div>
         </div>
-      </el-card>
+      </div>
+    </el-card>
 
-      <PostList :user-id="userId"/>
-    </div>
+    <PostList class="post-list-container" :user-id="userId"/>
   </div>
 </template>
 
@@ -142,23 +140,27 @@ onMounted(() => {
 .user-profile-container {
   min-height: 100vh;
   padding: 20px 15px;
-}
-
-/* 内容容器：限制最大宽度并居中 */
-.profile-wrapper {
   max-width: 985px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  gap: 18px;
+  flex-wrap: wrap;
+  box-sizing: border-box;
 }
 
 /* 用户信息卡片 */
 .user-info-card {
   height: fit-content;
+  width: 40%;
   padding: 24px 16px;
   transition: all 0.3s ease; /* 过渡动画 */
+}
 
-  :hover {
-    box-shadow: 0 8px 24px var(--el-box-shadow);
-  }
+.post-list-container {
+  flex: 1;
+  min-width: 300px;
+  align-self: flex-start;
 }
 
 .avatar-wrapper {
@@ -201,5 +203,18 @@ onMounted(() => {
   margin-top: 20px;
   display: flex;
   justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .user-profile-container {
+    flex-direction: column;
+    padding: 16px 10px;
+    gap: 16px;
+  }
+
+  .user-info-card {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 </style>
