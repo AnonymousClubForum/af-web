@@ -4,12 +4,14 @@ export interface User {
     username: string
     gender?: string
     avatarId?: string
+    bio?: string
 }
 
 export interface SaveUserRequest {
     username?: string
     password?: string
     gender?: string
+    bio?: string
 }
 
 export interface LoginRequest {

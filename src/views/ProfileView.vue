@@ -47,6 +47,9 @@
             </el-icon>
             {{ user.gender || '未设置' }}
           </el-descriptions-item>
+          <el-descriptions-item label="个人简介">
+            {{ user.bio || '这个人很懒，什么都没有留下' }}
+          </el-descriptions-item>
         </el-descriptions>
 
         <!-- 仅本人可见的操作按钮组 -->
@@ -90,8 +93,9 @@ const loading = ref(false)
 const user = ref<User>({
   id: '',
   username: '',
-  gender: '',
-  avatarId: ''
+  gender: undefined,
+  avatarId: undefined,
+  bio: undefined
 })
 const userId = computed(() => route.params.id ? String(route.params.id) : undefined)
 

@@ -37,16 +37,16 @@
             </el-radio-group>
           </el-form-item>
 
-          <!--          <el-form-item label="个人简介" prop="bio">-->
-          <!--            <el-input-->
-          <!--                v-model="userForm.bio"-->
-          <!--                type="textarea"-->
-          <!--                placeholder="请输入个人简介"-->
-          <!--                :rows="4"-->
-          <!--                maxlength="200"-->
-          <!--                show-word-limit-->
-          <!--            />-->
-          <!--          </el-form-item>-->
+          <el-form-item label="个人简介" prop="bio">
+            <el-input
+                v-model="userForm.bio"
+                type="textarea"
+                placeholder="一个简短的个性签名让大家更好地认识你～"
+                :rows="4"
+                maxlength="250"
+                show-word-limit
+            />
+          </el-form-item>
 
           <el-form-item>
             <el-button :loading="loading" type="primary" @click="handleUpdate">
@@ -78,9 +78,10 @@ const userFormRef = ref<FormInstance>()
 const loading = ref(false)
 
 const userForm = reactive<SaveUserRequest & { avatarId: string | undefined }>({
-  username: "",
-  password: "",
-  gender: "",
+  username: undefined,
+  password: undefined,
+  gender: undefined,
+  bio: undefined,
   avatarId: undefined
 })
 
@@ -91,6 +92,7 @@ const loadUserInfo = async () => {
   userForm.username = userStore.user?.username
   userForm.gender = userStore.user?.gender
   userForm.avatarId = userStore.user?.avatarId
+  userForm.bio = userStore.user?.bio
   loading.value = false
 }
 
@@ -155,7 +157,8 @@ const handleUpdate = async () => {
       const updateData: SaveUserRequest = {
         username: userForm.username,
         password: userForm.password,
-        gender: userForm.gender
+        gender: userForm.gender,
+        bio: userForm.bio
       }
       const res = await updateUser(updateData)
       if (res.code === 200 && res.data) {
