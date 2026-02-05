@@ -69,32 +69,30 @@
         </div>
 
         <!-- 二级评论列表 -->
-        <div v-if="openSubComment === comment.id" class="sub-comment-list">
-          <el-card v-loading="loading">
-            <div v-for="subComment in comment.subComments" :key="subComment.id" class="sub-comment-item">
-              <UserMeta :avatar-id="subComment.avatarId"
-                        :avatar-size="32"
-                        :ctime="subComment.ctime"
-                        :user-id="subComment.userId"
-                        :username="subComment.username"/>
-              <div class="sub-comment-content">{{ subComment.content }}</div>
-              <div v-if="subComment.userId === userStore.user?.id" class="sub-comment-actions">
-                <el-button link size="small" type="danger" @click="handleDeleteComment(subComment.id)">删除</el-button>
-              </div>
+        <el-card v-if="openSubComment === comment.id" class="sub-comment-list">
+          <div v-for="subComment in comment.subComments" :key="subComment.id" class="sub-comment-item">
+            <UserMeta :avatar-id="subComment.avatarId"
+                      :avatar-size="32"
+                      :ctime="subComment.ctime"
+                      :user-id="subComment.userId"
+                      :username="subComment.username"/>
+            <div class="sub-comment-content">{{ subComment.content }}</div>
+            <div v-if="subComment.userId === userStore.user?.id" class="sub-comment-actions">
+              <el-button link size="small" type="danger" @click="handleDeleteComment(subComment.id)">删除</el-button>
             </div>
-            <div class="pagination">
-              <el-pagination
-                  v-model:current-page="subPageNum"
-                  v-model:page-size="subPageSize"
-                  :page-sizes="[10, 20, 50, 100]"
-                  :total="subTotal"
-                  layout="prev, pager, next"
-                  @size-change="handleSubSizeChange"
-                  @current-change="handleSubCurrentChange"
-              />
-            </div>
-          </el-card>
-        </div>
+          </div>
+          <div class="pagination">
+            <el-pagination
+                v-model:current-page="subPageNum"
+                v-model:page-size="subPageSize"
+                :page-sizes="[10, 20, 50, 100]"
+                :total="subTotal"
+                layout="prev, pager, next"
+                @size-change="handleSubSizeChange"
+                @current-change="handleSubCurrentChange"
+            />
+          </div>
+        </el-card>
       </div>
     </div>
     <div v-else class="empty-tip">✨ 暂无评论，来说点什么吧～</div>
@@ -118,7 +116,7 @@
 import {onMounted, ref, watch} from 'vue'
 import {createComment, deleteComment, getCommentPage} from '../api'
 import type {Comment} from '../types'
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 import UserMeta from "./UserMeta.vue";
 import {useUserStore} from "../stores";
 
@@ -233,23 +231,25 @@ const handlePostComment = async (parentId?: string) => {
  * @param id 评论ID
  */
 const handleDeleteComment = async (id: string) => {
-  if (!confirm('确定要删除这条评论吗？')) {
-    return
-  }
-
-  try {
-    const res = await deleteComment(id)
-    if (res.code === 200) {
-      ElMessage.success('删除成功！')
-      // 重新加载当前页评论
-      await loadCommentList()
-    } else {
-      ElMessage.error('删除失败')
+  await ElMessageBox.confirm('确定要删除这条评论吗？', '提示', {
+    type: 'warning',
+    confirmButtonText: '确定',
+    cancelButtonText: '取消'
+  }).then(async () => {
+    try {
+      const res = await deleteComment(id)
+      if (res.code === 200) {
+        ElMessage.success('删除成功！')
+        // 重新加载当前页评论
+        await loadCommentList()
+      } else {
+        ElMessage.error('删除失败')
+      }
+    } catch (error) {
+      console.error('删除评论异常:', error)
+      ElMessage.error('删除评论出错，请重试！')
     }
-  } catch (error) {
-    console.error('删除评论异常:', error)
-    ElMessage.error('删除评论出错，请重试！')
-  }
+  })
 }
 
 /**
@@ -259,10 +259,11 @@ const handleDeleteComment = async (id: string) => {
 const showReplyBox = (parentId: string) => {
   activeReplyId.value = parentId
   replyContent.value = ''
-  // 滚动到回复框位置（可选）
   setTimeout(() => {
     const replyBox = document.querySelector(`.reply-box[data-parent-id="${parentId}"]`)
+    const input = replyBox?.querySelector('textarea') as HTMLTextAreaElement
     replyBox?.scrollIntoView({behavior: 'smooth', block: 'nearest'})
+    input?.focus(); // 自动聚焦输入框
   }, 0)
 }
 
@@ -371,8 +372,6 @@ onMounted(() => {
 
 .sub-comment-item {
   padding: 16px 0;
-  border-bottom: 1px solid var(--el-border-color);
-  border-radius: 8px;
   margin-bottom: 8px;
   transition: all 0.2s ease;
 }

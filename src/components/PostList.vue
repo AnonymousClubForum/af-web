@@ -27,7 +27,7 @@
       </div>
 
       <!-- 帖子卡片项 -->
-      <el-card v-for="post in postList" :key="post.id" class="post-card">
+      <el-card v-for="post in postList" :key="post.id" class="post-card" shadow="hover">
         <div class="post-main">
           <div class="post-title" @click="viewPost(post.id)">{{ post.title }}</div>
           <UserMeta :avatar-id="post.avatarId"
@@ -232,6 +232,7 @@ onMounted(() => {
 .post-card {
   position: relative; /* 为操作按钮绝对定位提供参考 */
   padding-right: 120px; /* 为右上角操作按钮预留空间，避免内容被遮挡 */
+  transition: all 0.2s ease;
 }
 
 /* 帖子主体内容 */
@@ -243,10 +244,11 @@ onMounted(() => {
 .post-title {
   font-size: 24px;
   margin-bottom: 12px;
+}
 
-  :hover {
-    text-decoration: underline;
-  }
+.post-title:hover {
+  text-decoration: underline;
+  color: var(--el-color-primary); /* 贴合主题色，提升交互体验 */
 }
 
 /* 操作按钮区域：绝对定位到右上角 */

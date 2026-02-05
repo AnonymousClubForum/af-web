@@ -23,7 +23,7 @@
           </el-upload>
         </div>
 
-        <el-form ref="userFormRef" :model="userForm" label-width="80px">
+        <el-form ref="userFormRef" :model="userForm" label-width="80px" class="form-section">
           <el-form-item label="用户名">
             <el-input v-model="userForm.username" disabled/>
           </el-form-item>
@@ -63,7 +63,7 @@
 <script lang="ts" setup>
 import {onMounted, reactive, ref} from 'vue'
 import {useRouter} from 'vue-router'
-import {ElMessage, type FormInstance, type UploadProps} from 'element-plus'
+import {ElMessage, ElMessageBox, type FormInstance, type UploadProps} from 'element-plus'
 import {Plus} from '@element-plus/icons-vue'
 import {updateUser, uploadAvatar} from '../api'
 import type {SaveUserRequest} from '../types'
@@ -126,7 +126,7 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = async (rawFile) => {
       const user = userStore.user
       if (!user) {
         ElMessage.error('未授权，请重新登录')
-        router.push('/login')
+        await router.push('/login')
         return false
       }
       user.avatarId = res.data
@@ -139,7 +139,8 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = async (rawFile) => {
     // 阻止默认上传（因为已经手动上传了压缩后的文件）
     return false;
   } catch (error) {
-    console.error('压缩失败：', error);
+    console.error('头像上传/压缩失败：', error);
+    ElMessage.error('头像处理失败，请重试')
   }
   return false
 }
@@ -147,10 +148,8 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = async (rawFile) => {
 // 更新用户信息
 const handleUpdate = async () => {
   if (!userFormRef.value) return
-
   await userFormRef.value.validate(async (valid) => {
     if (!valid) return
-
     loading.value = true
     try {
       const updateData: SaveUserRequest = {
@@ -158,14 +157,16 @@ const handleUpdate = async () => {
         password: userForm.password,
         gender: userForm.gender
       }
-
       const res = await updateUser(updateData)
-      if (res.data) {
+      if (res.code === 200 && res.data) {
         await loadUserInfo()
         ElMessage.success('修改成功')
+      } else {
+        ElMessage.error(res.msg || '信息修改失败，请重试')
       }
     } catch (error) {
       console.error('更新用户信息失败:', error)
+      ElMessage.error('网络异常，修改失败')
     } finally {
       loading.value = false
     }
@@ -174,9 +175,19 @@ const handleUpdate = async () => {
 
 // 退出登录
 const handleLogout = () => {
-  userStore.clear()
-  ElMessage.success('已退出登录')
-  router.push('/login')
+  ElMessageBox.confirm(
+      '确定要退出登录吗？',
+      '提示',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
+  ).then(() => {
+    userStore.clear()
+    ElMessage.success('已退出登录')
+    router.push('/login')
+  })
 }
 
 // 页面加载时获取用户信息
@@ -199,35 +210,44 @@ onMounted(() => {
 
   h2 {
     margin: 0;
+    font-size: 20px; /* 规范字号 */
+    font-weight: 600; /* 加粗，提升视觉重点 */
+    color: var(--el-text-color-primary);
   }
 }
 
 .profile-content {
   display: flex;
   gap: 40px;
+  align-items: flex-start;
+}
 
-  .avatar-section {
-    flex-shrink: 0;
+.form-section {
+  flex: 1;
+  max-width: 500px;
+}
 
-    :deep(.avatar-uploader) {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
+.avatar-section {
+  flex-shrink: 0;
+}
 
-      .avatar-uploader-icon {
-        border: 2px dashed var(--el-border-color);
-        border-radius: 50%;
-        transition: all 0.3s;
-      }
+:deep(.avatar-uploader) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
 
-      .upload-tip {
-        margin-left: 8px;
-        font-size: 12px;
-        color: var(--el-text-color-secondary);
-      }
-    }
+  .avatar-uploader-icon {
+    border: 2px dashed var(--el-border-color);
+    border-radius: 50%;
+    transition: all 0.3s;
+  }
+
+  .upload-tip {
+    margin-left: 8px;
+    font-size: 12px;
+    color: var(--el-text-color-secondary);
   }
 }
 
@@ -235,6 +255,12 @@ onMounted(() => {
   .profile-content {
     flex-direction: column;
     align-items: center;
+    gap: 24px; /* 小屏缩小间距，更紧凑 */
+  }
+
+  .form-section {
+    width: 100%;
+    max-width: 300px; /* 小屏限制表单宽度，避免拉伸 */
   }
 }
 </style>
