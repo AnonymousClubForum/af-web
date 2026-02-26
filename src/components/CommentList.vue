@@ -113,7 +113,7 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref, watch} from 'vue'
+import {ref, watch} from 'vue'
 import {createComment, deleteComment, getCommentPage} from '../api'
 import type {Comment} from '../types'
 import {ElMessage, ElMessageBox} from "element-plus";
@@ -306,11 +306,6 @@ watch(() => props.postId, () => {
   pageNum.value = 1 // 重置页码
   loadCommentList()
 }, {immediate: true})
-
-// 初始化加载评论
-onMounted(() => {
-  loadCommentList()
-})
 </script>
 
 <style scoped>
