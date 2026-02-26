@@ -72,7 +72,7 @@ import {useRouter} from 'vue-router'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {Plus, Search} from '@element-plus/icons-vue'
 import {deletePost as deletePostApi, getPostPage} from '../api'
-import type {SimplePost} from '../types'
+import type {Post} from "../types";
 import {useUserStore} from '../stores'
 import UserMeta from "./UserMeta.vue";
 
@@ -84,7 +84,7 @@ const router = useRouter()
 const userStore = useUserStore()
 
 const loading = ref(false)
-const postList = ref<SimplePost[]>([])
+const postList = ref<Post[]>([])
 const searchKeyword = ref('')
 const currentPage = ref(1)
 const pageSize = ref(10)

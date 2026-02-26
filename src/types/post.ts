@@ -10,16 +10,6 @@ export interface Post {
     utime?: string
 }
 
-export interface SimplePost {
-    id: string
-    userId: string
-    username: string
-    avatarId?: string
-    title: string
-    ctime?: string
-    utime?: string
-}
-
 export interface SavePostRequest {
     id?: string
     title?: string

@@ -1,5 +1,5 @@
 import request from '../utils/request'
-import type {ApiResponse, PageResult, Post, QueryPostPageRequest, SavePostRequest, SimplePost} from '../types'
+import type {ApiResponse, PageResult, Post, QueryPostPageRequest, SavePostRequest} from '../types'
 
 // 创建帖子
 export function createPost(data: SavePostRequest): Promise<ApiResponse<string>> {
@@ -36,7 +36,7 @@ export function getPost(id: string): Promise<ApiResponse<Post>> {
 }
 
 // 分页查询帖子列表
-export function getPostPage(params: QueryPostPageRequest): Promise<ApiResponse<PageResult<SimplePost>>> {
+export function getPostPage(params: QueryPostPageRequest): Promise<ApiResponse<PageResult<Post>>> {
     return request({
         url: '/platform/post/get_page',
         method: 'get',
