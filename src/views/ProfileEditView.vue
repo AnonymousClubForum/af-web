@@ -23,7 +23,7 @@
           </el-upload>
         </div>
 
-        <el-form ref="userFormRef" :model="userForm" label-width="80px" class="form-section">
+        <el-form ref="userFormRef" :model="userForm" class="form-section" label-width="80px">
           <el-form-item label="用户名">
             <el-input v-model="userForm.username" disabled/>
           </el-form-item>
@@ -40,11 +40,11 @@
           <el-form-item label="个人简介" prop="bio">
             <el-input
                 v-model="userForm.bio"
-                type="textarea"
-                placeholder="一个简短的个性签名让大家更好地认识你～"
                 :rows="4"
                 maxlength="250"
+                placeholder="一个简短的个性签名让大家更好地认识你～"
                 show-word-limit
+                type="textarea"
             />
           </el-form-item>
 

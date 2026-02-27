@@ -29,9 +29,70 @@
           />
         </div>
       </div>
+
+      <template #footer>
+        <div class="dialog-footer">
+          <ElButton @click="showReplyBox">回复</ElButton>
+        </div>
+      </template>
+
     </el-card>
     <el-divider/>
-    <CommentList v-if="post" :postId="post.id"/>
+
+    <el-card v-loading="loadingComment">
+      <template #header>
+        <div class="card-header">
+          <h1>评论</h1>
+        </div>
+      </template>
+
+      <!-- 评论列表 -->
+      <div v-if="commentList.length" class="comment-list">
+        <div v-for="comment in commentList" :key="comment.id" class="comment-item">
+          <UserMeta :avatar-id="comment.avatarId"
+                    :avatar-size="32"
+                    :ctime="comment.ctime"
+                    :user-id="comment.userId"
+                    :username="comment.username"/>
+          <div v-if="!!comment.parentComment" class="parent-comment-item">
+            <UserMeta :avatar-size="0"
+                      :ctime="comment.parentComment.ctime"
+                      :user-id="comment.parentComment.userId"
+                      :username="comment.parentComment.username"/>
+            <div class="comment-content">{{ comment.parentComment.content }}</div>
+          </div>
+          <div class="comment-content">{{ comment.content }}</div>
+          <div class="comment-actions">
+            <el-button link size="small" type="primary" @click="showReplyBox(comment.id)">回复</el-button>
+            <el-button v-if="comment.userId === userStore.user?.id"
+                       link size="small" type="danger" @click="handleDeleteComment(comment.id)">删除
+            </el-button>
+          </div>
+
+        </div>
+      </div>
+      <div v-else class="empty-tip">✨ 暂无评论，来说点什么吧～</div>
+
+      <!-- 分页区域 -->
+      <div class="pagination main-pagination">
+        <el-pagination
+            v-model:current-page="pageNum"
+            v-model:page-size="pageSize"
+            :page-sizes="[10, 20, 50, 100]"
+            :total="total"
+            layout="total, sizes, prev, pager, next"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+        />
+      </div>
+    </el-card>
+
+    <ReplyDialog
+        v-model="showReplyDialog"
+        :commentId="replyCommentId"
+        :postId="post?.id"
+        @success="loadCommentList"
+    />
   </div>
 </template>
 
@@ -40,12 +101,13 @@ import {onMounted, ref} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import {useDark} from "@vueuse/core";
 import {ArrowLeft} from '@element-plus/icons-vue'
-import {getPost} from '../api'
-import type {Post} from '../types'
+import {deleteComment, getCommentPage, getPost} from '../api'
+import type {Comment, Post} from '../types'
 import {useUserStore} from '../stores'
-import CommentList from "../components/CommentList.vue";
 import UserMeta from "../components/UserMeta.vue";
 import {MdPreview} from "md-editor-v3";
+import {ElMessage, ElMessageBox} from "element-plus";
+import ReplyDialog from "../components/ReplyDialog.vue";
 
 const router = useRouter()
 const route = useRoute()
@@ -54,6 +116,19 @@ const isDark = useDark()
 
 const loading = ref(false)
 const post = ref<Post | null>(null)
+
+// 页面参数
+const pageNum = ref(1)
+const pageSize = ref(10)
+const total = ref(0)
+
+// 评论列表
+const loadingComment = ref(false)
+const commentList = ref<Comment[]>([])
+
+// 回复框
+const showReplyDialog = ref(false)
+const replyCommentId = ref<string | undefined>()
 
 // 加载帖子详情
 const loadPostDetail = async () => {
@@ -69,11 +144,89 @@ const loadPostDetail = async () => {
     if (res.data) {
       post.value = res.data
     }
+    await loadCommentList()
   } catch (error) {
     console.error('加载帖子详情失败:', error)
   } finally {
     loading.value = false
   }
+}
+
+/**
+ * 加载评论列表
+ */
+const loadCommentList = async () => {
+  if (!String(route.params.id)) return
+  loadingComment.value = true
+  try {
+    const res = await getCommentPage({
+      pageNum: pageNum.value,
+      pageSize: pageSize.value,
+      postId: String(route.params.id)
+    })
+    if (res.code === 200) {
+      commentList.value = res.data.records
+      total.value = res.data.total
+    } else {
+      console.error('加载评论失败')
+    }
+  } catch (error) {
+    console.error('加载评论异常:', error)
+  } finally {
+    loadingComment.value = false
+  }
+}
+
+/**
+ * 删除评论
+ * @param id 评论ID
+ */
+const handleDeleteComment = async (id: string) => {
+  await ElMessageBox.confirm('确定要删除这条评论吗？', '提示', {
+    type: 'warning',
+    confirmButtonText: '确定',
+    cancelButtonText: '取消'
+  }).then(async () => {
+    try {
+      const res = await deleteComment(id)
+      if (res.code === 200) {
+        ElMessage.success('删除成功！')
+        // 重新加载当前页评论
+        await loadCommentList()
+      } else {
+        ElMessage.error('删除失败')
+      }
+    } catch (error) {
+      console.error('删除评论异常:', error)
+      ElMessage.error('删除评论出错，请重试！')
+    }
+  })
+}
+
+/**
+ * 显示回复框
+ * @param parentId 父评论ID
+ */
+const showReplyBox = (parentId?: string) => {
+  replyCommentId.value = parentId
+  showReplyDialog.value = true
+}
+
+/**
+ * 分页大小改变
+ */
+const handleSizeChange = (size: number) => {
+  pageSize.value = size
+  pageNum.value = 1
+  loadCommentList()
+}
+
+/**
+ * 当前页改变
+ */
+const handleCurrentChange = (page: number) => {
+  pageNum.value = page
+  loadCommentList()
 }
 
 // 返回
@@ -127,5 +280,57 @@ onMounted(() => {
       margin: 10px 0;
     }
   }
+}
+
+/* 评论列表样式 */
+.comment-list {
+  margin-top: 8px;
+}
+
+.comment-item {
+  padding: 20px 0;
+  transition: all 0.2s ease;
+}
+
+.parent-comment-item {
+  border-left: 4px solid var(--el-border-color);
+  margin-left: 12px;
+  padding: 12px 0;
+  transition: all 0.2s ease;
+}
+
+.comment-content {
+  line-height: 1.7;
+  margin-top: 14px;
+  margin-bottom: 14px;
+  font-size: 15px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 8px;
+}
+
+/* 空状态样式 */
+.empty-tip {
+  text-align: center;
+  padding: 40px 0;
+  font-size: 15px;
+}
+
+/* 分页样式 */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+  gap: 8px;
+}
+
+.main-pagination {
+  margin-top: 32px;
 }
 </style>

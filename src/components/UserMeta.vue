@@ -1,6 +1,6 @@
 <template>
   <div class="user-meta" @click="goToUserProfile">
-    <AvatarItem :id="props.avatarId" :size="props.avatarSize"/>
+    <AvatarItem v-if="props.avatarSize > 0" :id="props.avatarId" :size="props.avatarSize"/>
     <div class="details">
       <div class="name">{{ props.username }}</div>
       <div class="time">{{ props.ctime }}</div>

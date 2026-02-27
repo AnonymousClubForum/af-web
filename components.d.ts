@@ -12,13 +12,13 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AvatarItem: typeof import('./src/components/AvatarItem.vue')['default']
-    CommentList: typeof import('./src/components/CommentList.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
     ElCol: typeof import('element-plus/es')['ElCol']
     ElDescriptions: typeof import('element-plus/es')['ElDescriptions']
     ElDescriptionsItem: typeof import('element-plus/es')['ElDescriptionsItem']
+    ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDivider: typeof import('element-plus/es')['ElDivider']
     ElEmpty: typeof import('element-plus/es')['ElEmpty']
     ElForm: typeof import('element-plus/es')['ElForm']
@@ -39,6 +39,7 @@ declare module 'vue' {
     ElTag: typeof import('element-plus/es')['ElTag']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     PostList: typeof import('./src/components/PostList.vue')['default']
+    ReplyDialog: typeof import('./src/components/ReplyDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     UserMeta: typeof import('./src/components/UserMeta.vue')['default']

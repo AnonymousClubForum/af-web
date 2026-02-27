@@ -5,7 +5,7 @@ export interface Comment {
     username: string
     avatarId?: string
     content: string
-    subComments?: Comment[]
+    parentComment?: Comment
     ctime?: string
     utime?: string
 }

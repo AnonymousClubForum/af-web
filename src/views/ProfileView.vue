@@ -69,7 +69,7 @@
       </div>
     </el-card>
 
-    <PostList class="post-list-container" :user-id="userId"/>
+    <PostList :user-id="userId" class="post-list-container"/>
   </div>
 </template>
 
