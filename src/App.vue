@@ -95,7 +95,7 @@ body {
   .menu-brand {
     display: flex;
     align-items: center;
-    align-self: center;
+    justify-content: center;
     font-size: 20px;
     font-weight: bold;
   }

@@ -31,8 +31,11 @@
       </div>
 
       <template #footer>
-        <div class="dialog-footer">
-          <ElButton @click="showReplyBox">回复</ElButton>
+        <div class="post-footer">
+          <el-button @click="showReplyBox">
+            <ChatRound/>
+            回复
+          </el-button>
         </div>
       </template>
 
@@ -62,29 +65,33 @@
             <div class="comment-content">{{ comment.parentComment.content }}</div>
           </div>
           <div class="comment-content">{{ comment.content }}</div>
-          <div class="comment-actions">
-            <el-button link size="small" type="primary" @click="showReplyBox(comment.id)">回复</el-button>
+          <div class="comment-footer">
+            <el-button @click="showReplyBox(comment.id)">
+              <ChatRound/>
+              回复
+            </el-button>
             <el-button v-if="comment.userId === userStore.user?.id"
-                       link size="small" type="danger" @click="handleDeleteComment(comment.id)">删除
+                       type="danger" @click="handleDeleteComment(comment.id)">
+              <Delete/>
+              删除
             </el-button>
           </div>
-
+          <el-divider/>
+        </div>
+        <!-- 分页区域 -->
+        <div class="pagination">
+          <el-pagination
+              v-model:current-page="pageNum"
+              v-model:page-size="pageSize"
+              :page-sizes="[10, 20, 50, 100]"
+              :total="total"
+              layout="total, sizes, prev, pager, next"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+          />
         </div>
       </div>
       <div v-else class="empty-tip">✨ 暂无评论，来说点什么吧～</div>
-
-      <!-- 分页区域 -->
-      <div class="pagination main-pagination">
-        <el-pagination
-            v-model:current-page="pageNum"
-            v-model:page-size="pageSize"
-            :page-sizes="[10, 20, 50, 100]"
-            :total="total"
-            layout="total, sizes, prev, pager, next"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-        />
-      </div>
     </el-card>
 
     <ReplyDialog
@@ -100,7 +107,7 @@
 import {onMounted, ref} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import {useDark} from "@vueuse/core";
-import {ArrowLeft} from '@element-plus/icons-vue'
+import {ArrowLeft, ChatRound, Delete} from '@element-plus/icons-vue'
 import {deleteComment, getCommentPage, getPost} from '../api'
 import type {Comment, Post} from '../types'
 import {useUserStore} from '../stores'
@@ -282,20 +289,23 @@ onMounted(() => {
   }
 }
 
+.post-footer {
+  text-align: right;
+}
+
 /* 评论列表样式 */
 .comment-list {
   margin-top: 8px;
 }
 
 .comment-item {
-  padding: 20px 0;
   transition: all 0.2s ease;
 }
 
 .parent-comment-item {
   border-left: 4px solid var(--el-border-color);
   margin-left: 12px;
-  padding: 12px 0;
+  padding: 8px 12px;
   transition: all 0.2s ease;
 }
 
@@ -308,10 +318,8 @@ onMounted(() => {
   word-break: break-word;
 }
 
-.comment-actions {
-  display: flex;
-  gap: 18px;
-  margin-bottom: 8px;
+.comment-footer {
+  text-align: right;
 }
 
 /* 空状态样式 */
@@ -328,9 +336,5 @@ onMounted(() => {
   justify-content: center;
   margin-top: 24px;
   gap: 8px;
-}
-
-.main-pagination {
-  margin-top: 32px;
 }
 </style>
