@@ -127,7 +127,7 @@ const commentList = ref<Comment[]>([])
 
 // 回复框
 const showReplyDialog = ref(false)
-const replyCommentId = ref<string | undefined>()
+const replyCommentId = ref<string>()
 
 // 加载帖子详情
 const loadPostDetail = async () => {
@@ -206,7 +206,7 @@ const handleDeleteComment = async (id: string) => {
  * 显示回复框
  * @param parentId 父评论ID
  */
-const showReplyBox = (parentId?: string) => {
+const showReplyBox = (parentId: string) => {
   replyCommentId.value = parentId
   showReplyDialog.value = true
 }
