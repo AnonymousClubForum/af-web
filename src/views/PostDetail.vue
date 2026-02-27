@@ -32,7 +32,7 @@
 
       <template #footer>
         <div class="post-footer">
-          <el-button :icon="ChatRound" @click="showReplyBox">回复</el-button>
+          <el-button :icon="ChatRound" @click="showReplyBox(undefined)">回复</el-button>
         </div>
       </template>
 
@@ -206,7 +206,8 @@ const handleDeleteComment = async (id: string) => {
  * 显示回复框
  * @param parentId 父评论ID
  */
-const showReplyBox = (parentId: string) => {
+const showReplyBox = (parentId: string | undefined) => {
+  console.log("打开回复框: " + parentId)
   replyCommentId.value = parentId
   showReplyDialog.value = true
 }
