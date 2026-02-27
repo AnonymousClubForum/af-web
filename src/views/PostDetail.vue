@@ -32,10 +32,7 @@
 
       <template #footer>
         <div class="post-footer">
-          <el-button @click="showReplyBox">
-            <ChatRound/>
-            回复
-          </el-button>
+          <el-button :icon="ChatRound" @click="showReplyBox">回复</el-button>
         </div>
       </template>
 
@@ -62,18 +59,13 @@
                       :ctime="comment.parentComment.ctime"
                       :user-id="comment.parentComment.userId"
                       :username="comment.parentComment.username"/>
-            <div class="comment-content">{{ comment.parentComment.content }}</div>
+            <div class="parent-comment-content">{{ comment.parentComment.content }}</div>
           </div>
           <div class="comment-content">{{ comment.content }}</div>
           <div class="comment-footer">
-            <el-button @click="showReplyBox(comment.id)">
-              <ChatRound/>
-              回复
-            </el-button>
+            <el-button :icon="ChatRound" @click="showReplyBox(comment.id)">回复</el-button>
             <el-button v-if="comment.userId === userStore.user?.id"
-                       type="danger" @click="handleDeleteComment(comment.id)">
-              <Delete/>
-              删除
+                       type="danger" :icon="Delete" @click="handleDeleteComment(comment.id)">删除
             </el-button>
           </div>
           <el-divider/>
@@ -304,16 +296,23 @@ onMounted(() => {
 
 .parent-comment-item {
   border-left: 4px solid var(--el-border-color);
-  margin-left: 12px;
+  margin: 15px;
   padding: 8px 12px;
   transition: all 0.2s ease;
 }
 
 .comment-content {
   line-height: 1.7;
-  margin-top: 14px;
-  margin-bottom: 14px;
+  margin: 12px;
   font-size: 15px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.parent-comment-content {
+  line-height: 1.5;
+  margin: 6px;
+  font-size: 12px;
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -335,6 +334,5 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   margin-top: 24px;
-  gap: 8px;
 }
 </style>
