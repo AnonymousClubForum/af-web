@@ -235,7 +235,7 @@ const handleDeleteComment = async (id: string) => {
  * @param parentId 父评论ID
  */
 const showReplyBox = (parentId: string | undefined) => {
-  console.log("打开回复框: " + parentId)
+  console.log(`打开回复框: ${parentId}`)
   replyCommentId.value = parentId
   showReplyDialog.value = true
 }

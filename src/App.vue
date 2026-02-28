@@ -8,34 +8,32 @@
     >
       <div class="menu-brand">
         <router-link to="/">
-          <el-link :underline="false">
-            <el-image
-                alt="Anonymous Forum"
-                src="/banner.png"
-            />
-          </el-link>
+          <el-image
+              alt="Anonymous Forum"
+              src="/banner.png"
+          />
         </router-link>
       </div>
       <div class="menu-items">
-        <el-menu-item>
-          <el-switch v-model="isDark" active-action-icon="moon-night" inactive-action-icon="sunny"
-                     style="margin-right: 15px;"/>
-        </el-menu-item>
         <el-menu-item index="/">首页</el-menu-item>
         <template v-if="!userStore.isLoggedIn">
           <el-menu-item index="/login">登录</el-menu-item>
           <el-menu-item index="/register">注册</el-menu-item>
         </template>
         <template v-else>
-          <el-menu-item index="/posts">帖子列表</el-menu-item>
-          <el-menu-item index="/post/create">
-            发布帖子
-          </el-menu-item>
+          <el-sub-menu index="posts">
+            <el-menu-item index="/posts">全部</el-menu-item>
+            <el-menu-item v-for="section in SECTION_DICT" :key="section.id" :index="`/posts/${section.id}`">{{section.name}}</el-menu-item>
+          </el-sub-menu>
           <el-menu-item :index="`/profile/${userStore.user?.id}`">
             <AvatarItem :id="userStore.user?.avatarId" :size="24"/>
             <span>{{ userStore.user?.username }}</span>
           </el-menu-item>
         </template>
+        <el-menu-item>
+          <el-switch v-model="isDark" active-action-icon="moon-night" inactive-action-icon="sunny"
+                     active-text="深色模式"/>
+        </el-menu-item>
       </div>
     </el-menu>
 
@@ -51,6 +49,7 @@ import {useRoute} from 'vue-router'
 import {useDark} from '@vueuse/core'
 import {useUserStore} from './stores'
 import AvatarItem from "./components/AvatarItem.vue";
+import {SECTION_DICT} from "./constants/section.ts";
 
 const route = useRoute()
 const isDark = useDark()

@@ -1,7 +1,9 @@
 <template>
   <div class="post-list-container">
     <div class="page-header">
-      <h2 class="page-title">帖子列表</h2>
+      <div class="page-title">
+        {{ (sectionId === 0 || !!sectionId) ? `帖子 - ${SECTION_DICT[sectionId]?.name}` : '全部帖子' }}
+      </div>
       <div class="header-action">
         <el-input
             v-model="searchKeyword"
@@ -18,6 +20,9 @@
         </el-input>
       </div>
     </div>
+    <el-card v-if="sectionId === 0 || !!sectionId" class="post-card">
+      <div class="section-desc">{{ SECTION_DICT[sectionId]?.desc }}</div>
+    </el-card>
 
     <!-- 帖子列表 卡片布局 -->
     <div v-loading="loading" class="post-card-list">
@@ -29,7 +34,10 @@
       <!-- 帖子卡片项 -->
       <el-card v-for="post in postList" :key="post.id" class="post-card" shadow="hover">
         <div class="post-main">
-          <div class="post-title" @click="viewPost(post.id)">{{ post.title }}</div>
+          <div class="post-title" @click="viewPost(post.id)">
+            <el-tag v-if="post.isTop" type="danger">置顶</el-tag>
+            {{ post.title }}
+          </div>
           <UserMeta :avatar-id="post.avatarId"
                     :avatar-size="36"
                     :ctime="post.ctime"
@@ -63,22 +71,25 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref} from 'vue'
-import {useRouter} from 'vue-router'
+import {computed, onMounted, ref} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {Delete, EditPen, Plus, Search} from '@element-plus/icons-vue'
 import {deletePost as deletePostApi, getPostPage} from '../api'
 import type {Post} from "../types";
 import {useUserStore} from '../stores'
 import UserMeta from "./UserMeta.vue";
+import {SECTION_DICT} from "../constants/section.ts";
 
 const props = defineProps<{
   userId?: string
 }>()
 
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
 
+const sectionId = computed(() => route.params.sectionId ? Number(route.params.sectionId) : undefined)
 const loading = ref(false)
 const postList = ref<Post[]>([])
 const searchKeyword = ref('')
@@ -94,7 +105,8 @@ const fetchPostList = async () => {
       pageNum: currentPage.value,
       pageSize: pageSize.value,
       userId: props.userId,
-      searchContent: searchKeyword.value || undefined
+      searchContent: searchKeyword.value || undefined,
+      sectionId: sectionId.value
     })
     if (res.data) {
       postList.value = res.data.records
@@ -184,10 +196,12 @@ onMounted(() => {
 }
 
 .page-title {
-  margin: 0;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 600;
-  color: var(--el-text-color-primary);
+}
+
+.section-desc {
+  font-size: 18px;
 }
 
 .header-action {
@@ -238,7 +252,7 @@ onMounted(() => {
 }
 
 .post-title {
-  font-size: 24px;
+  font-size: 18px;
   margin-bottom: 12px;
 }
 
