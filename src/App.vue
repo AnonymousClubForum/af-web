@@ -24,7 +24,12 @@
           <el-sub-menu index="posts">
             <template #title>分区</template>
             <el-menu-item index="/posts">全部</el-menu-item>
-            <el-menu-item v-for="section in SECTION_DICT" :key="section.id" :index="`/posts/${section.id}`">{{section.name}}</el-menu-item>
+            <el-menu-item v-for="section in SECTION_DICT" :key="section.id"
+                          :index="`/posts/${section.id}`"
+                          :route="{path: '/posts', params: {sectionId: section.id}}"
+            >
+              {{ section.name }}
+            </el-menu-item>
           </el-sub-menu>
           <el-menu-item :index="`/profile/${userStore.user?.id}`">
             <AvatarItem :id="userStore.user?.avatarId" :size="24"/>

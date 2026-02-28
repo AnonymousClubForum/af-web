@@ -27,12 +27,6 @@ const routes = [
         meta: {title: '帖子列表'}
     },
     {
-        path: '/posts/:sectionId',
-        name: 'PostListView',
-        component: () => import('../views/PostListView.vue'),
-        meta: {title: '帖子列表'}
-    },
-    {
         path: '/post/create',
         name: 'CreatePost',
         component: () => import('../views/PostForm.vue'),
