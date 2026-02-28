@@ -48,20 +48,19 @@
         </div>
         <!-- 操作按钮 -->
         <div v-if="userStore.user?.id === post.userId" class="post-action">
-          <el-button :icon="EditPen" type="primary" @click="editPost(post.id)">编辑</el-button>
-          <el-button :icon="Delete" type="danger" @click="deletePost(post.id)">删除</el-button>
+          <el-button :icon="EditPen" size="small" type="primary" @click="editPost(post.id)">编辑</el-button>
+          <el-button :icon="Delete" size="small" type="danger" @click="deletePost(post.id)">删除</el-button>
         </div>
       </el-card>
 
       <!-- 分页组件 -->
-      <div class="pagination-container">
+      <div class="pagination">
         <el-pagination
             v-model:current-page="currentPage"
             v-model:page-size="pageSize"
-            :default-page-size="20"
             :pager-count="5"
             :total="total"
-            layout="total, prev, pager, next, jumper"
+            layout="prev, pager, next, jumper"
             @current-change="handleCurrentChange"
         />
       </div>
@@ -95,7 +94,7 @@ const loading = ref(false)
 const postList = ref<Post[]>([])
 const searchKeyword = ref('')
 const currentPage = ref(1)
-const pageSize = ref(10)
+const pageSize = ref(20)
 const total = ref(0)
 
 // 获取帖子列表

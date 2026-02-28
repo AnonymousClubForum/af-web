@@ -45,8 +45,9 @@
         <div class="card-header">
           <h1>评论</h1>
           <div>
-            <el-button :type="onlyShowPo ? 'primary' : 'default'" @click="toggleOnlyShowPo">只看楼主</el-button>
-            <el-button @click="toggleTimeOrder">{{ isDesc ? '切换正序排序' : '切换倒序排序' }}</el-button>
+            <el-button :type="onlyShowPo ? 'primary' : 'default'" size="small" @click="toggleOnlyShowPo">只看楼主
+            </el-button>
+            <el-button size="small" @click="toggleTimeOrder">{{ isDesc ? '切换正序排序' : '切换倒序排序' }}</el-button>
           </div>
         </div>
       </template>
@@ -69,9 +70,9 @@
           </div>
           <div class="comment-content">{{ comment.content }}</div>
           <div class="comment-footer">
-            <el-button :icon="ChatRound" @click="showReplyBox(comment.id)">回复</el-button>
-            <el-button v-if="comment.userId === userStore.user?.id"
-                       :icon="Delete" type="danger" @click="handleDeleteComment(comment.id)">删除
+            <el-button :icon="ChatRound" size="small" @click="showReplyBox(comment.id)">回复</el-button>
+            <el-button v-if="comment.userId === userStore.user?.id" :icon="Delete"
+                       size="small" type="danger" @click="handleDeleteComment(comment.id)">删除
             </el-button>
           </div>
           <el-divider/>
@@ -81,10 +82,9 @@
           <el-pagination
               v-model:current-page="pageNum"
               v-model:page-size="pageSize"
-              :default-page-size="20"
               :pager-count="5"
               :total="total"
-              layout="total, prev, pager, next"
+              layout="prev, pager, next"
               @current-change="handleCurrentChange"
           />
         </div>
@@ -124,7 +124,7 @@ const post = ref<Post | null>(null)
 
 // 页面参数
 const pageNum = ref(1)
-const pageSize = ref(10)
+const pageSize = ref(20)
 const total = ref(0)
 
 // 评论列表

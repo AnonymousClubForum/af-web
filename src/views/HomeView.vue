@@ -4,8 +4,8 @@
       <el-col :span="24">
         <el-card>
           <div class="welcome-section">
-            <h1>欢迎来到Anonymous Forum</h1>
-            <p>一个简单、快速的交流平台</p>
+            <div class="welcome-title">欢迎来到Anonymous Forum</div>
+            <div class="welcome-info">一个简单、快速的交流平台</div>
             <el-space>
               <el-button size="large" type="primary" @click="goToPostList">
                 进入论坛
@@ -63,16 +63,28 @@ const goToCreatePost = () => {
   text-align: center;
   padding: 60px 20px;
 
-  h1 {
-    font-size: 48px;
-    color: var(--el-text-color-primary);
+  .welcome-title {
+    font-size: 36px;
     margin-bottom: 20px;
   }
 
-  p {
+  .welcome-info {
     font-size: 18px;
     color: var(--el-text-color-secondary);
     margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .welcome-title {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+
+  .welcome-info {
+    font-size: 12px;
+    color: var(--el-text-color-secondary);
+    margin-bottom: 30px;
   }
 }
 </style>
