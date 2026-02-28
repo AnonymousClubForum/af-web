@@ -43,6 +43,10 @@
       <template #header>
         <div class="card-header">
           <h1>评论</h1>
+          <div v-if="commentList.length">
+            <el-button :type="onlyShowPo ? 'primary' : 'default'" @click="toggleOnlyShowPo">只看楼主</el-button>
+            <el-button @click="toggleTimeOrder">{{ isDesc ? '切换正序排序' : '切换倒序排序' }}</el-button>
+          </div>
         </div>
       </template>
 
@@ -56,7 +60,8 @@
                     :user-id="comment.userId"
                     :username="comment.username"/>
           <div v-if="!!comment.parentComment" class="parent-comment-item">
-            <UserMeta :ctime="comment.parentComment.ctime"
+            <UserMeta v-if="comment.parentComment.userId"
+                      :ctime="comment.parentComment.ctime"
                       :user-id="comment.parentComment.userId"
                       :username="comment.parentComment.username"/>
             <div class="parent-comment-content">{{ comment.parentComment.content }}</div>
@@ -124,6 +129,8 @@ const total = ref(0)
 // 评论列表
 const loadingComment = ref(false)
 const commentList = ref<Comment[]>([])
+const onlyShowPo = ref(false)
+const isDesc = ref(false)
 
 // 回复框
 const showReplyDialog = ref(false)
@@ -155,13 +162,15 @@ const loadPostDetail = async () => {
  * 加载评论列表
  */
 const loadCommentList = async () => {
-  if (!String(route.params.id)) return
+  if (!post.value) return
   loadingComment.value = true
   try {
     const res = await getCommentPage({
       pageNum: pageNum.value,
       pageSize: pageSize.value,
-      postId: String(route.params.id)
+      postId: post.value.id,
+      userId: onlyShowPo.value ? post.value.userId : undefined,
+      isDesc: isDesc.value
     })
     if (res.code === 200) {
       commentList.value = res.data.records
@@ -174,6 +183,24 @@ const loadCommentList = async () => {
   } finally {
     loadingComment.value = false
   }
+}
+
+/**
+ * 切换只看楼主
+ */
+const toggleOnlyShowPo = () => {
+  onlyShowPo.value = !onlyShowPo.value
+  pageNum.value = 1
+  loadCommentList()
+}
+
+/**
+ * 切换按时间正序/倒序排列
+ */
+const toggleTimeOrder = () => {
+  isDesc.value = !isDesc.value
+  pageNum.value = 1
+  loadCommentList()
 }
 
 /**

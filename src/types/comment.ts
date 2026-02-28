@@ -5,9 +5,13 @@ export interface Comment {
     username: string
     avatarId?: string
     content: string
-    parentComment?: Comment
+    parentComment?: {
+        userId?: string
+        username?: string
+        content?: string
+        ctime?: string
+    }
     ctime?: string
-    utime?: string
 }
 
 export interface SaveCommentRequest {
@@ -19,7 +23,8 @@ export interface SaveCommentRequest {
 export interface QueryCommentPageRequest {
     pageNum: number
     pageSize: number
-    postId?: string
-    parentId?: string
+    postId: string
+    userId?: string
+    isDesc: boolean
 }
 
