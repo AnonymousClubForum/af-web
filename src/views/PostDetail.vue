@@ -43,7 +43,7 @@
       <template #header>
         <div class="card-header">
           <h1>评论</h1>
-          <div v-if="commentList.length">
+          <div>
             <el-button :type="onlyShowPo ? 'primary' : 'default'" @click="toggleOnlyShowPo">只看楼主</el-button>
             <el-button @click="toggleTimeOrder">{{ isDesc ? '切换正序排序' : '切换倒序排序' }}</el-button>
           </div>
