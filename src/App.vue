@@ -22,6 +22,7 @@
         </template>
         <template v-else>
           <el-sub-menu index="posts">
+            <template #title>分区</template>
             <el-menu-item index="/posts">全部</el-menu-item>
             <el-menu-item v-for="section in SECTION_DICT" :key="section.id" :index="`/posts/${section.id}`">{{section.name}}</el-menu-item>
           </el-sub-menu>
