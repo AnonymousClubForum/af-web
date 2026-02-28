@@ -23,11 +23,12 @@
     <el-card v-if="sectionId === 0 || !!sectionId" class="post-card">
       <div class="section-desc">{{ SECTION_DICT[sectionId]?.desc }}</div>
     </el-card>
+    <el-divider/>
 
     <!-- 帖子列表 卡片布局 -->
     <div v-loading="loading" class="post-card-list">
       <!-- 无数据占位 -->
-      <div v-if="postList.length === 0 && !loading" class="empty-tip">
+      <div v-if="postList.length === 0" class="empty-tip">
         <el-empty description="暂无帖子，快来发布第一个帖子吧～"/>
       </div>
 
@@ -51,19 +52,19 @@
           <el-button :icon="Delete" type="danger" @click="deletePost(post.id)">删除</el-button>
         </div>
       </el-card>
-    </div>
 
-    <!-- 分页组件 位置不变 -->
-    <div class="pagination-container">
-      <el-pagination
-          v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :page-sizes="[10, 20, 50, 100]"
-          :total="total"
-          layout="total, sizes, prev, pager, next, jumper"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-      />
+      <!-- 分页组件 -->
+      <div class="pagination-container">
+        <el-pagination
+            v-model:current-page="currentPage"
+            v-model:page-size="pageSize"
+            :default-page-size="20"
+            :pager-count="5"
+            :total="total"
+            layout="total, prev, pager, next, jumper"
+            @current-change="handleCurrentChange"
+        />
+      </div>
     </div>
 
     <el-button :icon="Plus" class="floating-create-btn" type="primary" @click="goToCreatePost"/>
@@ -159,13 +160,6 @@ const deletePost = async (id: string) => {
   }
 }
 
-// 分页大小改变
-const handleSizeChange = (size: number) => {
-  pageSize.value = size
-  currentPage.value = 1
-  fetchPostList()
-}
-
 // 当前页改变
 const handleCurrentChange = (page: number) => {
   currentPage.value = page
@@ -211,6 +205,8 @@ onMounted(() => {
 
 .section-desc {
   font-size: 18px;
+  margin-bottom: 30px;
+  transition: all 0.2s ease;
 }
 
 .header-action {
@@ -243,9 +239,10 @@ onMounted(() => {
 
 /* 帖子列表容器 */
 .post-card-list {
-  display: grid;
+  display: flex;
+  flex-direction: column; /* 垂直排列 */
+  justify-content: center; /* 垂直居中 */
   gap: 16px;
-  margin-bottom: 30px;
 }
 
 .post-card {
@@ -286,18 +283,15 @@ onMounted(() => {
 }
 
 /* 分页样式 */
-.pagination-container {
+.pagination {
   display: flex;
+  align-items: center;
   justify-content: center;
   margin-top: 10px;
 }
 
 /* 响应式适配 小屏幕自动适配 */
 @media (max-width: 768px) {
-  .post-list-container {
-    padding: 10px 16px;
-  }
-
   .post-card {
     padding-right: 0; /* 小屏幕取消右侧内边距 */
     padding-bottom: 30px; /* 为操作按钮预留底部空间 */

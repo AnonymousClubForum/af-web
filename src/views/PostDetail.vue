@@ -81,10 +81,10 @@
           <el-pagination
               v-model:current-page="pageNum"
               v-model:page-size="pageSize"
-              :page-sizes="[10, 20, 50, 100]"
+              :default-page-size="20"
+              :pager-count="5"
               :total="total"
-              layout="total, sizes, prev, pager, next"
-              @size-change="handleSizeChange"
+              layout="total, prev, pager, next"
               @current-change="handleCurrentChange"
           />
         </div>
@@ -241,15 +241,6 @@ const showReplyBox = (parentId: string | undefined) => {
 }
 
 /**
- * 分页大小改变
- */
-const handleSizeChange = (size: number) => {
-  pageSize.value = size
-  pageNum.value = 1
-  loadCommentList()
-}
-
-/**
  * 当前页改变
  */
 const handleCurrentChange = (page: number) => {
@@ -362,6 +353,6 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 24px;
+  margin-top: 10px;
 }
 </style>

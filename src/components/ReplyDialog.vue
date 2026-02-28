@@ -5,7 +5,6 @@
       :close-on-click-modal="false"
       :destroy-on-close="true"
       :title="title"
-      width="500px"
       @close="handleCancel"
   >
     <!-- 回复内容输入框 -->
