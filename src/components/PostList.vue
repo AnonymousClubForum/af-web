@@ -48,8 +48,8 @@
         </div>
         <!-- 操作按钮 -->
         <div v-if="userStore.user?.id === post.userId" class="post-action">
-          <el-button :icon="EditPen" size="small" type="primary" @click="editPost(post.id)">编辑</el-button>
-          <el-button :icon="Delete" size="small" type="danger" @click="deletePost(post.id)">删除</el-button>
+          <el-button :icon="EditPen" type="primary" @click="editPost(post.id)">编辑</el-button>
+          <el-button :icon="Delete" type="danger" @click="deletePost(post.id)">删除</el-button>
         </div>
       </el-card>
 

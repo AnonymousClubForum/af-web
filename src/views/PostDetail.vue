@@ -16,7 +16,7 @@
       </template>
 
       <div v-if="post" class="post-content">
-        <h1 class="post-title">{{ post.title }}</h1>
+        <div class="post-title">{{ post.title }}</div>
         <UserMeta :avatar-id="post.avatarId"
                   :avatar-size="40"
                   :ctime="post.ctime"
@@ -43,7 +43,7 @@
     <el-card v-loading="loadingComment">
       <template #header>
         <div class="card-header">
-          <h1>评论</h1>
+          <div class="comment-title">评论</div>
           <div>
             <el-button :type="onlyShowPo ? 'primary' : 'default'" size="small" @click="toggleOnlyShowPo">只看楼主
             </el-button>
@@ -70,9 +70,9 @@
           </div>
           <div class="comment-content">{{ comment.content }}</div>
           <div class="comment-footer">
-            <el-button :icon="ChatRound" size="small" @click="showReplyBox(comment.id)">回复</el-button>
+            <el-button :icon="ChatRound" @click="showReplyBox(comment.id)">回复</el-button>
             <el-button v-if="comment.userId === userStore.user?.id" :icon="Delete"
-                       size="small" type="danger" @click="handleDeleteComment(comment.id)">删除
+                       type="danger" @click="handleDeleteComment(comment.id)">删除
             </el-button>
           </div>
           <el-divider/>
@@ -283,13 +283,11 @@ onMounted(() => {
     font-size: 28px;
     font-weight: bold;
     margin: 0 0 20px 0;
-    color: var(--el-text-color-primary);
   }
 
   .post-body {
     font-size: 16px;
     line-height: 1.8;
-    color: var(--el-text-color-primary);
     padding: 10px 0;
 
     :deep(img) {
@@ -303,6 +301,11 @@ onMounted(() => {
 
 .post-footer {
   text-align: right;
+}
+
+.comment-title {
+  font-size: 24px;
+  font-weight: bold;
 }
 
 /* 评论列表样式 */
