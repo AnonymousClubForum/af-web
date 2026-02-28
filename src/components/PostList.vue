@@ -38,13 +38,9 @@
           />
         </div>
         <!-- 操作按钮 -->
-        <div class="post-action">
-          <el-button v-if="userStore.user?.id === post.userId" link
-                     size="small" type="primary" @click="editPost(post.id)">编辑
-          </el-button>
-          <el-button v-if="userStore.user?.id === post.userId" link
-                     size="small" type="danger" @click="deletePost(post.id)">删除
-          </el-button>
+        <div v-if="userStore.user?.id === post.userId" class="post-action">
+          <el-button :icon="EditPen" type="primary" @click="editPost(post.id)">编辑</el-button>
+          <el-button :icon="Delete" type="danger" @click="deletePost(post.id)">删除</el-button>
         </div>
       </el-card>
     </div>
@@ -70,7 +66,7 @@
 import {onMounted, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {ElMessage, ElMessageBox} from 'element-plus'
-import {Plus, Search} from '@element-plus/icons-vue'
+import {Delete, EditPen, Plus, Search} from '@element-plus/icons-vue'
 import {deletePost as deletePostApi, getPostPage} from '../api'
 import type {Post} from "../types";
 import {useUserStore} from '../stores'

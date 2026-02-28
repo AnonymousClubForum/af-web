@@ -6,6 +6,7 @@
           <el-button :icon="ArrowLeft" @click="goBack">返回</el-button>
           <el-button
               v-if="userStore.user?.username === post?.username"
+              :icon="EditPen"
               type="primary"
               @click="editPost"
           >
@@ -104,7 +105,7 @@
 import {onMounted, ref} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import {useDark} from "@vueuse/core";
-import {ArrowLeft, ChatRound, Delete} from '@element-plus/icons-vue'
+import {ArrowLeft, ChatRound, Delete, EditPen} from '@element-plus/icons-vue'
 import {deleteComment, getCommentPage, getPost} from '../api'
 import type {Comment, Post} from '../types'
 import {useUserStore} from '../stores'
