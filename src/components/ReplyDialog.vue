@@ -36,18 +36,15 @@ import {computed, ref, watch} from 'vue';
 import {createComment} from "../api";
 import {ElMessage} from "element-plus";
 
-// 定义组件 Props 类型
-interface Props {
-  // 控制弹窗显隐（支持 v-model 双向绑定）
-  modelValue: boolean;
-  // 回复所属帖子
-  postId: string | undefined;
-  // 回复的评论
-  commentId: string | undefined;
-}
-
 // 接收 Props
-const props = defineProps<Props>();
+const props = defineProps<{
+  // 控制弹窗显隐（支持 v-model 双向绑定）
+  modelValue: boolean,
+  // 回复所属帖子
+  postId?: string,
+  // 回复的评论
+  commentId?: string
+}>();
 
 // 定义组件触发的事件
 const emit = defineEmits<{

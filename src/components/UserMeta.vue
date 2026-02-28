@@ -1,8 +1,24 @@
 <template>
   <div class="user-meta" @click="goToUserProfile">
-    <AvatarItem v-if="props.avatarSize > 0" :id="props.avatarId" :size="props.avatarSize"/>
+    <AvatarItem v-if="props.avatarSize" :id="props.avatarId" :size="props.avatarSize"/>
     <div class="details">
-      <div class="name">{{ props.username }}</div>
+      <div class="name">
+        {{ props.username }}
+        <el-tag
+            v-if="props.isPo"
+            size="small"
+            type="info"
+        >
+          楼主
+        </el-tag>
+        <el-tag
+            v-if="props.userId === userStore.user?.id"
+            size="small"
+            type="info"
+        >
+          我
+        </el-tag>
+      </div>
       <div class="time">{{ props.ctime }}</div>
     </div>
   </div>
@@ -11,8 +27,10 @@
 <script lang="ts" setup>
 import {useRouter} from "vue-router";
 import AvatarItem from "./AvatarItem.vue";
+import {useUserStore} from "../stores";
 
 const router = useRouter()
+const userStore = useUserStore()
 
 // 组件接收的 props
 const props = defineProps<{
@@ -20,7 +38,8 @@ const props = defineProps<{
   username?: string
   ctime?: string
   avatarId?: string
-  avatarSize: number
+  avatarSize?: number
+  isPo?: boolean
 }>()
 
 // 跳转至用户主页

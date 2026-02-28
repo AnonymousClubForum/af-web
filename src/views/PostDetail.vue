@@ -52,11 +52,11 @@
           <UserMeta :avatar-id="comment.avatarId"
                     :avatar-size="32"
                     :ctime="comment.ctime"
+                    :is-po="comment.userId === post?.userId"
                     :user-id="comment.userId"
                     :username="comment.username"/>
           <div v-if="!!comment.parentComment" class="parent-comment-item">
-            <UserMeta :avatar-size="0"
-                      :ctime="comment.parentComment.ctime"
+            <UserMeta :ctime="comment.parentComment.ctime"
                       :user-id="comment.parentComment.userId"
                       :username="comment.parentComment.username"/>
             <div class="parent-comment-content">{{ comment.parentComment.content }}</div>
@@ -65,7 +65,7 @@
           <div class="comment-footer">
             <el-button :icon="ChatRound" @click="showReplyBox(comment.id)">回复</el-button>
             <el-button v-if="comment.userId === userStore.user?.id"
-                       type="danger" :icon="Delete" @click="handleDeleteComment(comment.id)">删除
+                       :icon="Delete" type="danger" @click="handleDeleteComment(comment.id)">删除
             </el-button>
           </div>
           <el-divider/>
