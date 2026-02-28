@@ -1,9 +1,9 @@
-import type { Section } from '../types';
+import type {Section} from '../types';
 
 /**
  * 帖子分区列表
  */
-export const SECTION_DICT: {[key: number]: Section} = {
+export const SECTION_DICT: { [key: number]: Section } = {
     0: {
         id: 0,
         name: '综合',

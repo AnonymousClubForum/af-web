@@ -24,10 +24,7 @@
           <el-sub-menu index="posts">
             <template #title>分区</template>
             <el-menu-item index="/posts">全部</el-menu-item>
-            <el-menu-item v-for="section in SECTION_DICT" :key="section.id"
-                          :index="`/posts/${section.id}`"
-                          :route="{path: '/posts', params: {sectionId: section.id}}"
-            >
+            <el-menu-item v-for="section in SECTION_DICT" :key="section.id" :index="`/posts/${section.id}`">
               {{ section.name }}
             </el-menu-item>
           </el-sub-menu>
@@ -37,8 +34,8 @@
           </el-menu-item>
         </template>
         <el-menu-item>
-          <el-switch v-model="isDark" active-action-icon="moon-night" inactive-action-icon="sunny"
-                     active-text="深色模式"/>
+          <el-switch v-model="isDark" active-action-icon="moon-night" active-text="深色模式"
+                     inactive-action-icon="sunny"/>
         </el-menu-item>
       </div>
     </el-menu>

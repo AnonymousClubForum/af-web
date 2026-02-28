@@ -12,13 +12,13 @@ const routes = [
         path: '/login',
         name: 'LoginView',
         component: () => import('../views/LoginView.vue'),
-        meta: {title: '登录'}
+        meta: {title: '登录', guest: true}
     },
     {
         path: '/register',
         name: 'RegisterView',
         component: () => import('../views/RegisterView.vue'),
-        meta: {title: '注册'}
+        meta: {title: '注册', guest: true}
     },
     {
         path: '/posts',
@@ -27,16 +27,22 @@ const routes = [
         meta: {title: '帖子列表'}
     },
     {
+        path: '/posts/:sectionId',
+        name: 'SectionPostListView',
+        component: () => import('../views/PostListView.vue'),
+        meta: {title: '帖子列表'}
+    },
+    {
         path: '/post/create',
         name: 'CreatePost',
         component: () => import('../views/PostForm.vue'),
-        meta: {title: '发布帖子'}
+        meta: {title: '发布帖子', requiresAuth: true}
     },
     {
         path: '/post/edit/:id',
         name: 'EditPost',
         component: () => import('../views/PostForm.vue'),
-        meta: {title: '编辑帖子'}
+        meta: {title: '编辑帖子', requiresAuth: true}
     },
     {
         path: '/post/:id',
@@ -54,7 +60,7 @@ const routes = [
         path: '/profile/edit',
         name: 'ProfileEditView',
         component: () => import('../views/ProfileEditView.vue'),
-        meta: {title: '个人中心'}
+        meta: {title: '个人中心', requiresAuth: true}
     },
     {
         path: '/:pathMatch(.*)*',
