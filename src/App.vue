@@ -6,38 +6,33 @@
         mode="horizontal"
         router
     >
-      <div class="menu-brand">
-        <router-link to="/">
-          <el-image
-              alt="Anonymous Forum"
-              src="/banner.png"
-          />
-        </router-link>
-      </div>
-      <div class="menu-items">
-        <el-menu-item index="/">首页</el-menu-item>
-        <template v-if="!userStore.isLoggedIn">
-          <el-menu-item index="/login">登录</el-menu-item>
-          <el-menu-item index="/register">注册</el-menu-item>
-        </template>
-        <template v-else>
-          <el-sub-menu index="posts">
-            <template #title>分区</template>
-            <el-menu-item index="/posts">全部</el-menu-item>
-            <el-menu-item v-for="section in SECTION_DICT" :key="section.id" :index="`/posts/${section.id}`">
-              {{ section.name }}
-            </el-menu-item>
-          </el-sub-menu>
-          <el-menu-item :index="`/profile/${userStore.user?.id}`">
-            <AvatarItem :id="userStore.user?.avatarId" :size="24"/>
-            <span>{{ userStore.user?.username }}</span>
+      <el-menu-item index="banner">
+        <img
+            alt="Anonymous Forum"
+            src="/banner.png"
+            style="width: 300px"
+            @click="goToHome"
+        />
+      </el-menu-item>
+      <el-menu-item index="/">首页</el-menu-item>
+      <template v-if="!userStore.isLoggedIn">
+        <el-menu-item index="/login">登录</el-menu-item>
+        <el-menu-item index="/register">注册</el-menu-item>
+      </template>
+      <template v-else>
+        <el-sub-menu index="posts">
+          <template #title>分区</template>
+          <el-menu-item index="/posts">全部</el-menu-item>
+          <el-menu-item v-for="section in SECTION_DICT" :key="section.id" :index="`/posts/${section.id}`">
+            {{ section.name }}
           </el-menu-item>
-        </template>
-        <el-menu-item>
-          <el-switch v-model="isDark" active-action-icon="moon-night" active-text="深色模式"
-                     inactive-action-icon="sunny"/>
+        </el-sub-menu>
+        <el-menu-item :index="`/profile/${userStore.user?.id}`">
+          <AvatarItem :id="userStore.user?.avatarId" :size="24"/>
+          <span>{{ userStore.user?.username }}</span>
         </el-menu-item>
-      </div>
+      </template>
+      <el-menu-item index="theme" @click="toggleTheme">切换主题</el-menu-item>
     </el-menu>
 
     <div class="layout-main">
@@ -48,16 +43,25 @@
 
 <script lang="ts" setup>
 import {computed, onMounted} from 'vue'
-import {useRoute} from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 import {useDark} from '@vueuse/core'
 import {useUserStore} from './stores'
 import AvatarItem from "./components/AvatarItem.vue";
 import {SECTION_DICT} from "./constants/section.ts";
 
 const route = useRoute()
+const router = useRouter()
 const isDark = useDark()
 const userStore = useUserStore()
 const activeMenu = computed(() => route.path)
+
+const goToHome = () => {
+  router.push('/')
+}
+
+const toggleTheme = () => {
+  isDark.value = !isDark.value
+}
 
 onMounted(() => {
   userStore.loadFromServer()
@@ -86,26 +90,12 @@ body {
 }
 
 .layout-menu {
-  position: sticky;
-  top: 0;
   z-index: 1000;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 20px;
   box-shadow: 0 2px 8px var(--el-border-color);
+}
 
-  .menu-brand {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    font-weight: bold;
-  }
-
-  .menu-items {
-    display: flex;
-    align-items: center;
-  }
+.el-menu--horizontal > .el-menu-item:nth-child(1) {
+  margin-right: auto;
 }
 
 .layout-main {

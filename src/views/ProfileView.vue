@@ -69,7 +69,7 @@
       </div>
     </el-card>
 
-    <PostList :user-id="userId" class="post-list-container"/>
+    <PostListView :user-id="userId" class="post-list-container"/>
   </div>
 </template>
 
@@ -80,7 +80,7 @@ import {ElMessage} from 'element-plus'
 import {getUser} from '../api'
 import type {User} from '../types'
 import {useUserStore} from '../stores'
-import PostList from "../components/PostList.vue"
+import PostListView from "./PostListView.vue"
 import {Female, Male, UserFilled} from '@element-plus/icons-vue'
 import AvatarItem from "../components/AvatarItem.vue";
 

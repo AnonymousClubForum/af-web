@@ -150,9 +150,9 @@ const loadPostDetail = async () => {
   try {
     const res = await getPost(postId)
     if (res.data) {
+      await loadCommentList()
       post.value = res.data
     }
-    await loadCommentList()
   } catch (error) {
     console.error('加载帖子详情失败:', error)
   } finally {

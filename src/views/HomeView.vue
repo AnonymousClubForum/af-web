@@ -55,7 +55,7 @@ const goToCreatePost = () => {
 <style scoped>
 .home-container {
   padding: 20px;
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
