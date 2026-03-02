@@ -92,15 +92,33 @@ const handleUploadImage = async (files: Array<File>, callback: (urls: string[] |
   alt: string;
   title: string
 }[]) => void) => {
-  const res = await Promise.all(
-      files.map((file) => {
-        return new Promise((rev, rej) => {
-          uploadFile(file)
-              .then((res) => rev(res))
-              .catch((error) => rej(error));
-        })
-      })
+  const MAX_SIZE = 10 * 1024 * 1024
+  const [overSizeFiles, validFiles] = files.reduce(
+      (acc, file) => {
+        // 解构累加器
+        const [over, valid] = acc;
+        if (file.size >= MAX_SIZE) {
+          over.push(file);
+        } else {
+          valid.push(file);
+        }
+        return acc;
+      },
+      [[], []] as [File[], File[]]
   )
+
+  // 提示部分文件超限
+  if (overSizeFiles.length > 0) {
+    ElMessage.error(`有 ${overSizeFiles.length} 个文件大小超过 ${MAX_SIZE / 1024 / 1024} MB，已跳过上传`)
+  }
+
+  // 无合规文件时直接调用回调，避免无意义的请求
+  if (validFiles.length === 0) {
+    callback([])
+    return
+  }
+
+  const res = await Promise.all(validFiles.map(file => uploadFile(file)))
   callback(res.map((item: any) => `/storage/file/download?id=${item.data}`))
 };
 
