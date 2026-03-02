@@ -44,6 +44,7 @@
                     :ctime="post.ctime"
                     :user-id="post.userId"
                     :username="post.username"
+                    :utime="post.utime"
           />
         </div>
         <!-- 操作按钮 -->

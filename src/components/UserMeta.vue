@@ -19,7 +19,9 @@
           我
         </el-tag>
       </div>
-      <div class="time">{{ props.ctime }}</div>
+      <div v-if="props.ctime" class="time">
+        {{ !props.utime || props.utime === props.ctime ? props.ctime : `${props.ctime} 编辑于${props.utime}` }}
+      </div>
     </div>
   </div>
 </template>
@@ -37,6 +39,7 @@ const props = defineProps<{
   userId: string
   username?: string
   ctime?: string
+  utime?: string
   avatarId?: string
   avatarSize?: number
   isPo?: boolean

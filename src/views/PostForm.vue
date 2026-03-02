@@ -18,7 +18,16 @@
               show-word-limit
           />
         </el-form-item>
-
+        <el-form-item label="分区" prop="sectionId">
+          <el-select v-model="postForm.sectionId" placeholder="选择分区...">
+            <el-option
+                v-for="section in SECTION_DICT"
+                :key="section.id"
+                :label="section.name"
+                :value="section.id"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="内容" prop="content">
           <MdEditor
               v-model="postForm.content"
@@ -50,6 +59,7 @@ import {createPost, getPost, updatePost} from '../api'
 import type {SavePostRequest} from '../types'
 import {uploadFile} from "../api/file.ts";
 import {MdEditor} from "md-editor-v3";
+import {SECTION_DICT} from "../constants/section.ts";
 
 const router = useRouter()
 const route = useRoute()
@@ -62,13 +72,17 @@ const isEdit = ref(false)
 const postForm = reactive<SavePostRequest>({
   id: route.params.id ? String(route.params.id) : undefined,
   title: '',
-  content: ''
+  content: '',
+  sectionId: undefined
 })
 
 const rules: FormRules = {
   title: [
     {required: true, message: '请输入帖子标题', trigger: 'blur'},
     {min: 1, max: 100, message: '标题长度在 1 到 100 个字符', trigger: 'blur'}
+  ],
+  sectionId: [
+    {required: true, message: '请选择帖子分区', trigger: 'blur'}
   ]
 }
 
@@ -101,6 +115,7 @@ const loadPostDetail = async () => {
     if (res.data) {
       postForm.title = res.data.title
       postForm.content = res.data.content
+      postForm.sectionId = res.data.sectionId
     }
   } catch (error) {
     console.error('加载帖子详情失败:', error)

@@ -21,7 +21,8 @@
                   :avatar-size="40"
                   :ctime="post.ctime"
                   :user-id="post.userId"
-                  :username="post.username"/>
+                  :username="post.username"
+                  :utime="post.utime"/>
         <el-divider/>
         <div class="post-body">
           <MdPreview :modelValue="post.content"

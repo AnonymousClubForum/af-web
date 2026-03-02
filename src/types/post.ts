@@ -16,6 +16,7 @@ export interface SavePostRequest {
     id?: string
     title?: string
     content?: string
+    sectionId?: number
 }
 
 export interface QueryPostPageRequest {
