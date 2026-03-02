@@ -20,7 +20,7 @@
         </el-tag>
       </div>
       <div v-if="props.ctime" class="time">
-        {{ !props.utime || props.utime === props.ctime ? props.ctime : `${props.ctime} 编辑于${props.utime}` }}
+        {{ !props.utime || props.utime === props.ctime ? props.ctime : `${props.ctime} 更新于 ${props.utime}` }}
       </div>
     </div>
   </div>

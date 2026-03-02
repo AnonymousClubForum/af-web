@@ -79,7 +79,7 @@ const postForm = reactive<SavePostRequest>({
 const rules: FormRules = {
   title: [
     {required: true, message: '请输入帖子标题', trigger: 'blur'},
-    {min: 1, max: 100, message: '标题长度在 1 到 100 个字符', trigger: 'blur'}
+    {min: 1, max: 20, message: '标题长度在 1 到 20 个字符', trigger: 'blur'}
   ],
   sectionId: [
     {required: true, message: '请选择帖子分区', trigger: 'blur'}

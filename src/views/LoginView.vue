@@ -122,11 +122,6 @@ const goToRegister = () => {
 
 .card-header {
   text-align: center;
-
-  h2 {
-    margin: 0;
-    color: var(--el-text-color-primary);
-  }
 }
 
 .footer-links {
