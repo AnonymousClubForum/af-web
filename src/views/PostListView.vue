@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, onMounted, ref, watch} from 'vue'
+import {computed, ref, watch} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {Delete, EditPen, Plus, Search} from '@element-plus/icons-vue'
@@ -174,10 +174,6 @@ watch(
     },
     {immediate: true}
 )
-
-onMounted(() => {
-  fetchPostList()
-})
 </script>
 
 <style scoped>
