@@ -26,7 +26,7 @@ export const SECTION_DICT: { [key: number]: Section } = {
     },
     4: {
         id: 4,
-        name: '资源推荐',
-        desc: '推荐实用资源、工具等',
+        name: '需求',
+        desc: '征集、讨论需求，持续改进论坛',
     }
 };

@@ -23,12 +23,9 @@
                   :user-id="post.userId"
                   :username="post.username"
                   :utime="post.utime"/>
-        <el-divider/>
-        <div class="post-body">
-          <MdPreview :modelValue="post.content"
-                     :theme="isDark ? 'dark' : 'light'"
-                     style="background-color: rgba(0,0,0,0)"
-          />
+        <el-divider v-if="post.content"/>
+        <div v-if="post.content" class="post-body">
+          <div v-html="compiledMarkdown"/>
         </div>
       </div>
 
@@ -103,22 +100,20 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref} from 'vue'
+import {computed, onMounted, ref} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
-import {useDark} from "@vueuse/core";
 import {ArrowLeft, ChatRound, Delete, EditPen} from '@element-plus/icons-vue'
 import {deleteComment, getCommentPage, getPost} from '../api'
 import type {Comment, Post} from '../types'
 import {useUserStore} from '../stores'
 import UserMeta from "../components/UserMeta.vue";
-import {MdPreview} from "md-editor-v3";
 import {ElMessage, ElMessageBox} from "element-plus";
 import ReplyDialog from "../components/ReplyDialog.vue";
+import markdownIt from 'markdown-it';
 
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
-const isDark = useDark()
 
 const loading = ref(false)
 const post = ref<Post | null>(null)
@@ -137,6 +132,11 @@ const isDesc = ref(false)
 // 回复框
 const showReplyDialog = ref(false)
 const replyCommentId = ref<string>()
+
+const md = markdownIt()
+const compiledMarkdown = computed(() => {
+  return md.render(post.value ? post.value.content : '');
+})
 
 // 加载帖子详情
 const loadPostDetail = async () => {

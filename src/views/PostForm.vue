@@ -1,6 +1,6 @@
 <template>
   <div class="post-form-container">
-    <el-card>
+    <el-card v-loading="loading">
       <template #header>
         <el-header class="card-header">
           <h2>{{ isEdit ? '编辑帖子' : '发布帖子' }}</h2>
@@ -29,18 +29,39 @@
           </el-select>
         </el-form-item>
         <el-form-item label="内容" prop="content">
-          <MdEditor
+          <el-input
               v-model="postForm.content"
-              :theme="isDark ? 'dark' : 'light'"
-              :toolbars="['bold','underline','italic','strikeThrough','-','link','image','=','preview','previewOnly']"
-              height="500px"
+              :rows="10"
+              maxlength="10000"
               placeholder="请输入帖子内容"
-              @onUploadImg="handleUploadImage"
+              show-word-limit
+              type="textarea"
           />
+          <el-upload
+              :before-upload="beforeUploadImage"
+              :on-error="onUploadError"
+              :on-success="onUploadSuccess"
+              :show-file-list="false"
+              action="/storage/file/upload"
+              drag
+          >
+            <el-icon class="el-icon--upload">
+              <upload-filled/>
+            </el-icon>
+            <div class="el-upload__text">
+              拖拽 或 <em>点击上传配图</em>
+            </div>
+            <template #tip>
+              <div class="el-upload__tip">
+                允许不超过10MB的 jpg/png/webp 文件
+              </div>
+            </template>
+          </el-upload>
+
         </el-form-item>
 
         <div style="justify-self: right">
-          <el-button :loading="loading" type="primary" @click="handleSubmit">
+          <el-button :loading="submitting" type="primary" @click="handleSubmit">
             {{ isEdit ? '保存修改' : '发布' }}
           </el-button>
           <el-button @click="goBack">取消</el-button>
@@ -53,20 +74,18 @@
 <script lang="ts" setup>
 import {onMounted, reactive, ref} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
-import {useDark} from "@vueuse/core";
-import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
+import {ElMessage, type FormInstance, type FormRules, type UploadRawFile} from 'element-plus'
 import {createPost, getPost, updatePost} from '../api'
-import type {SavePostRequest} from '../types'
-import {uploadFile} from "../api/file.ts";
-import {MdEditor} from "md-editor-v3";
+import type {ApiResponse, SavePostRequest} from '../types'
 import {SECTION_DICT} from "../constants/section.ts";
+import {UploadFilled} from "@element-plus/icons-vue";
 
 const router = useRouter()
 const route = useRoute()
-const isDark = useDark()
 
 const postFormRef = ref<FormInstance>()
 const loading = ref(false)
+const submitting = ref(false)
 const isEdit = ref(false)
 
 const postForm = reactive<SavePostRequest>({
@@ -87,40 +106,25 @@ const rules: FormRules = {
 }
 
 // 处理图片上传（核心功能）
-const handleUploadImage = async (files: Array<File>, callback: (urls: string[] | {
-  url: string;
-  alt: string;
-  title: string
-}[]) => void) => {
-  const MAX_SIZE = 10 * 1024 * 1024
-  const [overSizeFiles, validFiles] = files.reduce(
-      (acc, file) => {
-        // 解构累加器
-        const [over, valid] = acc;
-        if (file.size >= MAX_SIZE) {
-          over.push(file);
-        } else {
-          valid.push(file);
-        }
-        return acc;
-      },
-      [[], []] as [File[], File[]]
-  )
-
-  // 提示部分文件超限
-  if (overSizeFiles.length > 0) {
-    ElMessage.error(`有 ${overSizeFiles.length} 个文件大小超过 ${MAX_SIZE / 1024 / 1024} MB，已跳过上传`)
+const beforeUploadImage = (rawFile: UploadRawFile) => {
+  // 文件超限
+  if (rawFile.size > 10 * 1024 * 1024) {
+    ElMessage.error('文件大小超过 10 MB')
+    return false
   }
-
-  // 无合规文件时直接调用回调，避免无意义的请求
-  if (validFiles.length === 0) {
-    callback([])
-    return
-  }
-
-  const res = await Promise.all(validFiles.map(file => uploadFile(file)))
-  callback(res.map((item: any) => `/storage/file/download?id=${item.data}`))
+  loading.value = true
+  return true
 };
+
+const onUploadSuccess = (response: ApiResponse<string>) => {
+  postForm.content += `![](/storage/file/download?id=${response.data})`
+  loading.value = false
+}
+
+const onUploadError = (error: Error) => {
+  loading.value = false
+  ElMessage.error(`上传图片出错：${error.message}`)
+}
 
 // 加载帖子详情（编辑模式）
 const loadPostDetail = async () => {
@@ -151,7 +155,7 @@ const handleSubmit = async () => {
   await postFormRef.value.validate(async (valid) => {
     if (!valid) return
 
-    loading.value = true
+    submitting.value = true
     try {
       if (isEdit.value) {
         const res = await updatePost(postForm)
@@ -170,7 +174,7 @@ const handleSubmit = async () => {
       console.error('提交失败:', error)
       ElMessage.error('提交失败，请重试')
     } finally {
-      loading.value = false
+      submitting.value = false
     }
   })
 }
