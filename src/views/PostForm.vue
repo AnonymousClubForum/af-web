@@ -43,13 +43,13 @@
               :on-success="onUploadSuccess"
               :show-file-list="false"
               action="/storage/file/upload"
-              drag
+              class="img-upload-area"
           >
             <el-icon class="el-icon--upload">
               <upload-filled/>
             </el-icon>
             <div class="el-upload__text">
-              拖拽 或 <em>点击上传配图</em>
+              点击上传配图
             </div>
             <template #tip>
               <div class="el-upload__tip">
@@ -204,9 +204,9 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
 
-  h2 {
-    margin: 0;
-  }
+.img-upload-area {
+  margin-top: 20px;
 }
 </style>
