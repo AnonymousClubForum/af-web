@@ -109,7 +109,6 @@ import {useUserStore} from '../stores'
 import UserMeta from "../components/UserMeta.vue";
 import {ElMessage, ElMessageBox} from "element-plus";
 import ReplyDialog from "../components/ReplyDialog.vue";
-import markdownIt from 'markdown-it';
 
 const router = useRouter()
 const route = useRoute()
@@ -133,9 +132,57 @@ const isDesc = ref(false)
 const showReplyDialog = ref(false)
 const replyCommentId = ref<string>()
 
-const md = markdownIt()
+/**
+ * 转义 HTML 防止 XSS
+ */
+const escapeHtml = (text: string): string => {
+  return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+}
+
+/**
+ * 主解析函数：将 Markdown 字符串解析为 HTML
+ */
+const customMarkdownParser = (md: string): string => {
+  if (!md) return '';
+
+  const lines = md.split('\n');
+  let html = '';
+
+  for (const line of lines) {
+    let result = line;
+
+    // 图片
+    // 语法: ![alt](url)
+    result = result.replace(/!\[([^\]]*)]\(([^)]+)\)/g, (_, __, url) => {
+      return `<img src="${escapeHtml(url)}" loading="lazy" alt="图片">`;
+    });
+
+    // 加粗
+    // 语法: **text** 或 __text__
+    result = result.replace(/(\*\*|__)(.*?)\1/g, (_, __, content) => {
+      return `<strong>${content}</strong>`;
+    });
+
+    // 斜体
+    // 语法: *text* 或 _text_ (必须在加粗之后解析)
+    result = result.replace(/([*_])(.*?)\1/g, (_, __, content) => {
+      return `<em>${content}</em>`;
+    });
+
+    html += `<p>${result}</p>\n`;
+  }
+
+  return html;
+}
+
+// 使用自定义解析器
 const compiledMarkdown = computed(() => {
-  return md.render(post.value ? post.value.content : '');
+  return customMarkdownParser(post.value ? post.value.content : '');
 })
 
 // 加载帖子详情
