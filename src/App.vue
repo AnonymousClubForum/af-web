@@ -6,12 +6,11 @@
         mode="horizontal"
         router
     >
-      <el-menu-item index="banner">
+      <el-menu-item index="banner" route="/">
         <img
             alt="Anonymous Forum"
             src="/banner.png"
             style="width: 300px"
-            @click="goToHome"
         />
       </el-menu-item>
       <el-menu-item index="/">首页</el-menu-item>
@@ -43,21 +42,16 @@
 
 <script lang="ts" setup>
 import {computed, onMounted} from 'vue'
-import {useRoute, useRouter} from 'vue-router'
+import {useRoute} from 'vue-router'
 import {useDark} from '@vueuse/core'
 import {useUserStore} from './stores'
 import AvatarItem from "./components/AvatarItem.vue";
 import {SECTION_DICT} from "./constants/section.ts";
 
 const route = useRoute()
-const router = useRouter()
 const isDark = useDark()
 const userStore = useUserStore()
 const activeMenu = computed(() => route.path)
-
-const goToHome = () => {
-  router.push('/')
-}
 
 const toggleTheme = () => {
   isDark.value = !isDark.value
