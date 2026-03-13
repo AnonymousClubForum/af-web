@@ -156,25 +156,31 @@ const customMarkdownParser = (md: string): string => {
   for (const line of lines) {
     let result = line;
 
-    // 图片
-    // 语法: ![alt](url)
-    result = result.replace(/!\[([^\]]*)]\(([^)]+)\)/g, (_, __, url) => {
-      return `<img src="${escapeHtml(url)}" loading="lazy" alt="图片">`;
-    });
+    if (result.trim()) {
+      // 先将普通空格替换为 &nbsp; 保留空格
+      result = result.replace(/ /g, '&nbsp;');
+      // 图片
+      // 语法: ![alt](url)
+      result = result.replace(/!\[([^\]]*)]\(([^)]+)\)/g, (_, __, url) => {
+        return `<img src="${escapeHtml(url)}" loading="lazy" alt="图片">`;
+      });
 
-    // 加粗
-    // 语法: **text** 或 __text__
-    result = result.replace(/(\*\*|__)(.*?)\1/g, (_, __, content) => {
-      return `<strong>${content}</strong>`;
-    });
+      // 加粗
+      // 语法: **text** 或 __text__
+      result = result.replace(/(\*\*|__)(.*?)\1/g, (_, __, content) => {
+        return `<strong>${content}</strong>`;
+      });
 
-    // 斜体
-    // 语法: *text* 或 _text_ (必须在加粗之后解析)
-    result = result.replace(/([*_])(.*?)\1/g, (_, __, content) => {
-      return `<em>${content}</em>`;
-    });
+      // 斜体
+      // 语法: *text* 或 _text_ (必须在加粗之后解析)
+      result = result.replace(/([*_])(.*?)\1/g, (_, __, content) => {
+        return `<em>${content}</em>`;
+      });
 
-    html += `<p>${result}</p>\n`;
+      html += `<p>${result}</p>`;
+    } else {
+      html += '<br>'
+    }
   }
 
   return html;
