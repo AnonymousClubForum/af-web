@@ -337,6 +337,7 @@ onMounted(() => {
     font-size: 16px;
     line-height: 1.8;
     padding: 10px 0;
+    white-space: pre-wrap;
 
     :deep(img) {
       max-width: 100%;
