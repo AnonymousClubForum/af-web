@@ -1,7 +1,7 @@
 <template>
   <div class="layout-container">
     <div class="layout-header">
-      <a href="/" class="header-banner">
+      <a class="header-banner" href="/">
         <img
             alt="Anonymous Forum"
             src="/banner.png"
@@ -11,8 +11,8 @@
       <div class="header-right">
         <el-menu
             :default-active="activeMenu"
-            mode="horizontal"
             :ellipsis="false"
+            mode="horizontal"
             router
         >
           <el-menu-item index="/">首页</el-menu-item>
