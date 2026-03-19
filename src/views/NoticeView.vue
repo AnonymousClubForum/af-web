@@ -4,17 +4,17 @@
     <div class="notice-type-buttons">
       <el-button
           :disabled="true"
-          icon="el-icon-thumb"
+          :icon="Apple"
           type="default"
       >
-        赞通知
+        赞
       </el-button>
       <el-button
           :disabled="false"
-          icon="el-icon-chat-dot-round"
+          :icon="ChatRound"
           type="primary"
       >
-        评论通知
+        评论
       </el-button>
     </div>
 
@@ -30,24 +30,19 @@
           :key="notice.id"
           class="notice-card"
       >
-        <div class="notice-content">
-          <UserMeta :avatar-id="notice.avatarId"
-                    :avatar-size="24"
-                    :ctime="notice.ctime"
-                    :user-id="notice.userId"
-                    :username="notice.username"/>
-          <span>
-            {{ notice.parentId ? '回复了你的评论：' : '评论了你的帖子：' }}
-          </span>
-          <!-- 可点击的跳转文本 -->
-          <el-link
-              class="jump-link"
-              type="primary"
-              @click="handleJump(notice)"
-          >
-            {{ notice.parentId ? notice.parentContent : notice.postTitle }}
-          </el-link>
-        </div>
+        <UserMeta :avatar-id="notice.avatarId"
+                  :avatar-size="24"
+                  :ctime="notice.ctime"
+                  :user-id="notice.userId"
+                  :username="notice.username"/>
+        <span> {{ notice.parentId ? '回复了你的评论：' : '评论了你的帖子：' }} </span>
+        <!-- 可点击的跳转文本 -->
+        <el-link
+            type="default"
+            @click="handleJump(notice)"
+        >
+          {{ notice.parentId ? notice.parentContent : notice.postTitle }}
+        </el-link>
       </el-card>
     </div>
 
@@ -72,6 +67,7 @@ import {useUserStore} from '../stores'
 import type {CommentNotice} from "../types";
 import {getCommentNoticePage} from "../api";
 import UserMeta from "../components/UserMeta.vue";
+import {Apple, ChatRound} from "@element-plus/icons-vue";
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -132,14 +128,16 @@ onMounted(() => {
 
 <style scoped>
 .notice-page {
-  max-width: 1200px;
-  margin: 20px auto;
-  padding: 0 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .notice-type-buttons {
   margin-bottom: 20px;
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
 }
 
@@ -149,21 +147,12 @@ onMounted(() => {
 
 .notice-card {
   margin-bottom: 15px;
-  padding: 15px;
-}
-
-.notice-content {
-  margin-bottom: 10px;
-  line-height: 1.6;
-}
-
-.jump-link {
-  cursor: pointer;
-  margin-left: 5px;
 }
 
 .pagination {
-  margin-top: 20px;
-  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
 }
 </style>
