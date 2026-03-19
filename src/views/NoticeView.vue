@@ -35,14 +35,12 @@
                   :ctime="notice.ctime"
                   :user-id="notice.userId"
                   :username="notice.username"/>
-        <span> {{ notice.parentId ? '回复了你的评论：' : '评论了你的帖子：' }} </span>
-        <!-- 可点击的跳转文本 -->
-        <el-link
-            type="default"
-            @click="handleJump(notice)"
-        >
-          {{ notice.parentId ? notice.parentContent : notice.postTitle }}
-        </el-link>
+        <div class="notice-content">
+          {{ notice.parentId ? '回复了你的评论: ' : '评论了你的帖子: ' }}
+          <el-link type="default" @click="handleJump(notice)">
+            {{ notice.parentId ? notice.parentContent : notice.postTitle }}
+          </el-link>
+        </div>
       </el-card>
     </div>
 
@@ -98,10 +96,10 @@ const getCommentNoticeList = async () => {
       noticeList.value = res.data.records
       total.value = res.data.total
     } else {
-      ElMessage.error('获取通知列表失败：' + res.msg)
+      ElMessage.error('获取通知列表失败: ' + res.msg)
     }
   } catch (error) {
-    console.error('请求通知接口失败：', error)
+    console.error('请求通知接口失败: ', error)
     ElMessage.error('网络异常，无法获取通知列表')
   } finally {
     loading.value = false
@@ -110,14 +108,7 @@ const getCommentNoticeList = async () => {
 
 // 处理跳转逻辑
 const handleJump = (notice: CommentNotice) => {
-  // 跳转到帖子详情页，携带postId参数
-  router.push({
-    path: `/post/${notice.postId}`,
-    query: {
-      // 可选：携带评论ID，方便定位到具体评论
-      commentId: notice.parentId || notice.id
-    }
-  })
+  router.push(`/post/${notice.postId}`)
 }
 
 // 页面挂载时加载数据
@@ -147,6 +138,10 @@ onMounted(() => {
 
 .notice-card {
   margin-bottom: 15px;
+}
+
+.notice-content {
+  padding: 10px;
 }
 
 .pagination {
