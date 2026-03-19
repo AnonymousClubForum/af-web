@@ -1,5 +1,13 @@
 import request from '../utils/request'
-import type {ApiResponse, Comment, PageResult, QueryCommentPageRequest, SaveCommentRequest} from "../types";
+import type {
+    ApiResponse,
+    Comment,
+    CommentNotice,
+    PageResult,
+    QueryCommentNoticePageRequest,
+    QueryCommentPageRequest,
+    SaveCommentRequest
+} from "../types";
 
 /**
  * 发布评论
@@ -32,6 +40,18 @@ export function deleteComment(id: string): Promise<ApiResponse<string>> {
 export function getCommentPage(params: QueryCommentPageRequest): Promise<ApiResponse<PageResult<Comment>>> {
     return request({
         url: '/platform/comment/get_page',
+        method: 'get',
+        params
+    })
+}
+
+/**
+ * 分页获取评论通知
+ * @param params - 分页参数
+ */
+export function getCommentNoticePage(params: QueryCommentNoticePageRequest): Promise<ApiResponse<PageResult<CommentNotice>>> {
+    return request({
+        url: '/platform/comment/notice/get_page',
         method: 'get',
         params
     })

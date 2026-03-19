@@ -11,7 +11,20 @@ export interface Comment {
         content?: string
         ctime?: string
     }
-    ctime?: string
+    ctime: string
+}
+
+export interface CommentNotice {
+    id: string
+    postId: string
+    postTitle: string
+    parentId?: string
+    parentContent?: string
+    userId: string
+    username: string
+    avatarId?: string
+    content: string
+    ctime: string
 }
 
 export interface SaveCommentRequest {
@@ -28,3 +41,8 @@ export interface QueryCommentPageRequest {
     isDesc: boolean
 }
 
+export interface QueryCommentNoticePageRequest {
+    pageNum: number
+    pageSize: number
+    userId: string
+}

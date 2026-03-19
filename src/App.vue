@@ -21,6 +21,7 @@
             <el-menu-item index="/register">注册</el-menu-item>
           </template>
           <template v-else>
+            <el-menu-item index="/notice">通知</el-menu-item>
             <el-sub-menu index="posts">
               <template #title>分区</template>
               <el-menu-item index="/posts">全部</el-menu-item>
