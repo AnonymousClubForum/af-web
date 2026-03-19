@@ -63,6 +63,12 @@ const routes = [
         meta: {title: '个人中心', requiresAuth: true}
     },
     {
+        path: '/notice',
+        name: 'NoticeView',
+        component: () => import('../views/NoticeView.vue'),
+        meta: {title: '通知中心', requiresAuth: true}
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'NotFound',
         redirect: '/'
