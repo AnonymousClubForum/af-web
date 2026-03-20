@@ -1,42 +1,39 @@
 <template>
   <div class="layout-container">
     <div class="layout-header">
-      <a class="header-banner" href="/">
-        <img
-            alt="Anonymous Forum"
-            src="/banner.png"
-            @click="router.push('/')"
-        />
-      </a>
-      <div class="header-right">
-        <el-menu
-            :default-active="activeMenu"
-            :ellipsis="false"
-            mode="horizontal"
-            router
-        >
-          <el-menu-item index="/">首页</el-menu-item>
-          <template v-if="!userStore.isLoggedIn">
-            <el-menu-item index="/login">登录</el-menu-item>
-            <el-menu-item index="/register">注册</el-menu-item>
-          </template>
-          <template v-else>
-            <el-menu-item index="/notice">通知</el-menu-item>
-            <el-sub-menu index="posts">
-              <template #title>分区</template>
-              <el-menu-item index="/posts">全部</el-menu-item>
-              <el-menu-item v-for="section in SECTION_DICT" :key="section.id" :index="`/posts/${section.id}`">
-                {{ section.name }}
-              </el-menu-item>
-            </el-sub-menu>
-            <el-menu-item :index="`/profile/${userStore.user?.id}`">
-              <AvatarItem :id="userStore.user?.avatarId" :size="24"/>
-              <span>{{ userStore.user?.username ? userStore.user.username : '' }}</span>
+      <el-menu
+          :default-active="activeMenu"
+          :ellipsis="isEllipsis"
+          mode="horizontal"
+          router
+      >
+        <el-menu-item index="banner" route="/">
+          <img
+              alt="Anonymous Forum"
+              src="/banner.png"
+          />
+        </el-menu-item>
+        <el-menu-item index="/">首页</el-menu-item>
+        <template v-if="!userStore.isLoggedIn">
+          <el-menu-item index="/login">登录</el-menu-item>
+          <el-menu-item index="/register">注册</el-menu-item>
+        </template>
+        <template v-else>
+          <el-menu-item index="/notice">通知</el-menu-item>
+          <el-sub-menu index="posts">
+            <template #title>分区</template>
+            <el-menu-item index="/posts">全部</el-menu-item>
+            <el-menu-item v-for="section in SECTION_DICT" :key="section.id" :index="`/posts/${section.id}`">
+              {{ section.name }}
             </el-menu-item>
-          </template>
-          <el-menu-item index="theme" @click="toggleTheme">切换主题</el-menu-item>
-        </el-menu>
-      </div>
+          </el-sub-menu>
+          <el-menu-item :index="`/profile/${userStore.user?.id}`">
+            <AvatarItem :id="userStore.user?.avatarId" :size="24"/>
+            <span>{{ userStore.user?.username ? userStore.user.username : '' }}</span>
+          </el-menu-item>
+        </template>
+        <el-menu-item index="theme" @click="toggleTheme">切换主题</el-menu-item>
+      </el-menu>
     </div>
 
     <div class="layout-main">
@@ -46,25 +43,36 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, onMounted} from 'vue'
-import {useRoute, useRouter} from 'vue-router'
+import {computed, onMounted, onUnmounted, ref} from 'vue'
+import {useRoute} from 'vue-router'
 import {useDark} from '@vueuse/core'
 import {useUserStore} from './stores'
 import AvatarItem from "./components/AvatarItem.vue";
 import {SECTION_DICT} from "./constants/section.ts";
 
 const route = useRoute()
-const router = useRouter()
 const isDark = useDark()
 const userStore = useUserStore()
 const activeMenu = computed(() => route.path)
+const isEllipsis = ref(false)
 
 const toggleTheme = () => {
   isDark.value = !isDark.value
 }
 
+const handleResize = () => {
+  const windowWidth = window.innerWidth;
+  isEllipsis.value = windowWidth < 768;
+}
+
 onMounted(() => {
+  window.addEventListener('resize', handleResize);
+  handleResize(); // 初始化状态
   userStore.loadFromServer()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
 })
 </script>
 
@@ -92,26 +100,13 @@ body {
 .layout-header {
   z-index: 1000;
   box-shadow: 0 2px 8px var(--el-border-color);
-  display: flex;
-  align-items: center;
-}
-
-.header-banner {
-  margin-left: 0;
-}
-
-.header-right {
-  margin-left: auto;
-  margin-right: 0;
 }
 
 .layout-main {
   flex: 1;
 }
 
-@media (max-width: 768px) {
-  .header-banner {
-    display: none;
-  }
+.el-menu--horizontal > .el-menu-item:nth-child(1) {
+  margin-right: auto;
 }
 </style>
