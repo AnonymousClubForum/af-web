@@ -38,7 +38,7 @@
         <div class="notice-content">
           {{ notice.parentId ? '回复了你的评论: ' : '评论了你的帖子: ' }}
           <el-link type="default" @click="handleJump(notice)">
-            {{ notice.parentId ? notice.parentContent : notice.postTitle }}
+            {{ notice.content }}
           </el-link>
         </div>
       </el-card>
