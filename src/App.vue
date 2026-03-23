@@ -5,6 +5,7 @@
           :default-active="activeMenu"
           :ellipsis="isEllipsis"
           mode="horizontal"
+          router
       >
         <el-menu-item index="banner" route="/">
           <img
@@ -12,27 +13,26 @@
               src="/banner.png"
           />
         </el-menu-item>
-        <el-menu-item index="/" route="/">首页</el-menu-item>
+        <el-menu-item index="/">首页</el-menu-item>
         <template v-if="!userStore.isLoggedIn">
-          <el-menu-item index="/login" route="/login">登录</el-menu-item>
-          <el-menu-item index="/register" route="/register">注册</el-menu-item>
+          <el-menu-item index="/login">登录</el-menu-item>
+          <el-menu-item index="/register">注册</el-menu-item>
         </template>
         <template v-else>
-          <el-menu-item index="/notice" route="/notice">通知</el-menu-item>
+          <el-menu-item index="/notice">通知</el-menu-item>
           <el-sub-menu index="posts">
             <template #title>分区</template>
-            <el-menu-item index="/posts" route="/posts">全部</el-menu-item>
-            <el-menu-item v-for="section in SECTION_DICT" :key="section.id" :index="`/posts/${section.id}`"
-                          :route="`/posts/${section.id}`">
+            <el-menu-item index="/posts">全部</el-menu-item>
+            <el-menu-item v-for="section in SECTION_DICT" :key="section.id" :index="`/posts/${section.id}`">
               {{ section.name }}
             </el-menu-item>
           </el-sub-menu>
-          <el-menu-item :route="`/profile/${userStore.user?.id}`" index="profile">
+          <el-menu-item :index="`/profile/${userStore.user?.id}`">
             <AvatarItem :id="userStore.user?.avatarId" :size="24"/>
             <span>{{ userStore.user?.username ? userStore.user.username : '' }}</span>
           </el-menu-item>
         </template>
-        <el-menu-item index="theme" @click="toggleTheme">切换主题</el-menu-item>
+        <el-menu-item index="" @click="toggleTheme">切换主题</el-menu-item>
       </el-menu>
     </div>
 
