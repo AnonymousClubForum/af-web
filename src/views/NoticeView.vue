@@ -1,23 +1,5 @@
 <template>
   <div class="notice-page">
-    <!-- 通知类型选择按钮 -->
-    <div class="notice-type-buttons">
-      <el-button
-          :disabled="true"
-          :icon="Apple"
-          type="default"
-      >
-        赞
-      </el-button>
-      <el-button
-          :disabled="false"
-          :icon="ChatRound"
-          type="primary"
-      >
-        评论
-      </el-button>
-    </div>
-
     <!-- 通知列表区域 -->
     <div v-loading="loading" class="notice-list">
       <!-- 空数据提示 -->
@@ -65,7 +47,6 @@ import {useUserStore} from '../stores'
 import type {CommentNotice} from "../types";
 import {getCommentNoticePage} from "../api";
 import UserMeta from "../components/UserMeta.vue";
-import {Apple, ChatRound} from "@element-plus/icons-vue";
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -122,14 +103,6 @@ onMounted(() => {
   max-width: 900px;
   margin: 0 auto;
   padding: 20px;
-}
-
-.notice-type-buttons {
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
 }
 
 .notice-list {
