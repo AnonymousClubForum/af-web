@@ -88,6 +88,14 @@ body {
   width: 100%;
   height: 100%;
 }
+
+/* 全局禁止文本选中 */
+.el-button, .el-empty, .el-menu, .el-menu-item, .el-tag {
+  -webkit-user-select: none; /* Chrome/Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+  user-select: none; /* 标准 */
+}
 </style>
 
 <style scoped>
