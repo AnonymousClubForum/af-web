@@ -38,6 +38,7 @@
           <div class="post-title" @click="viewPost(post.id)">
             <el-tag v-if="post.isTop" type="danger">置顶</el-tag>
             {{ post.title }}
+            <el-tag v-if="post.sectionId === 0 || post.sectionId" size="small" type="info">{{ SECTION_DICT[post.sectionId]?.name }}</el-tag>
           </div>
           <UserMeta :avatar-id="post.avatarId"
                     :avatar-size="36"

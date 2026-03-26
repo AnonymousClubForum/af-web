@@ -16,7 +16,10 @@
       </template>
 
       <div v-if="post" class="post-content">
-        <div class="post-title">{{ post.title }}</div>
+        <div class="post-title">
+          {{ post.title }}
+          <el-tag v-if="post.sectionId === 0 || post.sectionId" size="small" type="info">{{ SECTION_DICT[post.sectionId]?.name }}</el-tag>
+        </div>
         <UserMeta :avatar-id="post.avatarId"
                   :avatar-size="40"
                   :ctime="post.ctime"
@@ -109,6 +112,7 @@ import {useUserStore} from '../stores'
 import UserMeta from "../components/UserMeta.vue";
 import {ElMessage, ElMessageBox} from "element-plus";
 import ReplyDialog from "../components/ReplyDialog.vue";
+import {SECTION_DICT} from "../constants/section.ts";
 
 const router = useRouter()
 const route = useRoute()
