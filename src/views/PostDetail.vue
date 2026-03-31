@@ -167,8 +167,20 @@ const customMarkdownParser = (md: string): string => {
       result = result.replace(/ /g, '&nbsp;');
       // 图片
       // 语法: [img]id[/img]
-      result = result.replace(/(\[img])(.*?)(\[\/img])/g, (_, __, url) => {
-        return `<img src=\`/storage/file/download?id=${escapeHtml(url)}\` loading="lazy" alt="图片">`;
+      result = result.replace(/(\[img])(.*?)(\[\/img])/g, (_, __, imgId) => {
+        return `<img src="/storage/file/download?id=${escapeHtml(imgId)}" loading="lazy" alt="图片">`;
+      });
+
+      // 外部图片
+      // 语法: [imgurl]url[/imgurl]
+      result = result.replace(/(\[imgurl])(.*?)(\[\/imgurl])/g, (_, __, url) => {
+        return `<img src="${escapeHtml(url)}" loading="lazy" alt="外部图片">`;
+      });
+
+      // 外部链接
+      // 语法: [url]url[/url]
+      result = result.replace(/(\[url])(.*?)(\[\/url])/g, (_, __, url) => {
+        return `<a href="${escapeHtml(url)}">${url}</a>`;
       });
 
       // 加粗
