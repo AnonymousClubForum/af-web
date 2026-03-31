@@ -49,3 +49,10 @@ export const useUserStore = defineStore('user', () => {
         clear
     }
 })
+
+export const useSectionStore = defineStore('section', () => {
+    const id = ref<number>()
+    return {
+        id
+    }
+})

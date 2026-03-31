@@ -22,8 +22,8 @@
           <el-menu-item index="/notice">通知</el-menu-item>
           <el-sub-menu index="posts">
             <template #title>分区</template>
-            <el-menu-item index="/posts">全部</el-menu-item>
-            <el-menu-item v-for="section in SECTION_DICT" :key="section.id" :index="`/posts/${section.id}`">
+            <el-menu-item index="" @click="goToPostList(undefined)">全部</el-menu-item>
+            <el-menu-item v-for="section in SECTION_DICT" :key="section.id" index="" @click="goToPostList(section.id)">
               {{ section.name }}
             </el-menu-item>
           </el-sub-menu>
@@ -44,15 +44,17 @@
 
 <script lang="ts" setup>
 import {computed, onMounted, onUnmounted, ref} from 'vue'
-import {useRoute} from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 import {useDark} from '@vueuse/core'
-import {useUserStore} from './stores'
+import {useSectionStore, useUserStore} from './stores'
 import AvatarItem from "./components/AvatarItem.vue";
 import {SECTION_DICT} from "./constants/section.ts";
 
 const route = useRoute()
+const router = useRouter()
 const isDark = useDark()
 const userStore = useUserStore()
+const sectionStore = useSectionStore()
 const activeMenu = computed(() => route.path)
 const isEllipsis = ref(false)
 
@@ -63,6 +65,11 @@ const toggleTheme = () => {
 const handleResize = () => {
   const windowWidth = window.innerWidth;
   isEllipsis.value = windowWidth < 768;
+}
+
+const goToPostList = (sectionId?: number) => {
+  sectionStore.id = sectionId
+  router.push('/posts')
 }
 
 onMounted(() => {

@@ -2,7 +2,9 @@
   <div class="post-list-container">
     <div class="page-header">
       <div class="page-title">
-        {{ (sectionId === 0 || !!sectionId) ? `帖子 - ${SECTION_DICT[sectionId]?.name}` : '全部帖子' }}
+        {{
+          (sectionStore.id === 0 || !!sectionStore.id) ? `帖子 - ${SECTION_DICT[sectionStore.id]?.name}` : '全部帖子'
+        }}
       </div>
       <div class="header-action">
         <el-input
@@ -20,8 +22,8 @@
         </el-input>
       </div>
     </div>
-    <el-card v-if="sectionId === 0 || !!sectionId" class="post-card">
-      <div class="section-desc">{{ SECTION_DICT[sectionId]?.desc }}</div>
+    <el-card v-if="sectionStore.id === 0 || !!sectionStore.id" class="post-card">
+      <div class="section-desc">{{ SECTION_DICT[sectionStore.id]?.desc }}</div>
     </el-card>
     <el-divider/>
 
@@ -38,7 +40,9 @@
           <div class="post-title" @click="viewPost(post.id)">
             <el-tag v-if="post.isTop" type="danger">置顶</el-tag>
             {{ post.title }}
-            <el-tag v-if="post.sectionId === 0 || post.sectionId" size="small" type="info">{{ SECTION_DICT[post.sectionId]?.name }}</el-tag>
+            <el-tag v-if="post.sectionId === 0 || post.sectionId" size="small" type="info">
+              {{ SECTION_DICT[post.sectionId]?.name }}
+            </el-tag>
           </div>
           <UserMeta :avatar-id="post.avatarId"
                     :avatar-size="36"
@@ -73,13 +77,13 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, ref, watch} from 'vue'
-import {useRoute, useRouter} from 'vue-router'
+import {ref, watch} from 'vue'
+import {useRouter} from 'vue-router'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {Delete, EditPen, Plus, Search} from '@element-plus/icons-vue'
 import {deletePost as deletePostApi, getPostPage} from '../api'
 import type {Post} from "../types";
-import {useUserStore} from '../stores'
+import {useSectionStore, useUserStore} from '../stores'
 import UserMeta from "../components/UserMeta.vue";
 import {SECTION_DICT} from "../constants/section.ts";
 
@@ -88,10 +92,9 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
-const route = useRoute()
 const userStore = useUserStore()
+const sectionStore = useSectionStore()
 
-const sectionId = computed(() => route.params.sectionId ? Number(route.params.sectionId) : undefined)
 const loading = ref(false)
 const postList = ref<Post[]>([])
 const searchKeyword = ref('')
@@ -108,7 +111,7 @@ const fetchPostList = async () => {
       pageSize: pageSize.value,
       userId: props.userId,
       searchContent: searchKeyword.value || undefined,
-      sectionId: sectionId.value
+      sectionId: sectionStore.id
     })
     if (res.data) {
       postList.value = res.data.records
@@ -168,8 +171,9 @@ const handleCurrentChange = (page: number) => {
 }
 
 watch(
-    () => route.params.sectionId,
+    () => sectionStore.id,
     () => {
+      console.log(sectionStore.id)
       currentPage.value = 1
       fetchPostList()
     },

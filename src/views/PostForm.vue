@@ -79,9 +79,11 @@ import {createPost, getPost, updatePost} from '../api'
 import type {ApiResponse, SavePostRequest} from '../types'
 import {SECTION_DICT} from "../constants/section.ts";
 import {UploadFilled} from "@element-plus/icons-vue";
+import {useSectionStore} from "../stores";
 
 const router = useRouter()
 const route = useRoute()
+const sectionStore = useSectionStore()
 
 const postFormRef = ref<FormInstance>()
 const loading = ref(false)
@@ -92,7 +94,7 @@ const postForm = reactive<SavePostRequest>({
   id: route.params.id ? String(route.params.id) : undefined,
   title: '',
   content: '',
-  sectionId: undefined
+  sectionId: 0
 })
 
 const rules: FormRules = {
@@ -185,10 +187,11 @@ const goBack = () => {
 }
 
 onMounted(() => {
-  // 判断是否是编辑模式
   if (route.params.id) {
     isEdit.value = true
     loadPostDetail()
+  } else if (sectionStore.id === 0 || !!sectionStore.id) {
+    postForm.sectionId = sectionStore.id
   }
 })
 </script>

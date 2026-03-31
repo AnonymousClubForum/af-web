@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import {useUserStore} from '../stores'
+import {useSectionStore} from '../stores'
 
 const routes = [
     {
@@ -12,37 +12,31 @@ const routes = [
         path: '/login',
         name: 'LoginView',
         component: () => import('../views/LoginView.vue'),
-        meta: {title: '登录', guest: true}
+        meta: {title: '登录'}
     },
     {
         path: '/register',
         name: 'RegisterView',
         component: () => import('../views/RegisterView.vue'),
-        meta: {title: '注册', guest: true}
+        meta: {title: '注册'}
     },
     {
         path: '/posts',
         name: 'PostListView',
         component: () => import('../views/PostListView.vue'),
-        meta: {title: '帖子列表'}
-    },
-    {
-        path: '/posts/:sectionId',
-        name: 'SectionPostListView',
-        component: () => import('../views/PostListView.vue'),
-        meta: {title: '帖子列表'}
+        meta: {title: '帖子列表', requireSection: true}
     },
     {
         path: '/post/create',
         name: 'CreatePost',
         component: () => import('../views/PostForm.vue'),
-        meta: {title: '发布帖子', requiresAuth: true}
+        meta: {title: '发布帖子', requireSection: true}
     },
     {
         path: '/post/edit/:id',
         name: 'EditPost',
         component: () => import('../views/PostForm.vue'),
-        meta: {title: '编辑帖子', requiresAuth: true}
+        meta: {title: '编辑帖子'}
     },
     {
         path: '/post/:id',
@@ -60,13 +54,13 @@ const routes = [
         path: '/profile/edit',
         name: 'ProfileEditView',
         component: () => import('../views/ProfileEditView.vue'),
-        meta: {title: '个人中心', requiresAuth: true}
+        meta: {title: '个人中心'}
     },
     {
         path: '/notice',
         name: 'NoticeView',
         component: () => import('../views/NoticeView.vue'),
-        meta: {title: '通知中心', requiresAuth: true}
+        meta: {title: '通知中心'}
     },
     {
         path: '/:pathMatch(.*)*',
@@ -82,21 +76,12 @@ const router = createRouter({
 
 // 路由守卫
 router.beforeEach((to, _, next) => {
-    const userStore = useUserStore()
-
     // 设置页面标题
     document.title = to.meta.title ? `${to.meta.title} - 没名字论坛` : '没名字论坛'
 
-    // 需要登录的页面
-    if (to.meta.requiresAuth && !userStore.isLoggedIn) {
-        next('/login')
-        return
-    }
-
-    // 已登录用户不能访问登录/注册页面
-    if (to.meta.guest && userStore.isLoggedIn) {
-        next('/')
-        return
+    // 不需要分区的页面清空分区信息
+    if (!to.meta.requireSection) {
+        useSectionStore().id = undefined
     }
 
     next()
