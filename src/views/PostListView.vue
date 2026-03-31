@@ -12,7 +12,6 @@
             clearable
             placeholder="搜索帖子标题/内容..."
             size="default"
-            style="max-width: 300px"
             @clear="handleSearch"
             @keyup.enter="handleSearch"
         >
@@ -194,8 +193,7 @@ watch(
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
+  gap: 12px;
   margin-bottom: 24px;
 }
 
@@ -211,8 +209,7 @@ watch(
 }
 
 .header-action {
-  flex: 1;
-  justify-content: flex-end;
+  width: 350px;
 }
 
 /* 右下角浮动发布按钮样式 */
@@ -307,6 +304,11 @@ watch(
   .page-header {
     flex-direction: column;
     align-items: flex-start;
+
+    .header-action {
+      flex: 1;
+      align-self: flex-end;
+    }
   }
 }
 </style>
