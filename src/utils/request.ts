@@ -51,17 +51,17 @@ service.interceptors.response.use(
                         lock: true, // 锁定页面滚动和所有交互
                         background: 'rgba(0, 0, 0, 0.7)' // 半透明黑色背景，强化“锁定”视觉效果
                     });
-                    ElMessage.error('未授权，请重新登录');
+                    ElMessage.error(error.response.data?.message || '未授权，请重新登录');
                     setTimeout(() => {
                         loadingInstance.close();
                         window.location.href = '/login';
                     }, 1000);
                     break
                 case 403:
-                    ElMessage.error('拒绝访问')
+                    ElMessage.error(error.response.data?.message || '拒绝访问')
                     break
                 case 404:
-                    ElMessage.error('请求资源不存在')
+                    ElMessage.error(error.response.data?.message || '请求资源不存在')
                     break
                 case 500:
                     ElMessage.error(error.response.data?.message || '服务器错误')
