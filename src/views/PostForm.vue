@@ -119,7 +119,7 @@ const beforeUploadImage = (rawFile: UploadRawFile) => {
 };
 
 const onUploadSuccess = (response: ApiResponse<string>) => {
-  postForm.content += `![](/storage/file/download?id=${response.data})`
+  postForm.content += `[img]${response.data}[/img]`
   loading.value = false
 }
 

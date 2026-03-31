@@ -166,20 +166,20 @@ const customMarkdownParser = (md: string): string => {
       // 先将普通空格替换为 &nbsp; 保留空格
       result = result.replace(/ /g, '&nbsp;');
       // 图片
-      // 语法: ![alt](url)
-      result = result.replace(/!\[([^\]]*)]\(([^)]+)\)/g, (_, __, url) => {
-        return `<img src="${escapeHtml(url)}" loading="lazy" alt="图片">`;
+      // 语法: [img]id[/img]
+      result = result.replace(/(\[img])(.*?)(\[\/img])/g, (_, __, url) => {
+        return `<img src=\`/storage/file/download?id=${escapeHtml(url)}\` loading="lazy" alt="图片">`;
       });
 
       // 加粗
-      // 语法: **text** 或 __text__
-      result = result.replace(/(\*\*|__)(.*?)\1/g, (_, __, content) => {
+      // 语法: [bold]text[/bold]
+      result = result.replace(/(\[bold])(.*?)(\[\/bold])/g, (_, __, content) => {
         return `<strong>${content}</strong>`;
       });
 
       // 斜体
-      // 语法: *text* 或 _text_ (必须在加粗之后解析)
-      result = result.replace(/([*_])(.*?)\1/g, (_, __, content) => {
+      // 语法: [italic]text[/italic]
+      result = result.replace(/(\[italic])(.*?)(\[\/italic])/g, (_, __, content) => {
         return `<em>${content}</em>`;
       });
 
